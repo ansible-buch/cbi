@@ -1,0 +1,14 @@
+---
+- name: Helm install
+  kubernetes.core.helm:
+    release_name: gitea
+    chart_ref: gitea-charts/gitea
+    release_namespace: gitea
+    create_namespace: true
+    values_files:
+      - values.yml
+
+
+# Uninstall:
+# helm uninstall gitea  -n gitea
+# kubectl delete ns gitea

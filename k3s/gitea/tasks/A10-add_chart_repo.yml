@@ -1,0 +1,5 @@
+---
+- name: Add chart repo
+  kubernetes.core.helm_repository:
+    repo_name: gitea-charts
+    repo_url: https://dl.gitea.com/charts

@@ -1,0 +1,375 @@
+#!/usr/bin/env python3
+import os
+import sys
+import subprocess
+import glob
+import re
+import getpass
+import yaml
+
+try:
+    from icecream import ic
+except ModuleNotFoundError as e:
+    def ic(arg):
+        print(arg)
+
+from argparse import ArgumentParser
+from enum import Enum
+
+progname = os.path.basename(sys.argv[0])
+version  = "0.2"
+
+
+opts   = {}
+stash  = {}
+config = {}
+
+
+
+###########
+def main():
+###########
+    global opts
+    global stash
+    global config
+    
+    get_options()
+
+    if not os.path.exists('.cbiroot'):
+        sys.exit("Must be called in the cbi root directory - exiting.")
+
+    stash['cbiroot']    = os.getcwd()
+    stash['root_env']   = os.path.join(stash['cbiroot'], 'env.yml')
+    stash['roles_path'] = os.path.join(stash['cbiroot'], 'lib')
+
+    
+    if opts['which'] == 'config':
+        create_sample_config()
+
+    with open(stash['root_env'], "r") as yamlfile:
+        config = yaml.load(yamlfile, Loader=yaml.FullLoader)
+
+        
+    if opts['which'] == 'setup':
+        setup_environment(opts['server_type'])
+
+
+
+    if opts['which'] == 'start':
+        start()
+
+
+
+##################
+def get_options():
+##################
+    global opts
+
+    parser = ArgumentParser()
+
+    subparsers = parser.add_subparsers(dest='which')
+
+    # config subcommand
+    parser_config = subparsers.add_parser('config', help='create sample config')
+    parser_config.add_argument('-f', '--force', action='store_true', dest='force', help='...')
+
+
+    # setup subcommand
+    parser_setup = subparsers.add_parser('setup',
+                                         help='setup container platform')
+    parser_setup.add_argument("server_type",
+                              choices=['docker', 'k3s'])
+
+    
+    # start subcommand
+    parser_start = subparsers.add_parser('start', help='start app')
+    parser_start.add_argument('app_path', help='path to app')
+    parser_start.add_argument('-p', action='store_true', dest='only_pre', help='only pre tasks and generate files')
+    parser_start.add_argument('-u', action='store_true', dest='only_up', help='only docker compose up')
+    parser_start.add_argument('-P', action='store_true', dest='only_post', help='only post tasks')
+
+
+    args = parser.parse_args()
+    opts = vars(args)
+
+
+
+############
+def start():
+############
+    global stash
+    
+
+    os.chdir(opts['app_path'])
+    stash['app_path'] = os.getcwd()
+
+
+    todo = {
+        'pre':  True, # pre tasks + generate files from templates
+        'up':   True, # docker compose up + wait_for tasks
+        'post': True, # post_tasks
+    }
+
+    if opts['only_pre']:
+        todo['up']   = False
+        todo['post'] = False
+    if opts['only_up']:
+        todo['pre']   = False
+        todo['post'] = False
+    if opts['only_post']:
+        todo['pre']  = False
+        todo['up']   = False
+    
+
+    pre_task_files   = []
+    start_task_files = []
+    wait_task_files  = []
+    post_task_files  = []
+
+
+
+    if todo['pre']:
+        pre_task_files  = sorted(glob.glob('tasks/A[0-9][0-9]*'))
+        
+    if todo['up']:
+        start_task_files = sorted(glob.glob('tasks/S[0-9][0-9]*'))
+        wait_task_files  = sorted(glob.glob('tasks/W[0-9][0-9]*'))
+        
+    if todo['post']:    
+        post_task_files = sorted(glob.glob('tasks/Z[0-9][0-9]*'))
+
+    ##all_task_files = pre_task_files + wait_task_files + post_task_files
+    
+
+
+    if todo['pre']:
+        for file in pre_task_files:
+            ansible_runner(action='run_tasks', arg=file)
+            
+        if os.path.isdir('templates'):
+            ansible_runner(action='generate_files')
+
+            
+    if todo['up']:
+        if os.path.exists('docker-compose.yml'):
+            p = subprocess.run(['docker', 'compose', 'up', '-d'])
+        
+        for file in start_task_files:
+            ansible_runner(action='run_tasks', arg=file)
+            
+        for file in wait_task_files:
+            ansible_runner(action='run_tasks', arg=file)
+
+
+    if todo['post']:
+        for file in post_task_files:
+            ansible_runner(action='run_tasks', arg=file)
+            
+        
+
+##########################################
+def ansible_runner(action=None, arg=None):
+##########################################
+    global stash
+    global config
+
+    cmd = [
+        "ansible",
+        "-i", "localhost,",
+        "localhost",
+        "-c", "local",
+        "-m", "include_role",
+        "-a", f"name=cbi tasks_from={action}.yml",
+        "-e", f"root_env={stash['root_env']}",
+        "-e", f"app_path={stash['app_path']}"
+    ]
+
+    if action == 'run_tasks':
+
+        cmd += ["-e", f"task_file={arg}"]
+                
+        
+    p = subprocess.run(
+        cmd,
+        env=dict(
+            os.environ.copy(),
+            ANSIBLE_ROLES_PATH=stash['roles_path'],
+            ANSIBLE_DISPLAY_SKIPPED_HOSTS='false',
+            ANSIBLE_LOAD_CALLBACK_PLUGINS='true',
+            ANSIBLE_STDOUT_CALLBACK='yaml'
+        )
+    )
+
+
+    
+    
+###########################
+def create_sample_config():
+###########################
+    global opts
+    
+    if os.path.exists('env.yml') and not opts['force']:
+        sys.exit("env.yml already exists; use --force to overwrite.")
+
+
+    
+    text = """
+# The default domain under which apps will be accessible:
+domain: example.org
+
+# # # The default FQDN under which apps will be accessible.
+# # # In most cases you should use this global setting, and only change
+# # # it in individual applications if necessary:
+# # #app_fqdn: ${COMPOSE_PROJECT_NAME}.{{domain}}
+
+# Default initial password for apps (if needed):
+default_password: secret
+
+# Default salt for password hashes (we need at least 22 chars):
+default_salt:     really.salty.salt.0123456789
+
+
+# Name of the internal Docker network for proxy communication (Docker only):
+docker_internal_network: traefik
+
+
+# Where do we get certificates from (Docker only)?
+# - letsencrypt: Let's Encrypt (only suitable for internet servers)
+# - private_ca:  private CA
+cert_resolver_type: 
+
+# Mail address to which the CA can send notifications when certificate
+# expiration is too near (if you don't need this, just leave it out):
+#cert_resolver_email: webmaster@{{domain}}
+
+
+# LDAP: Do you plan to deploy an OpenLDAP container (Docker only)?
+# Then Traefik will open port 127.0.0.1:636 to make the LDAP service
+# accessible from our host.
+ldap_open_host_port: false
+
+# LDAP directory tree root
+# (of course you can ignore this if you don't use LDAP):
+ldap_root: dc=example,dc=org
+
+# Are LDAP-Accounts visible from the host (e.g. for SSH-Login)?
+# (of course you can ignore this if you don't use LDAP):
+ldap_host_uses_ldap: false
+
+# The versions of all apps to be used:
+# - stable: Well-tested versions as of September 2024
+# - latest: Use the latest bleeding edge version whenever possible
+version_style: stable
+
+# Define some versions:
+versions:
+  k3s:
+    stable: v1.31.0+k3s1
+    latest: ""
+  gitea:
+    stable: 1.22.2
+    latest: ""
+"""
+    with open('env.yml', 'w') as f:
+        f.write(text)
+        
+    sys.exit(0)
+
+
+
+# ######################
+# def get_server_type():
+# ######################
+
+#     try:
+#         p = subprocess.run(["k3s",  "--version"], capture_output=True)
+#         if p.returncode == 0:
+#             return ServerType.K3S
+#     except:
+#         pass
+
+#     try:
+#         p = subprocess.run(["docker",  "--version"], capture_output=True)
+#         if p.returncode == 0:
+#             return ServerType.DOCKER
+#     except:
+#         pass
+
+#     sys.exit("[FAIL] Neither Docker nor K3s seems to be installed.")
+    
+
+
+def is_executable(cmd):
+    try:
+        p = subprocess.run(cmd, shell=True)
+        return p.returncode == 0
+    except:
+        return False
+        
+
+    
+###################################
+def setup_environment(server_type):
+###################################
+    global config
+
+    def log(cmd):
+        print(f"[EXEC] {cmd}")
+
+    
+    if server_type == 'docker':
+        print("Sorry, this setup is not capable to perform a Docker installation.")
+        print("We recommend to use <https://github.com/ansible-buch/docker-installer>.")
+        sys.exit(0)
+
+
+
+        
+    # Setup K3s (the only possible alternative):
+    env = os.environ.copy()
+
+    version_style = config['version_style']
+    env['INSTALL_K3S_VERSION'] = config['versions']['k3s'][version_style]
+    
+
+    if not is_executable("k3s --version"):
+        cmd = "curl -fsSL https://get.k3s.io | sh -"
+        log(cmd)
+        p = subprocess.run(cmd, shell=True, env=env)
+
+        # Uninstall:
+        # k3s-uninstall.sh
+        # rm -rf /var/lib/rancher /etc/rancher ~/.kube/*
+
+
+    if not is_executable("helm version"):
+        cmd = "curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash"
+        log(cmd)
+        p = subprocess.run(cmd, shell=True)
+
+
+    cmd = "mkdir -p /etc/bash_completion.d"
+    log(cmd)
+    p = subprocess.run(cmd, shell=True)
+
+    
+    cmd = "kubectl completion bash >/etc/bash_completion.d/kubectl"
+    log(cmd)
+    p = subprocess.run(cmd, shell=True)
+
+    
+    cmd = "mkdir -p -m 0700 ~/.kube"
+    log(cmd)
+    p = subprocess.run(cmd, shell=True)
+
+    cmd = "cp /etc/rancher/k3s/k3s.yaml ~/.kube/config"
+    log(cmd)
+    p = subprocess.run(cmd, shell=True)
+
+
+
+    
+        
+    
+if __name__ == '__main__':
+    main()

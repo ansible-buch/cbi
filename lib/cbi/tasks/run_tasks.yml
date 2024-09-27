@@ -1,0 +1,5 @@
+---
+- name: Include environment file '{{root_env}}'
+  include_vars: "{{root_env}}"
+
+- include_tasks: "{{ task_file }}"

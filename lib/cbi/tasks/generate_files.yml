@@ -1,0 +1,29 @@
+---
+- name: Include global environment file '{{root_env}}'
+  include_vars: "{{root_env}}"
+
+- name: Possibly include app-specific environment file '{{app_path}}/app.yml'
+  include_vars:
+    dir: "{{app_path}}"
+    files_matching: app.yml
+
+- name: Include template information file
+  include_vars: "{{app_path}}/templates/info.yml"
+
+
+- name: Create target directories
+  file:
+    path: "{{item.path}}"
+    mode: "{{item.mode | default(omit)}}"
+    state: directory
+  with_items: "{{generate.dirs}}"
+  when: generate.dirs is defined
+
+
+- name: Process templates
+  template:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    mode: "{{item.mode | default(omit)}}"
+  with_items: "{{generate.files}}"
+  when: generate.files is defined
