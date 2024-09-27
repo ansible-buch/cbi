@@ -301,7 +301,7 @@ versions:
 
 def is_executable(cmd):
     try:
-        p = subprocess.run(cmd, shell=True)
+        p = subprocess.run(cmd, shell=True, stderr = subprocess.DEVNULL)
         return p.returncode == 0
     except:
         return False
