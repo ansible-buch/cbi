@@ -17,7 +17,7 @@
 ## Clone this repo on your server and ch'dir into directory:
 
 ```
-git clone ....TODO.....
+git clone https://github.com/ansible-buch/cbi.git
 cd cbi
 ```
 
