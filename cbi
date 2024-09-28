@@ -26,9 +26,10 @@ stash  = {}
 config = {}
 
 class Engine(Enum):
+    NONE   = 0
     DOCKER = 1
     K3S    = 2
-
+    
 
 ###########
 def main():
@@ -353,9 +354,8 @@ def engine_type():
         if p.returncode == 0:
             return Engine.DOCKER
     except:
-        pass
+        return Engine.NONE
 
-    sys.exit("[FAIL] Neither Docker nor K3s seems to be installed.")
     
 
 
