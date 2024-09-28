@@ -2,7 +2,7 @@
 - name: Setup K3s stable
   shell:  "curl -fsSL https://get.k3s.io | sh -"
   environment:
-    INSTALL_K3S_VERSION: {{versions['k3s']['stable']}}
+    INSTALL_K3S_VERSION: "{{versions['k3s']['stable']}}"
   register: cmd
   when: version_style == 'stable'
 
