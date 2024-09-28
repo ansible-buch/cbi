@@ -212,6 +212,8 @@ def go(target):
             
             if target == "up":
                 p = subprocess.run(['kubectl', 'apply', '-f', 'manifests'])
+            if target == "down":
+                p = subprocess.run(['kubectl', 'delete', '-f', 'manifests'])
         
         for file in main_files:
             ansible_runner(action='run_tasks', arg=file)

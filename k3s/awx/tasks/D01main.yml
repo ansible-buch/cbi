@@ -1,0 +1,8 @@
+---
+# kubectl delete ns awx
+- name: Delete namespace gitea
+  kubernetes.core.k8s:
+    kind: namespace
+    api_version: v1
+    name: awx
+    state: absent
