@@ -12,4 +12,3 @@
     release_namespace: awx
     create_namespace: true
     wait: true
-  
