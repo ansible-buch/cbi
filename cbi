@@ -196,14 +196,16 @@ def go(target):
         for file in pre_files:
             ansible_runner(action='run_tasks', arg=file)
             
-        if os.path.isdir('templates'):
+        if os.path.isdir('templates') and target == "up":
             ansible_runner(action='generate_files')
 
             
     if todo['main']:
         if (engine_type() == Engine.DOCKER
             and
-            os.path.exists('docker-compose.yml')):
+            os.path.exists('docker-compose.yml')
+            and
+            target == "up"):
             p = subprocess.run(['docker', 'compose', 'up', '-d'])
         
         for file in main_files:
