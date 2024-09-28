@@ -11,7 +11,7 @@
 
 - Server with at least 4 GB RAM
 - Root access on this server
-- `ansible`, `curl` and `git` installed on this server
+- `ansible` (community package) and `git` installed on this server
 
 
 ## Clone this repo on your server and ch'dir into directory:
