@@ -11,7 +11,7 @@
 
 - name: Setup K3s latest
   shell: "{{install_cmd}}"
-  environment:
+  register: cmd
   when: version_style == 'latest'
 
 
