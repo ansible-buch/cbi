@@ -1,0 +1,6 @@
+---
+- name: Add chart repo
+  kubernetes.core.helm_repository:
+    repo_name: awx-operator
+    repo_url: https://ansible-community.github.io/awx-operator-helm
+
