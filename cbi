@@ -322,14 +322,12 @@ ldap_host_uses_ldap: false
 # - latest: Use the latest bleeding edge version whenever possible
 version_style: stable
 
-# Define some versions:
+# Define some stable versions:
 versions:
   k3s:
     stable: v1.31.0+k3s1
-    latest: ""
   gitea:
     stable: 1.22.2
-    latest: ""
 """
     with open('env.yml', 'w') as f:
         f.write(text)
