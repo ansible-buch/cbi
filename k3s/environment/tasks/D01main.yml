@@ -1,0 +1,11 @@
+---
+- name: Call k3s-uninstall.sh
+  commmand: k3s-uninstall.sh
+
+- name: Remove K3s files
+  file:
+    path: "{{item}}"
+  with_items:
+    - /var/lib/rancher
+    - /etc/rancher
+    - ~/.kube
