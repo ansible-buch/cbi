@@ -399,10 +399,6 @@ def setup_environment(server_type):
         log(cmd)
         p = subprocess.run(cmd, shell=True, env=env)
 
-        # Uninstall:
-        # k3s-uninstall.sh
-        # rm -rf /var/lib/rancher /etc/rancher ~/.kube/*
-
 
     if not is_executable("helm version"):
         cmd = "curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash"

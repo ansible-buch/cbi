@@ -10,4 +10,14 @@
   with_items:
     - /var/lib/rancher
     - /etc/rancher
-    - ~/.kube
+    - /etc/bash_completion.d/kubectl
+    - ~/.kube/config
+    
+- name: Remove Helm files
+  file:
+    path: "{{item}}"
+    state: absent
+  with_items:
+    - /usr/local/bin/helm
+    - /root/.cache/helm
+    - /root/.config/helm
