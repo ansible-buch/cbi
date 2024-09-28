@@ -32,7 +32,7 @@ cd cbi
 ## Setup container management platform of your choice:
 
 ```
-./cbi setup k3s
+./cbi up k3s/environment
 ```
 
 __or__:

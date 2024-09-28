@@ -133,9 +133,11 @@ def go(target):
 
     global stash
 
-
-    os.chdir(opts['app_path'])
-    stash['app_path'] = os.getcwd()
+    try:
+        os.chdir(opts['app_path'])
+        stash['app_path'] = os.getcwd()
+    except:
+        sys.exit(f"App directory does not exist: {opts['app_path']}")
 
 
     todo = {
@@ -203,10 +205,12 @@ def go(target):
     if todo['main']:
         if (engine_type() == Engine.DOCKER
             and
-            os.path.exists('docker-compose.yml')
-            and
-            target == "up"):
-            p = subprocess.run(['docker', 'compose', 'up', '-d'])
+            os.path.exists('docker-compose.yml')):
+            
+            if target == "up":
+                p = subprocess.run(['docker', 'compose', 'up', '-d'])
+            if target == "down":
+                p = subprocess.run(['docker', 'compose', 'down', '--volumes'])
         
         for file in main_files:
             ansible_runner(action='run_tasks', arg=file)
