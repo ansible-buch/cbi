@@ -5,6 +5,7 @@
 - name: Remove K3s files
   file:
     path: "{{item}}"
+    state: absent
   with_items:
     - /var/lib/rancher
     - /etc/rancher
