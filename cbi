@@ -382,15 +382,6 @@ def setup_environment(server_type):
     # Setup K3s (the only possible alternative):
     env = os.environ.copy()
 
-    version_style = config['version_style']
-    env['INSTALL_K3S_VERSION'] = config['versions']['k3s'][version_style]
-    
-
-    if not is_executable("k3s --version"):
-        cmd = "curl -fsSL https://get.k3s.io | sh -"
-        log(cmd)
-        p = subprocess.run(cmd, shell=True, env=env)
-
 
     if not is_executable("helm version"):
         cmd = "curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash"

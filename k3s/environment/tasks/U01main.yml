@@ -9,3 +9,36 @@
     msg: |
       {{cmd.stdout}}
       {{cmd.stderr}}
+
+
+- name: Install Helm
+  shell: "curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash"
+    register: cmd
+
+- debug:
+    msg: |
+      {{cmd.stdout}}
+      {{cmd.stderr}}
+
+- name: Create Bash completion plugin dir
+  file:
+    path: /etc/bash_completion.d
+    state: directory
+
+
+- name: Create kubectl completions
+  shell:
+    cmd: "kubectl completion bash >/etc/bash_completion.d/kubectl"
+    creates: /etc/bash_completion.d/kubectl
+
+
+- name: Create ~/.kube dir
+  file:
+    path: ~/.kube
+    mode: 0700
+    state: directory
+
+- name: Copy kube config
+  copy:
+    src: /etc/rancher/k3s/k3s.yaml
+    dest: ~/.kube/config
