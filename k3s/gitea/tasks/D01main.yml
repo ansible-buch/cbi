@@ -1,0 +1,15 @@
+---
+# helm uninstall gitea -n gitea
+- name: Helm uninstall
+  kubernetes.core.helm:
+    release_name: gitea
+    state: absent
+    wait: true
+
+# kubectl delete ns gitea
+- name: Delete namespace gitea
+  kubernetes.core.k8s:
+    kind: namespace
+    api_version: v1
+    name: gitea
+    state: absent

@@ -49,8 +49,37 @@ __or__:
 
 - Gitea
   ```
-  ./cbi start k3s/gitea
+  ./cbi up k3s/gitea
   ```
+
+
+
+
+
+
+
+
+# Internals
+
+## Naming of task files:
+
+### Up tasks:
+- `U01pre*`
+- `U01main*`
+- `U01wait*`
+- `U01post*`
+
+### Down tasks:
+- `D01pre*`
+- `D01main*`
+- `D01wait*`
+- `D01post*`
+
+
+
+
+
+
 
 
 
