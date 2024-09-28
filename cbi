@@ -205,6 +205,13 @@ def go(target):
                 p = subprocess.run(['docker', 'compose', 'up', '-d'])
             if target == "down":
                 p = subprocess.run(['docker', 'compose', 'down', '--volumes'])
+                
+        if (engine_type() == Engine.K3S
+            and
+            os.path.exists('manifests')):
+            
+            if target == "up":
+                p = subprocess.run(['kubectl', 'apply', '-f', 'manifests'])
         
         for file in main_files:
             ansible_runner(action='run_tasks', arg=file)
