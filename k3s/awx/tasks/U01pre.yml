@@ -4,3 +4,12 @@
     repo_name: awx-operator
     repo_url: https://ansible-community.github.io/awx-operator-helm
 
+
+- name: Install operator
+  kubernetes.core.helm:
+    release_name: awx-operator
+    chart_ref: awx-operator/awx-operator
+    release_namespace: awx
+    create_namespace: true
+    wait: true
+  
