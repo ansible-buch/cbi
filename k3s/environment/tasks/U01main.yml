@@ -1,7 +1,4 @@
 ---
-- set_fact:
-    install_cmd: "curl -fsSL https://get.k3s.io | sh -"
-
 - name: Setup K3s
   shell: "curl -fsSL https://get.k3s.io | sh -"
   environment:
