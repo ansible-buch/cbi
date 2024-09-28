@@ -1,6 +1,7 @@
 ---
 - name: Call k3s-uninstall.sh
   command: k3s-uninstall.sh
+  ignore_errors: true
 
 - name: Remove K3s files
   file:
