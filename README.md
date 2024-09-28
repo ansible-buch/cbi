@@ -53,6 +53,11 @@ __or__:
   ./cbi up k3s/gitea
   ```
 
+- AWX
+  ```
+  ./cbi up k3s/awx
+  ```
+
 
 
 
