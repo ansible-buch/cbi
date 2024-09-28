@@ -43,3 +43,8 @@
   copy:
     src: /etc/rancher/k3s/k3s.yaml
     dest: ~/.kube/config
+
+- name: Install Python Kubernetes support
+  package:
+    name: python3-kubernetes
+    state: latest
