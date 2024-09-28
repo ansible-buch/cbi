@@ -324,8 +324,7 @@ ldap_host_uses_ldap: false
 versions:
   k3s:   v1.30.5+k3s1
   gitea: 1.22.2
-  #awx:   24.6.1
-  awx:    24.3.1
+  awx:   Always latest. Anything else is magic.
 """
     with open('env.yml', 'w') as f:
         f.write(text)
