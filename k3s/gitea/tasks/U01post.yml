@@ -1,5 +1,0 @@
----
-- debug:
-    msg: |
-      Please wait until 'kubectl get pods -n gitea'
-      reports the status of all pods as 'Running'.
