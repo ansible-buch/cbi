@@ -2,18 +2,11 @@
 - set_fact:
     install_cmd: "curl -fsSL https://get.k3s.io | sh -"
 
-- name: Setup K3s stable
-  shell: "{{install_cmd}}"
+- name: Setup K3s
+  shell: "curl -fsSL https://get.k3s.io | sh -"
   environment:
-    INSTALL_K3S_VERSION: "{{versions['k3s']['stable']}}"
+    INSTALL_K3S_VERSION: "{{versions['k3s']}}"
   register: cmd
-  when: version_style == 'stable'
-
-- name: Setup K3s latest
-  shell: "{{install_cmd}}"
-  register: cmd
-  when: version_style == 'latest'
-
 
 - debug:
     msg: |

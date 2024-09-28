@@ -317,17 +317,11 @@ ldap_root: dc=example,dc=org
 # (of course you can ignore this if you don't use LDAP):
 ldap_host_uses_ldap: false
 
-# The versions of all apps to be used:
-# - stable: Well-tested versions as of September 2024
-# - latest: Use the latest bleeding edge version whenever possible
-version_style: stable
 
-# Define some versions:
+# Define some well-tested versions as of September 2024:
 versions:
-  k3s:
-    stable: v1.31.0+k3s1
-  gitea:
-    stable: 1.22.2
+  k3s:   v1.30.5+k3s1
+  gitea: 1.22.2
 """
     with open('env.yml', 'w') as f:
         f.write(text)
