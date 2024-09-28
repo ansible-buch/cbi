@@ -38,8 +38,9 @@ cd cbi
 __or__:
 
 ```
-./cbi setup docker
-# (This currently only gives a hint about an external installer.)
+./cbi up docker/environment
+# CURRENTLY NOT IMPLEMENTED!
+# Please use https://github.com/ansible-buch/docker-installer instead.
 ```
 
 
