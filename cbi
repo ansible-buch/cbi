@@ -359,53 +359,7 @@ def is_executable(cmd):
         return p.returncode == 0
     except:
         return False
-        
 
-    
-###################################
-def setup_environment(server_type):
-###################################
-    global config
-
-    def log(cmd):
-        print(f"[EXEC] {cmd}")
-
-    
-    if server_type == 'docker':
-        print("Sorry, this setup is not capable to perform a Docker installation.")
-        print("We recommend to use <https://github.com/ansible-buch/docker-installer>.")
-        sys.exit(0)
-
-
-
-        
-    # Setup K3s (the only possible alternative):
-    env = os.environ.copy()
-
-
-    if not is_executable("helm version"):
-        cmd = "curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash"
-        log(cmd)
-        p = subprocess.run(cmd, shell=True)
-
-
-    cmd = "mkdir -p /etc/bash_completion.d"
-    log(cmd)
-    p = subprocess.run(cmd, shell=True)
-
-    
-    cmd = "kubectl completion bash >/etc/bash_completion.d/kubectl"
-    log(cmd)
-    p = subprocess.run(cmd, shell=True)
-
-    
-    cmd = "mkdir -p -m 0700 ~/.kube"
-    log(cmd)
-    p = subprocess.run(cmd, shell=True)
-
-    cmd = "cp /etc/rancher/k3s/k3s.yaml ~/.kube/config"
-    log(cmd)
-    p = subprocess.run(cmd, shell=True)
 
 
 
