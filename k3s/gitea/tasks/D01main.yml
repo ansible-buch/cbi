@@ -3,6 +3,7 @@
 - name: Helm uninstall
   kubernetes.core.helm:
     release_name: gitea
+    release_namespace: gitea
     state: absent
     wait: true
 
