@@ -1,0 +1,29 @@
+---
+- name: Configure Podman for insecure private Registry
+  copy:
+    dest: /etc/containers/registries.conf.d/gitea.{{domain}}.conf
+    content: |
+      [[registry]]
+      location = "gitea.{{domain}}"
+      insecure = true
+
+
+- name: Pre-create K3s configuration directory
+  file:
+    path: /etc/rancher/k3s
+    state: directory
+
+      
+- name: Configure K3s for insecure private Registry
+  copy:
+    dest: /etc/rancher/k3s/registries.yaml
+    content: |
+      mirrors:
+        my-gitea-registry:
+          endpoint:
+            - "https://gitea.{{domain}}
+
+      configs:
+        gitea.{{domain}}:
+          tls:
+            insecure_skip_verify: true

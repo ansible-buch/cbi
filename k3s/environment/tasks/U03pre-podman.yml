@@ -1,0 +1,4 @@
+---
+- name: Install Podman
+  package:
+    name: podman
