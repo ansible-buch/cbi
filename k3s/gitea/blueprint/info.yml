@@ -1,0 +1,5 @@
+---
+generate:
+  files:
+    - src:  chart-values.yml.j2
+      dest: run/chart-values.yml

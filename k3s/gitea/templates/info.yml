@@ -1,8 +1,0 @@
----
-generate:
-  dirs:
-    - path: charts
-
-  files:
-    - src:  values.yml.j2
-      dest: charts/values.yml
