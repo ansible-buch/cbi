@@ -7,13 +7,19 @@
     dir: "{{app_path}}"
     files_matching: app.yml
 
-- name: Include template information file
-  include_vars: "{{app_path}}/templates/info.yml"
+- name: Include blueprint information file
+  include_vars: "{{app_path}}/blueprint/info.yml"
+
+
+- name: Create run/ directory
+  file:
+    path: run
+    state: directory
 
 
 - name: Create target directories
   file:
-    path: "{{item.path}}"
+    path: "run/{{item.path}}"
     mode: "{{item.mode | default(omit)}}"
     state: directory
   with_items: "{{generate.dirs}}"
@@ -23,7 +29,7 @@
 - name: Process templates
   template:
     src: "{{item.src}}"
-    dest: "{{item.dest}}"
+    dest: "run/{% if item.dest is defined %}{{item.dest}}{% else %}{{item.src | splitext | first}}{% endif%}"
     mode: "{{item.mode | default(omit)}}"
   with_items: "{{generate.files}}"
   when: generate.files is defined
