@@ -12,7 +12,10 @@
     prompt: "Primary interface of your system? Select one of the above"
   register: answer
 
-    
+
+- name: Gather facts
+  setup:
+  
 - name: Create k3s-resolv.conf
   copy:
     dest: /etc/k3s-resolv.conf
