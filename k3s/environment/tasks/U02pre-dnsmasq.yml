@@ -39,4 +39,4 @@
       bogus-priv
       no-resolv
 
-      server={{ lookup('file', '/etc/resolv.conf') | regex_findall('\\s*nameserver\\s*(.*)') | first }}
+      server={{ lookup('file', '/etc/resolv.conf') | regex_findall('\s*nameserver\s*(.*)') | first }}
