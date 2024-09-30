@@ -2,7 +2,6 @@
   setup:
 
 - debug: msg={{lookup('file', '/etc/resolv.conf') | regex_findall('\\s*nameserver\\s*(.*)') | first }}
-- meta: end_play
 
 - command: ip -br a
   register: ip_cmd
