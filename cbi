@@ -207,7 +207,7 @@ def go(target):
                 p = subprocess.run(['docker', 'compose', 'down', '--volumes'])
                 
         if engine_type() == Engine.K3S:
-                manifest = None
+            manifest = None
             if os.path.isfile('run/manifest.yml'):
                 manifest = 'run/manifest.yml'
             elif os.path.isdir('run/manifests'):
