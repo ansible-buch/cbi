@@ -1,6 +1,8 @@
 - name: Gather facts
   setup:
-  
+
+- debug: msg={{lookup('file', '/etc/resolv.conf') | regex_findall('\\s*nameserver\\s*(.*)')}}
+- meta: end_play
 
 - command: ip -br a
   register: ip_cmd
@@ -28,6 +30,8 @@
     name: dnsmasq
     state: present
 
+
+    
 - name: Create /etc/dnsmasq.conf
   copy:
     dest: /etc/dnsmasq.conf
