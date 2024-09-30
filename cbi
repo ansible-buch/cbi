@@ -206,14 +206,18 @@ def go(target):
             if target == "down":
                 p = subprocess.run(['docker', 'compose', 'down', '--volumes'])
                 
-        if (engine_type() == Engine.K3S
-            and
-            os.path.exists('manifests')):
-            
-            if target == "up":
-                p = subprocess.run(['kubectl', 'apply', '-f', 'manifests'])
-            if target == "down":
-                p = subprocess.run(['kubectl', 'delete', '-f', 'manifests'])
+        if engine_type() == Engine.K3S:
+                manifest = None
+            if os.path.isfile('run/manifest.yml'):
+                manifest = 'run/manifest.yml'
+            elif os.path.isdir('run/manifests'):
+                manifest = 'run/manifests'
+
+            if manifest != None:
+                if target == "up":
+                    p = subprocess.run(['kubectl', 'apply', '-f', manifest])
+                if target == "down":
+                    p = subprocess.run(['kubectl', 'delete', '-f', manifest])
         
         for file in main_files:
             ansible_runner(action='run_tasks', arg=file)
