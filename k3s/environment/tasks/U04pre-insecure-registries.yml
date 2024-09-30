@@ -13,7 +13,6 @@
     path: /etc/rancher/k3s
     state: directory
 
-      
 - name: Configure K3s for insecure private Registry
   copy:
     dest: /etc/rancher/k3s/registries.yaml
