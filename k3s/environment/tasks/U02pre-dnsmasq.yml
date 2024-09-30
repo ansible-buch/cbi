@@ -9,7 +9,7 @@
 - debug: var=ip_cmd.stdout_lines
     
 - pause:
-    prompt: "What is the primary interface of your system?"
+    prompt: "Primary interface of your system? Select one of the above"
   register: answer
 
     
