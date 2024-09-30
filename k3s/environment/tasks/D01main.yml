@@ -21,3 +21,8 @@
     - /usr/local/bin/helm
     - /root/.cache/helm
     - /root/.config/helm
+
+- name: Remove Podman
+  package:
+    name: podman
+    state: absent
