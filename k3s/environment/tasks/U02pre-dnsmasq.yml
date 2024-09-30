@@ -11,7 +11,7 @@
   register: answer
 
 - set_fact:
-    server_ip: ansible_facts[answer.user_input]['ipv4']['address']
+    server_ip: "{{ ansible_facts[answer.user_input]['ipv4']['address'] }}"
   
 
 - name: Create k3s-resolv.conf
