@@ -2,3 +2,19 @@
   package:
     name: dnsmasq
     state: present
+
+- command: ip -br a
+  register: ip_cmd
+
+- debug: var: ip_cmd
+    
+- pause:
+    prompt: "What is the primary interface of your system?"
+    register: answer
+
+    
+- name: Create k3s-resolv.conf
+  copy:
+    dest: /etc/k3s-resolv.conf
+    content: |
+      nameserver: {{host_main_ip}}
