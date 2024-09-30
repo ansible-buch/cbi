@@ -17,4 +17,4 @@
   copy:
     dest: /etc/k3s-resolv.conf
     content: |
-      nameserver: {{host_main_ip}}
+      nameserver: {{ ansible_facts[answer]['ipv4']['address'] }}
