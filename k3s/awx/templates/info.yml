@@ -1,8 +1,0 @@
----
-generate:
-  dirs:
-    - path: manifests
-
-  files:
-    - src:  manifest.yml.j2
-      dest: manifests/manifest.yml
