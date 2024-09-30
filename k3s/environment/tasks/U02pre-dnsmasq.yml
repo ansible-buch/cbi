@@ -42,3 +42,11 @@
                regex_findall('\s*nameserver\s*(.*)') |
                first
              -}}
+
+      address=/{{domain}}/{{server_ip}}
+
+- name: Restart service and enable start on boot
+  service:
+    name: dnsmasq
+    state: restarted
+    enabled: yes
