@@ -1,7 +1,7 @@
 ---
 - name: Setup K3s
   shell: >
-    curl -fsSL https://get.k3s.io | sh -s -
+    curl -fsSL https://get.k3s.io | sh -s - server
       --resolv-conf /etc/k3s-resolv.conf
 
   environment:
