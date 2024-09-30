@@ -6,11 +6,11 @@
 - command: ip -br a
   register: ip_cmd
 
-- debug: var=ip_cmd
+- debug: var=ip_cmd.stdout_lines
     
 - pause:
     prompt: "What is the primary interface of your system?"
-    register: answer
+  register: answer
 
     
 - name: Create k3s-resolv.conf
