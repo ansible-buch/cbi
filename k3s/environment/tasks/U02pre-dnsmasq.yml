@@ -1,7 +1,7 @@
 - name: Gather facts
   setup:
 
-- debug: msg={{lookup('file', '/etc/resolv.conf') | regex_findall('\\s*nameserver\\s*(.*)')}}
+- debug: msg={{lookup('file', '/etc/resolv.conf') | regex_findall('\\s*nameserver\\s*(.*)') | first }}
 - meta: end_play
 
 - command: ip -br a
