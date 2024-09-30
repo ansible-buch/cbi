@@ -1,23 +1,39 @@
-- name: Install dnsmasq
-  package:
-    name: dnsmasq
-    state: present
+- name: Gather facts
+  setup:
+  
 
 - command: ip -br a
   register: ip_cmd
 
 - debug: var=ip_cmd.stdout_lines
-    
+  
 - pause:
     prompt: "Primary interface of your system? Select one of the above"
   register: answer
 
-
-- name: Gather facts
-  setup:
+- set_fact:
+    server_ip: ansible_facts[answer.user_input]['ipv4']['address']
   
+
 - name: Create k3s-resolv.conf
   copy:
     dest: /etc/k3s-resolv.conf
     content: |
-      nameserver: {{ ansible_facts[answer.user_input]['ipv4']['address'] }}
+      # This file will be submitted to K3s.
+      nameserver {{server_ip}}
+
+
+- name: Install dnsmasq
+  package:
+    name: dnsmasq
+    state: present
+
+- name: Create /etc/dnsmasq.conf
+  copy:
+    dest: /etc/dnsmasq.conf
+    content: |
+      domain-needed
+      bogus-priv
+      no-resolv
+
+      server={{ lookup('file', '/etc/resolv.conf') | regex_findall('\\s*nameserver\\s*(.*)') | first}}
