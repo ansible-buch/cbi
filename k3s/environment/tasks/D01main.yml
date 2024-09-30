@@ -34,3 +34,16 @@
   with_items:
     - /etc/containers
     - /var/lib/containers
+
+- name: Remove dnsmasq
+  package:
+    name: dnsmasq
+    state: absent
+
+- name: Remove dnsmasq files
+  file:
+    path: "{{item}}"
+    state: absent
+  with_items:
+    - /etc/dnsmasq.conf
+    - /etc/dnsmasq.d/
