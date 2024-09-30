@@ -26,9 +26,9 @@
   when: generate.dirs is defined
 
 
-- name: Process templates
+- name: Process blueprint Jinja templates 
   template:
-    src: "{{item.src}}"
+    src: "blueprint/{{item.src}}"
     dest: "run/{% if item.dest is defined %}{{item.dest}}{% else %}{{item.src | splitext | first}}{% endif%}"
     mode: "{{item.mode | default(omit)}}"
   with_items: "{{generate.files}}"
