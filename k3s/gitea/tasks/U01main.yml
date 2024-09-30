@@ -7,4 +7,4 @@
     create_namespace: true
     wait: true
     values_files:
-      - charts/values.yml
+      - run/chart-values.yml
