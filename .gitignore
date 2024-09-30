@@ -1,5 +1,2 @@
 **/env.yml
-**/docker-compose.yml
-**/mnt/
-**/manifests/
-**/charts/
+**/run
