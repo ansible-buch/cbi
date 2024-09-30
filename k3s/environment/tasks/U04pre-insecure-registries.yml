@@ -1,4 +1,13 @@
 ---
+- name: Create needed configuration directories
+  file:
+    path: "{{item}}"
+    state: directory
+  with_items:
+    - /etc/containers/registries.conf.d
+    - /etc/rancher/k3s
+
+
 - name: Configure Podman for insecure private Registry
   copy:
     dest: /etc/containers/registries.conf.d/gitea.{{domain}}.conf
@@ -7,11 +16,6 @@
       location = "gitea.{{domain}}"
       insecure = true
 
-
-- name: Pre-create K3s configuration directory
-  file:
-    path: /etc/rancher/k3s
-    state: directory
 
 - name: Configure K3s for insecure private Registry
   copy:
