@@ -12,8 +12,6 @@
     prompt: "Primary interface of your system? Select one of the above"
   register: answer
 
-- debug: var=answer
-  
 
 - name: Gather facts
   setup:
@@ -22,4 +20,4 @@
   copy:
     dest: /etc/k3s-resolv.conf
     content: |
-      nameserver: {{ ansible_facts[answer.stdin]['ipv4']['address'] }}
+      nameserver: {{ ansible_facts[answer.user_input]['ipv4']['address'] }}
