@@ -24,7 +24,7 @@
       mirrors:
         my-gitea-registry:
           endpoint:
-            - "https://gitea.{{domain}}
+            - "https://gitea.{{domain}}"
 
       configs:
         gitea.{{domain}}:
