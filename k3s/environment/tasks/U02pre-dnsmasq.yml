@@ -41,7 +41,7 @@
         lookup('file', '/etc/resolv.conf') |
                regex_findall('\s*nameserver\s*(.*)') |
                first
-             -}}
+             }}
 
       address=/{{domain}}/{{server_ip}}
 
