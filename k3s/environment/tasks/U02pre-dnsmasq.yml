@@ -12,6 +12,8 @@
     prompt: "Primary interface of your system? Select one of the above"
   register: answer
 
+- debug: var=answer
+  
 
 - name: Gather facts
   setup:
