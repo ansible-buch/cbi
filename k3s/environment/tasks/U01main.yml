@@ -1,4 +1,10 @@
 ---
+
+- debug:
+    msg: >-
+      curl -fsSL https://get.k3s.io | sh -s - server
+        --resolv-conf /etc/k3s-resolv.conf
+
 - name: Setup K3s
   shell:
     cmd: >-
