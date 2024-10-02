@@ -1,17 +1,25 @@
 - name: Gather facts
   setup:
 
-- shell: ip -br a | grep -v '^lo'
-  register: ip_cmd
+- block:
+    
+  - shell: ip -br a | grep -v '^lo'
+    register: ip_cmd
 
-- debug: var=ip_cmd.stdout_lines
+  - debug: var=ip_cmd.stdout_lines
   
-- pause:
-    prompt: "Primary interface of your system? Select one of the above"
-  register: answer
+  - pause:
+      prompt: "Primary interface of your system? Select one of the above"
+    register: answer
 
+  - set_fact:
+      iface: "{{answer.user_input}}"
+    
+  when: iface is undefined
+
+    
 - set_fact:
-    server_ip: "{{ ansible_facts[answer.user_input]['ipv4']['address'] }}"
+    server_ip: "{{ ansible_facts[iface]['ipv4']['address'] }}"
   
 
 - name: Create k3s-resolv.conf
