@@ -19,7 +19,7 @@
     owner: "{{item}}"
   with_items:
     - root
-    - {{k3s_user}}
+    - "{{k3s_user}}"
 
 - name: Copy kube config
   copy:
