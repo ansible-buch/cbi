@@ -1,15 +1,16 @@
 - name: Gather facts
   setup:
 
-# - set_fact:
-#     server_ip: "{{ ansible_facts[iface]['ipv4']['address'] }}"
+- set_fact:
+    server_ip: "{{ ansible_facts[iface]['ipv4']['address'] }}"
+
 
 - name: Run a dig command
   shell: dig ansible.com | grep SERVER
   register: dig_cmd
 
-
-- set_fact:
+- name: Determine used (= primary) nameserver
+  set_fact:
     primary_dns: >-
       {{-
         dig_cmd.stdout |
