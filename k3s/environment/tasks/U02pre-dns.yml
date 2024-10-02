@@ -1,6 +1,11 @@
 - name: Gather facts
   setup:
 
+- meta: end_play
+
+
+
+    
 - set_fact:
     server_ip: "{{ ansible_facts[iface]['ipv4']['address'] }}"
 
