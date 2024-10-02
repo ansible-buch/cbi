@@ -10,25 +10,34 @@
     creates: /etc/bash_completion.d/kubectl
 
 
-- name: Create ~/.kube dir
+- name: Create ~root/.kube dir
   file:
-    path: ~{{item}}/.kube
+    path: ~root/.kube
     state: directory
     mode: 0700
-    owner: "{{item}}"
-    group: "{{lookup('pipe', 'id -gn ' + item)}}"
-  with_items:
-    - root
-    - "{{user}}"
 
 - name: Create symlinks to global kubeconfig (due to helm)
   file:
     state: link
     follow: false
     src: /etc/rancher/k3s/k3s.yaml
-    dest: ~{{item}}/.kube/config
-    owner: "{{item}}"
-    group: "{{lookup('pipe', 'id -gn ' + item)}}"
-  with_items:
-    - root
-    - "{{user}}"
+    dest: ~root/.kube/config
+
+- block:
+  - name: Create unpriv user ~/.kube dir
+    file:
+      path: ~{{user}}/.kube
+      state: directory
+      mode: 0700
+      owner: "{{user}}"
+      group: "{{lookup('pipe', 'id -gn ' + user)}}"
+
+  - name: Create symlinks to global kubeconfig (due to helm)
+    file:
+      state: link
+      follow: false
+      src: /etc/rancher/k3s/k3s.yaml
+      dest: ~{{item}}/.kube/config
+      owner: "{{user}}"
+      group: "{{lookup('pipe', 'id -gn ' + user)}}"
+  when: user is defined
