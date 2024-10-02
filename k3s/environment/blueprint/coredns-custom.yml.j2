@@ -1,3 +1,5 @@
+{% set primary_ip = ansible_facts[iface]['ipv4']['address'] %}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -20,5 +22,5 @@ data:
       604800     ; expire (1 week)
       60         ; minimum TTL (1 minute)
     )
-    @ IN A 192.168.150.100
+    @ IN A {{primary_ip}}
     * IN CNAME @

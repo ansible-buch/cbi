@@ -1,4 +1,7 @@
 ---
+- name: Gather facts
+  setup:
+
 - name: Include global environment file '{{root_env}}'
   include_vars: "{{root_env}}"
 
