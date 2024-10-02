@@ -1,4 +1,4 @@
 - name: Apply coredns custom configmap
   kubernetes.core.k8s:
     state: present
-    definition: "{{ lookup('File', '') run/coredns-custom.yml}}"
+    definition: "{{ lookup('file', 'run/coredns-custom.yml') }}"
