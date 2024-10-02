@@ -27,6 +27,10 @@
       bogus-priv
       no-resolv
 
+      interface=lo
+      interface=cni0
+      bind-interfaces
+
       server={{-
         lookup('file', '/etc/resolv.conf') |
                regex_findall('\s*nameserver\s*(.*)') |
