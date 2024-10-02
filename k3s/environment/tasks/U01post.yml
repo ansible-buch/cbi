@@ -13,9 +13,13 @@
 
 - name: Create ~/.kube dir
   file:
-    path: ~/.kube
+    path: ~{{item}}/.kube
     mode: 0700
     state: directory
+    owner: "{{item}}"
+  with_items:
+    - root
+    - {{k3s_user}}
 
 - name: Copy kube config
   copy:
