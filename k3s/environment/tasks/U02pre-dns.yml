@@ -2,7 +2,7 @@
   setup:
 
 - set_fact:
-    server_ip: "{{ ansible_facts[iface]['ipv4']['address'] }}"
+    server_ip: "{{ ansible_facts['ansible'~iface]['ipv4']['address'] }}"
 
 
 - name: Run a dig command

@@ -3,7 +3,7 @@
 
 - name: Get ip of K3s cni0 interface
   set_fact:
-    cni_ip: "{{ ansible_facts[iface]['cni0']['address'] }}"
+    cni_ip: "{{ ansible_facts['ansible_cni0']['address'] }}"
 
 
 - debug: var=cni_ip
