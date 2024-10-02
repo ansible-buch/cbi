@@ -29,7 +29,7 @@ class Engine(Enum):
     NONE   = 0
     DOCKER = 1
     K3S    = 2
-    
+
 
 ###########
 def main():
@@ -37,7 +37,7 @@ def main():
     global opts
     global stash
     global config
-    
+
     get_options()
 
     if not os.path.exists('.cbiroot'):
@@ -47,7 +47,7 @@ def main():
     stash['root_env']   = os.path.join(stash['cbiroot'], 'env.yml')
     stash['roles_path'] = os.path.join(stash['cbiroot'], 'lib')
 
-    
+
     if opts['which'] == 'config':
         create_sample_config()
 
@@ -60,7 +60,7 @@ def main():
         with yamlfile:
             config = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
-        
+
     # if opts['which'] == 'setup':
     #     setup_environment(opts['server_type'])
 
@@ -87,7 +87,7 @@ def get_options():
     parser_config.add_argument('-f', '--force', action='store_true',
                                dest='force', help='overwrite existing config')
 
-    
+
     # up subcommand
     parser_up = subparsers.add_parser('up', help='create and start app')
     parser_up.add_argument('app_path', help='path to app')
@@ -118,7 +118,7 @@ def get_options():
                              help='remove all volumes/PVs. '
                              'CURRENTY THE DEFAULT ACTION!')
 
-    
+
     args = parser.parse_args()
     opts = vars(args)
 
@@ -161,7 +161,7 @@ def go(target):
         todo['pre']  = False
         todo['main'] = False
         todo['wait'] = False
-    
+
 
     pre_files  = []
     main_files = []
@@ -171,7 +171,7 @@ def go(target):
     if target == "up":
         selector = 'U'
     elif target == "down":
-        selector = 'D' 
+        selector = 'D'
     else:
         system.exit(f"Bad target: {target}")
 
@@ -182,10 +182,10 @@ def go(target):
         main_files = sorted(glob.glob(f'tasks/{selector}[0-9][0-9]main*'))
     if todo['wait']:
         wait_files = sorted(glob.glob(f'tasks/{selector}[0-9][0-9]wait*'))
-    if todo['post']:    
+    if todo['post']:
         post_files = sorted(glob.glob(f'tasks/{selector}[0-9][0-9]post*'))
 
-        
+
     # ic(pre_files)
     # ic(main_files)
     # ic(wait_files)
@@ -195,21 +195,21 @@ def go(target):
     if todo['pre']:
         for file in pre_files:
             ansible_runner(action='run_tasks', arg=file)
-            
+
         if os.path.isdir('blueprint') and target == "up":
             ansible_runner(action='generate_files')
 
-            
+
     if todo['main']:
         if (engine_type() == Engine.DOCKER
             and
             os.path.exists('docker-compose.yml')):
-            
+
             if target == "up":
                 p = subprocess.run(['docker', 'compose', 'up', '-d'])
             if target == "down":
                 p = subprocess.run(['docker', 'compose', 'down', '--volumes'])
-                
+
         if engine_type() == Engine.K3S:
             manifest = None
             if os.path.isfile('run/manifest.yml'):
@@ -222,7 +222,7 @@ def go(target):
                     p = subprocess.run(['kubectl', 'apply', '-f', manifest])
                 if target == "down":
                     p = subprocess.run(['kubectl', 'delete', '-f', manifest])
-        
+
         for file in main_files:
             ansible_runner(action='run_tasks', arg=file)
 
@@ -231,23 +231,23 @@ def go(target):
         for file in wait_files:
             ansible_runner(action='run_tasks', arg=file)
 
-            
+
     if todo['post']:
         for file in post_files:
             ansible_runner(action='run_tasks', arg=file)
-            
-        
 
 
 
-            
+
+
+
 ##########################################
 def ansible_runner(action=None, arg=None):
 ##########################################
     global stash
     global config
     global opts
-    
+
     cmd = [
         "ansible",
         "-i", "localhost,",
@@ -266,7 +266,7 @@ def ansible_runner(action=None, arg=None):
 
     if action == 'run_tasks':
         cmd += ["-e", f"task_file={arg}"]
-                
+
     p = subprocess.run(
         cmd,
         env=dict(
@@ -280,20 +280,20 @@ def ansible_runner(action=None, arg=None):
 
     if p.returncode != 0:
         sys.exit(f"Ansible exited with error code {p.returncode}.")
-        
 
 
-    
+
+
 ###########################
 def create_sample_config():
 ###########################
     global opts
-    
+
     if os.path.exists('env.yml') and not opts['force']:
         sys.exit("env.yml already exists; use --force to overwrite.")
 
 
-    
+
     text = """
 # The default domain under which apps will be accessible:
 domain: example.org
@@ -317,7 +317,7 @@ docker_internal_network: traefik
 # Where do we get certificates from (Docker only)?
 # - letsencrypt: Let's Encrypt (only suitable for internet servers)
 # - private_ca:  private CA
-cert_resolver_type: 
+cert_resolver_type:
 
 # Mail address to which the CA can send notifications when certificate
 # expiration is too near (if you don't need this, just leave it out):
@@ -342,11 +342,11 @@ ldap_host_uses_ldap: false
 versions:
   k3s:   v1.30.5+k3s1
   gitea: 1.22.2
-  #awx:  Always latest. Anything else is magic. 
+  #awx:  Always latest. Anything else is magic.
 """
     with open('env.yml', 'w') as f:
         f.write(text)
-        
+
     sys.exit(0)
 
 
@@ -369,7 +369,7 @@ def engine_type():
     except:
         return Engine.NONE
 
-    
+
 
 
 #######################
