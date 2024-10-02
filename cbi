@@ -18,7 +18,7 @@ from argparse import ArgumentParser
 from enum import Enum
 
 progname = os.path.basename(sys.argv[0])
-version  = "0.27"
+version  = "0.3"
 
 
 opts   = {}
@@ -100,6 +100,9 @@ def get_options():
     parser_up.add_argument('--post', action='store_true', dest='post',
                            help='perform post tasks')
 
+    parser_up.add_argument('-e', dest='extra', action="append",
+                           help='extra vars')
+
     # down subcommand
     parser_down = subparsers.add_parser('down', help='stop and remove app')
     parser_down.add_argument('app_path', help='path to app')
@@ -118,6 +121,7 @@ def get_options():
     
     args = parser.parse_args()
     opts = vars(args)
+
 
 
 
@@ -242,7 +246,8 @@ def ansible_runner(action=None, arg=None):
 ##########################################
     global stash
     global config
-
+    global opts
+    
     cmd = [
         "ansible",
         "-i", "localhost,",
@@ -253,6 +258,11 @@ def ansible_runner(action=None, arg=None):
         "-e", f"root_env={stash['root_env']}",
         "-e", f"app_path={stash['app_path']}"
     ]
+
+    if opts['extra']:
+        for extra_var_value in opts['extra']:
+            cmd.extend(['-e', extra_var_value])
+
 
     if action == 'run_tasks':
         cmd += ["-e", f"task_file={arg}"]

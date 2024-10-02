@@ -1,2 +1,5 @@
 ---
 - debug: msg="U01main"
+
+- debug: var=foo
+- debug: var=bar
