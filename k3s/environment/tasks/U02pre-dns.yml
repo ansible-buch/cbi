@@ -24,13 +24,14 @@
     dest: /etc/k3s-resolv.conf
     content: |
       # This file is submitted to K3s.
-      nameserver {{primary_dns}}
+      #nameserver {{primary_dns}}
+      nameserver 172.16.0.1
 
 
-- name: Install dnsmasq
-  package:
-    name: dnsmasq
-    state: present
+# - name: Install dnsmasq
+#   package:
+#     name: dnsmasq
+#     state: present
 
 
     
@@ -43,7 +44,7 @@
       no-resolv
 
       interface=lo
-      interface=cni0
+      interface=dns0
       bind-dynamic
 
       server={{primary_dns}}
@@ -51,9 +52,9 @@
       address=/{{domain}}/{{server_ip}}
   register: copy_dnsmasqconf_task
 
-- name: Restart service and enable start on boot
-  service:
-    name: dnsmasq
-    state: restarted
-    enabled: yes
-  when: copy_dnsmasqconf_task is changed
+# - name: Restart service and enable start on boot
+#   service:
+#     name: dnsmasq
+#     state: restarted
+#     enabled: yes
+#   when: copy_dnsmasqconf_task is changed
