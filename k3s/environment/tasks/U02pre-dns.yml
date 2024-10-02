@@ -23,7 +23,7 @@
   copy:
     dest: /etc/k3s-resolv.conf
     content: |
-      # This file will be submitted to K3s.
+      # This file is submitted to K3s.
       nameserver {{primary_dns}}
 
 

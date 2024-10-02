@@ -7,4 +7,12 @@
   set_fact:
     cni0_ip: "{{ ansible_facts['cni0']['ipv4']['address'] }}"
 
-- debug: var=cni0_ip
+- name: Renew contents os /etc/k3s-resolv.conf
+  copy:
+    dest: /etc/k3s-resolv.conf
+    content: |
+      # This file is submitted to K3s.
+      nameserver {{cni0_ip}}
+
+  
+
