@@ -19,6 +19,9 @@
   shell: "curl -fsSL https://raw.githubusercontent.com/\
           helm/helm/main/scripts/get-helm-3 | bash"
   register: cmd
+  environment:
+    PATH: >-
+      {{ lookup("pipe", "sh -c 'echo $PATH'" }}:/usr/local/bin 
 
 - debug:
     msg: |
