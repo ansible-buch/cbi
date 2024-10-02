@@ -1,15 +1,27 @@
 - name: Gather facts
   setup:
 
+# - set_fact:
+#     server_ip: "{{ ansible_facts[iface]['ipv4']['address'] }}"
+
+- name: Run a dig command
+  shell: dig ansible.com | grep SERVER
+  register: dig_command
+
+
 - set_fact:
-    server_ip: "{{ ansible_facts[iface]['ipv4']['address'] }}"
-  
+    primary_dns: >-
+      {{-
+        dig_cmd.stdout |
+        regex_search('SERVER: ([0-9\\.]+)', '\1')
+      }}
+
 - name: Create k3s-resolv.conf
   copy:
     dest: /etc/k3s-resolv.conf
     content: |
       # This file will be submitted to K3s.
-      nameserver {{server_ip}}
+      nameserver {{primary_dns}}
 
 
 - name: Install dnsmasq
@@ -31,11 +43,7 @@
       interface=cni0
       bind-dynamic
 
-      server={{-
-        lookup('file', '/etc/resolv.conf') |
-               regex_findall('\s*nameserver\s*(.*)') |
-               first
-             }}
+      server={{primary_dns}}
 
       address=/{{domain}}/{{server_ip}}
   register: copy_dnsmasqconf_task
