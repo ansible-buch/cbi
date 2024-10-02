@@ -14,8 +14,8 @@
 - name: Create ~/.kube dir
   file:
     path: ~{{item}}/.kube
-    mode: 0700
     state: directory
+    mode: 0700
     owner: "{{item}}"
   with_items:
     - root
@@ -26,6 +26,7 @@
     src: /etc/rancher/k3s/k3s.yaml
     dest: ~{{item}}/.kube/config
     mode: 0600
+    owner: "{{item}}"
   with_items:
     - root
     - "{{k3s_user}}"
