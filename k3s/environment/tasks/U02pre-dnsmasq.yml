@@ -29,7 +29,7 @@
 
       interface=lo
       interface=cni0
-      bind-interfaces
+      bind-dynamic
 
       server={{-
         lookup('file', '/etc/resolv.conf') |
