@@ -1,6 +1,8 @@
 - name: Gather facts
   setup:
 
+- debug:
+    
 - meta: end_play
 
 
