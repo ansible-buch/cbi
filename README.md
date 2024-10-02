@@ -10,7 +10,6 @@
 ## Requirements:
 
 - Server with at least 4 GB RAM
-- Root access on this server
 - `ansible` (community package) and `git` installed on this server
 
 
@@ -31,14 +30,17 @@ cd cbi
 
 ## Setup container management platform of your choice:
 
+To additionally grant Kubernetes access to a non-privileged user,
+add `-e user=USERNAME`:
+
 ```
-./cbi up k3s/environment
+sudo ./cbi up k3s/environment -e user=USERNAME
 ```
 
 __or__:
 
 ```
-./cbi up docker/environment
+sudo ./cbi up docker/environment
 # CURRENTLY NOT IMPLEMENTED!
 # Please use https://github.com/ansible-buch/docker-installer instead.
 ```
