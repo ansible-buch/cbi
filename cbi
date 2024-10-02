@@ -259,7 +259,7 @@ def ansible_runner(action=None, arg=None):
         "-e", f"app_path={stash['app_path']}"
     ]
 
-    if opts['extra']:
+    if 'extra' in opts and opts['extra'] != None:
         for extra_var_value in opts['extra']:
             cmd.extend(['-e', extra_var_value])
 
