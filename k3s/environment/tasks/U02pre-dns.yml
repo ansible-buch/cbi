@@ -14,7 +14,8 @@
     primary_dns: >-
       {{-
         dig_cmd.stdout |
-        regex_search('SERVER: ([0-9\\.]+)', '\1')
+        regex_search('SERVER: ([0-9\\.]+)', '\1') |
+        first
       }}
 
 - name: Create k3s-resolv.conf
