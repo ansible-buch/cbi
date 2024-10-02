@@ -4,7 +4,6 @@
     cmd: >-
       curl -fsSL https://get.k3s.io | sh -s - server \
           --write-kubeconfig-mode 644
-      #   --resolv-conf /etc/k3s-resolv.conf
 
   environment:
     INSTALL_K3S_VERSION: "{{versions['k3s']}}"
@@ -30,8 +29,3 @@
   package:
     name: python3-kubernetes
     state: latest
-
-# - name: Install ACL package
-#   package:
-#     name: acl
-#     state: present

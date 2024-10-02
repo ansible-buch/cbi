@@ -10,14 +10,6 @@
     creates: /etc/bash_completion.d/kubectl
 
 
-# - name: Grant ACL read access to global kubeconfig file
-#   ansible.posix.acl:
-#     path: /etc/rancher/k3s/k3s.yaml
-#     entity: "{{user}}"
-#     etype: user
-#     permissions: r
-#     state: present
-    
 - name: Create ~/.kube dir
   file:
     path: ~{{item}}/.kube

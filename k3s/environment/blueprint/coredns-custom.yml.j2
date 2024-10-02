@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  tzone.server: |
+    {{domain}}:53 {
+      errors
+      file /etc/coredns/custom/tzone.db
+      reload
+    }
+  tzone.db: |
+    $ORIGIN {{domain}}.
+    $TTL 60
+    @ 3600 IN SOA  sns.dns.icann.org. noc.dns.icann.org. (
+      2024100201 ; serial
+      60         ; refresh (1 minute)
+      15         ; retry (15 seconds)
+      604800     ; expire (1 week)
+      60         ; minimum TTL (1 minute)
+    )
+    @ IN A 192.168.150.100
+    * IN CNAME @

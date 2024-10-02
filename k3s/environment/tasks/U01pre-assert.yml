@@ -1,4 +1,3 @@
 - assert:
     that:
-      - iface is defined and iface != ""
       - user  is defined and user  != ""

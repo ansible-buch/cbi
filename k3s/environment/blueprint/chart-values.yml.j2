@@ -1,0 +1,44 @@
+---
+# https://gitea.com/gitea/helm-chart/
+
+redis-cluster:
+  enabled: false
+redis:
+  enabled: true
+postgresql:
+  enabled: true
+postgresql-ha:
+  enabled: false
+
+persistence:
+  enabled: true
+
+image:
+  tag: {{versions['gitea']}}
+  
+gitea:
+  config:
+    database:
+      DB_TYPE: postgres
+    service:
+      DISABLE_REGISTRATION: true
+    server:
+      SSH_DOMAIN: gitea.{{domain}}
+      SSH_PORT: {{gitea_ssh_nodeport}}
+  admin:
+    username: {{gitea_admin_username}}
+    password: {{default_password}}
+    email: {{gitea_admin_username}}@{{domain}}
+
+service:
+  ssh:
+    type: NodePort
+    nodePort: {{gitea_ssh_nodeport}}
+
+ingress:
+  enabled: true
+  hosts: 
+    - host: gitea.{{domain}}
+      paths:
+        - path: /
+          pathType: Prefix
