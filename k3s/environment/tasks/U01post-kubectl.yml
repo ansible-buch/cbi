@@ -37,7 +37,7 @@
       state: link
       follow: false
       src: /etc/rancher/k3s/k3s.yaml
-      dest: ~{{item}}/.kube/config
+      dest: ~{{user}}/.kube/config
       owner: "{{user}}"
       group: "{{lookup('pipe', 'id -gn ' + user)}}"
   when: user is defined
