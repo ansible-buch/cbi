@@ -59,4 +59,4 @@
     name: dnsmasq
     state: restarted
     enabled: yes
-  when: copy_dnsmasqconf_task | changed
+  when: copy_dnsmasqconf_task is changed
