@@ -5,5 +5,5 @@
   register: app_resources
     
 - name: Rollout restart deployment coredns
-  shell:  kubectl rollout restart deployment coredns
+  shell:  kubectl -n kube-system rollout restart deployment coredns
   when: app_resources is changed
