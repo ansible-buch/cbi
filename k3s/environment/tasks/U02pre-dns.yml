@@ -6,7 +6,7 @@
 
 - name: Run a dig command
   shell: dig ansible.com | grep SERVER
-  register: dig_command
+  register: dig_cmd
 
 
 - set_fact:
