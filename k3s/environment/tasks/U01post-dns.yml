@@ -1,7 +1,7 @@
 - name: Gather facts
   setup:
 
-- debub: var=ansible_facts
+- debug: var=ansible_facts
     
 - name: Get ip of K3s cni0 interface
   set_fact:
