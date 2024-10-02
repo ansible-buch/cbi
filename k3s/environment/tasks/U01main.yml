@@ -29,3 +29,8 @@
   package:
     name: python3-kubernetes
     state: latest
+
+- name: Install ACL package
+  package:
+    name: acl
+    state: present
