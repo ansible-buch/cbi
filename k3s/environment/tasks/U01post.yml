@@ -32,6 +32,7 @@
 
 - name: Create symlinks to global kubeconfig (due to helm)
   file:
+    state: link
     src: /etc/rancher/k3s/k3s.yaml
     dest: ~{{item}}/.kube/config
     owner: "{{item}}"
