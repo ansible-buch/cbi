@@ -1,8 +1,6 @@
 - name: Gather facts
   setup:
 
-- debug: var=ansible_facts
-    
 - name: Get ip of K3s cni0 interface
   set_fact:
     cni0_ip: "{{ ansible_facts['cni0']['ipv4']['address'] }}"
@@ -13,6 +11,3 @@
     content: |
       # This file is submitted to K3s.
       nameserver {{cni0_ip}}
-
-  
-
