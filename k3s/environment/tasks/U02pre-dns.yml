@@ -1,38 +1,31 @@
 - name: Gather facts
   setup:
 
-- debug:
-    
-- meta: end_play
+# - set_fact:
+#     server_ip: "{{ ansible_facts[iface]['ipv4']['address'] }}"
 
 
+# - name: Run a dig command
+#   shell: dig ansible.com | grep SERVER
+#   register: dig_cmd
+#   changed_when: false
 
-    
-- set_fact:
-    server_ip: "{{ ansible_facts[iface]['ipv4']['address'] }}"
+# - name: Determine used (= primary) nameserver
+#   set_fact:
+#     primary_dns: >-
+#       {{-
+#         dig_cmd.stdout |
+#         regex_search('SERVER: ([0-9\\.]+)', '\1') |
+#         first
+#       }}
 
-
-- name: Run a dig command
-  shell: dig ansible.com | grep SERVER
-  register: dig_cmd
-  changed_when: false
-
-- name: Determine used (= primary) nameserver
-  set_fact:
-    primary_dns: >-
-      {{-
-        dig_cmd.stdout |
-        regex_search('SERVER: ([0-9\\.]+)', '\1') |
-        first
-      }}
-
-- name: Create k3s-resolv.conf
-  copy:
-    dest: /etc/k3s-resolv.conf
-    content: |
-      # This file is submitted to K3s.
-      #nameserver {{primary_dns}}
-      nameserver 172.16.0.1
+# - name: Create k3s-resolv.conf
+#   copy:
+#     dest: /etc/k3s-resolv.conf
+#     content: |
+#       # This file is submitted to K3s.
+#       #nameserver {{primary_dns}}
+#       nameserver 172.16.0.1
 
 
 # - name: Install dnsmasq
@@ -42,22 +35,22 @@
 
 
     
-- name: Create /etc/dnsmasq.conf
-  copy:
-    dest: /etc/dnsmasq.conf
-    content: |
-      domain-needed
-      bogus-priv
-      no-resolv
+# - name: Create /etc/dnsmasq.conf
+#   copy:
+#     dest: /etc/dnsmasq.conf
+#     content: |
+#       domain-needed
+#       bogus-priv
+#       no-resolv
 
-      interface=lo
-      interface=dns0
-      bind-dynamic
+#       interface=lo
+#       interface=dns0
+#       bind-dynamic
 
-      server={{primary_dns}}
+#       server={{primary_dns}}
 
-      address=/{{domain}}/{{server_ip}}
-  register: copy_dnsmasqconf_task
+#       address=/{{domain}}/{{server_ip}}
+#   register: copy_dnsmasqconf_task
 
 # - name: Restart service and enable start on boot
 #   service:
