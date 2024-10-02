@@ -21,7 +21,7 @@
   register: cmd
   environment:
     PATH: >-
-      {{ lookup("pipe", "sh -c 'echo $PATH'" }}:/usr/local/bin 
+      {{ lookup("pipe", "sh -c 'echo $PATH'") }}:/usr/local/bin 
 
 - debug:
     msg: |
