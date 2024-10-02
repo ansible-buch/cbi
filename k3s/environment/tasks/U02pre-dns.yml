@@ -44,7 +44,6 @@
 
       interface=lo
       interface=cni0
-      interface=flannel.1
       bind-dynamic
 
       server={{primary_dns}}

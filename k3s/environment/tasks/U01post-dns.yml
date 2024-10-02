@@ -1,3 +1,9 @@
+- name: Check if the interface is up
+  command: ip link show cni0
+  register: result
+  until: "'state UP' in result.stdout"
+  retries: 10
+
 - name: Gather facts
   setup:
 
