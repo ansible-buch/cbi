@@ -1,0 +1,24 @@
+---
+- name: Create Bash completion plugin dir
+  file:
+    path: /etc/bash_completion.d
+    state: directory
+
+
+- name: Create kubectl completions
+  shell:
+    cmd: "kubectl completion bash >/etc/bash_completion.d/kubectl"
+    creates: /etc/bash_completion.d/kubectl
+
+
+- name: Create ~/.kube dir
+  file:
+    path: ~/.kube
+    mode: 0700
+    state: directory
+
+- name: Copy kube config
+  copy:
+    src: /etc/rancher/k3s/k3s.yaml
+    dest: ~/.kube/config
+    mode: 0600
