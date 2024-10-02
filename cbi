@@ -278,6 +278,10 @@ def ansible_runner(action=None, arg=None):
         )
     )
 
+    if p.returncode != 0:
+        sys.exit(f"Ansible exited with error code {p.returncode}.")
+        
+
 
     
 ###########################
