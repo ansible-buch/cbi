@@ -24,5 +24,8 @@
 - name: Copy kube config
   copy:
     src: /etc/rancher/k3s/k3s.yaml
-    dest: ~/.kube/config
+    dest: ~{{item}}/.kube/config
     mode: 0600
+  with_items:
+    - root
+    - "{{k3s_user}}"
