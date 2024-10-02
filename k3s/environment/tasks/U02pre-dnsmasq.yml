@@ -52,9 +52,11 @@
              }}
 
       address=/{{domain}}/{{server_ip}}
+  register: copy_dnsmasqconf_task
 
 - name: Restart service and enable start on boot
   service:
     name: dnsmasq
     state: restarted
     enabled: yes
+  when: copy_dnsmasqconf_task | changed
