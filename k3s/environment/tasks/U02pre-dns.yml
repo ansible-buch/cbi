@@ -8,6 +8,7 @@
 - name: Run a dig command
   shell: dig ansible.com | grep SERVER
   register: dig_cmd
+  changed_when: false
 
 - name: Determine used (= primary) nameserver
   set_fact:
