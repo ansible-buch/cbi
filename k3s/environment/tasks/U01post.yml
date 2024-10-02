@@ -1,22 +1,8 @@
 ---
-
-- block:
-    
-  - pause:
-      prompt: "Username of unprivileged K3s user"
-    register: answer
-
-  - set_fact:
-      k3s_user: "{{answer.user_input}}"
-    
-  when: k3s_user is undefined
-
-
 - name: Create Bash completion plugin dir
   file:
     path: /etc/bash_completion.d
     state: directory
-
 
 - name: Create kubectl completions
   shell:
@@ -27,7 +13,7 @@
 - name: Grant ACL read access to global kubeconfig file
   ansible.posix.acl:
     path: /etc/rancher/k3s/k3s.yaml
-    entity: "{{k3s_user}}"
+    entity: "{{user}}"
     etype: user
     permissions: r
     state: present
@@ -41,7 +27,7 @@
     group: "{{lookup('pipe', 'id -gn ' + item)}}"
   with_items:
     - root
-    - "{{k3s_user}}"
+    - "{{user}}"
 
 - name: Create symlinks to global kubeconfig (due to helm)
   file:
@@ -53,4 +39,4 @@
     group: "{{lookup('pipe', 'id -gn ' + item)}}"
   with_items:
     - root
-    - "{{k3s_user}}"
+    - "{{user}}"
