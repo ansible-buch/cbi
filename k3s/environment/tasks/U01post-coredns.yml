@@ -2,3 +2,8 @@
   kubernetes.core.k8s:
     state: present
     definition: "{{ lookup('file', 'run/coredns-custom.yml') }}"
+  register: app_resources
+    
+- name: Rollout restart deployment coredns
+  shell:  kubectl rollout restart deployment coredns
+  when: app_resources is changed
