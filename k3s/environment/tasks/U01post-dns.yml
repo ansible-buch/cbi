@@ -1,0 +1,9 @@
+- name: Gather facts
+  setup:
+
+- name: Get ip of K3s cni interface
+  set_fact:
+    cni_ip: "{{ ansible_facts[iface]['cni']['address'] }}"
+
+
+- debug: var=cni_ip
