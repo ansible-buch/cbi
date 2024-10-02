@@ -250,6 +250,7 @@ def ansible_runner(action=None, arg=None):
     
     cmd = [
         "ansible",
+        "-vvv",
         "-i", "localhost,",
         "localhost",
         "-c", "local",
