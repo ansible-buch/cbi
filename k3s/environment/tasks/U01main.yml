@@ -19,15 +19,22 @@
   shell: "curl -fsSL https://raw.githubusercontent.com/\
           helm/helm/main/scripts/get-helm-3 | bash"
   register: cmd
-  environment:
-    PATH: >-
-      {{ lookup("pipe", "sh -c 'echo $PATH'") }}:/usr/local/bin 
-
+  ignore_errors: true # Rocky 9 / sudo: No /usr/local/bin in PATH
+  
 - debug:
     msg: |
       {{cmd.stdout}}
       {{cmd.stderr}}
 
+- stat:
+    path: /usr/local/bin/helm
+  register: p
+      
+- fail:
+    msg: Something is wrong with Helm installation.
+  when: not (p.stat.exists and p.stat.executable)
+
+      
 - name: Install Python Kubernetes support
   package:
     name: python3-kubernetes
