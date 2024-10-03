@@ -7,12 +7,11 @@
 - Currently supports K3s
 - Docker (via Compose) will come soon (not relevant for Ansible Book :-)
 
-It has been tested on:
+It has been successfully tested on:
 
 - Debian 12
 - Ubuntu 24.04
 - Rocky Linux 9
-- openSUSE Leap 15.6
 
 <br/>
 
@@ -21,10 +20,11 @@ It has been tested on:
 - Server with at least 4 GB RAM
 - `ansible` (community package) and `git` installed on this server
 
+<!--
 ### Special additional requirements on openSUSE:
 - Package `python3-PyYAML` installed
 - `pip3.11 install kubernetes`
-
+-->
 <br/>
 
 ## Clone this repo on your server and ch'dir into directory:
