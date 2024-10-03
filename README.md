@@ -10,6 +10,7 @@
 It has been tested on:
 
 - Debian 12
+- Ubuntu 24.04
 - Rocky Linux 9
 
 

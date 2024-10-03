@@ -1,7 +1,11 @@
 ---
+- name: Gather facts
+  setup:
+
 - assert:
     that:
       - iface is defined and iface  != ""
+      - iface in ansible_interfaces
 
 
 - command: printenv PATH
@@ -15,3 +19,5 @@
       /usr/local/bin is not in your PATH. If you are using sudo,
       you most likely have to add it to the secure_path
       in /etc/sudoers.
+
+- meta: end_play
