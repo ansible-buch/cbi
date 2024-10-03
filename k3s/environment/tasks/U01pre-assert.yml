@@ -2,6 +2,7 @@
 - name: Gather facts
   setup:
 
+
 - assert:
     that:
       - iface is defined and iface  != ""
@@ -20,16 +21,14 @@
       you most likely have to add it to the secure_path
       in /etc/sudoers.
 
+
 - block:
   - command: "id {{user}}"
     ignore_errors: true
     register: id_cmd
-    
+
   - assert:
       that: id_cmd is success
       fail_msg: "The user '{{user}}' does not seem to exist"
-    
-  when: user is defined
 
-      
-- meta: end_play
+  when: user is defined
