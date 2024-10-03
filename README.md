@@ -14,15 +14,18 @@ It has been tested on:
 - Rocky Linux 9
 - openSUSE Leap 15.6
 
+<br/>
+
 ## Requirements:
 
 - Server with at least 4 GB RAM
 - `ansible` (community package) and `git` installed on this server
 
-### Special additional requirements on SUSE:
+### Special additional requirements on openSUSE:
 - Package `python3-PyYAML` installed
 - `pip3.11 install kubernetes`
 
+<br/>
 
 ## Clone this repo on your server and ch'dir into directory:
 
@@ -56,6 +59,7 @@ sudo ./cbi up k3s/environment -e iface=IFACE_NAME -e user=USERNAME
 ```
 
 
+<br/>
 
 
 # Kubernetes apps:
@@ -74,6 +78,7 @@ sudo ./cbi up k3s/environment -e iface=IFACE_NAME -e user=USERNAME
 
 
 
+<br/>
 
 
 
