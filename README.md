@@ -18,7 +18,10 @@ It has been tested on:
 
 - Server with at least 4 GB RAM
 - `ansible` (community package) and `git` installed on this server
-- On SUSE: Package `python3-PyYAML` installed
+
+### Special additional requirements on SUSE:
+- Package `python3-PyYAML` installed
+- `pip3.11 install kubernetes`
 
 
 ## Clone this repo on your server and ch'dir into directory:
