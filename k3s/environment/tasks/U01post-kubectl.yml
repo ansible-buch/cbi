@@ -7,13 +7,12 @@
     path: /etc/bash_completion.d
     state: directory
 
-- debug: var=ansible_env.PATH
-    
 - name: Create kubectl completions
   shell:
     cmd: "kubectl completion bash >/etc/bash_completion.d/kubectl"
     creates: /etc/bash_completion.d/kubectl
-
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
 
 - name: Create ~root/.kube dir
   file:

@@ -1,4 +1,7 @@
 ---
+- name: Gather facts
+  setup:
+    
 - name: Apply coredns custom configmap
   kubernetes.core.k8s:
     state: present
@@ -7,4 +10,7 @@
     
 - name: Rollout restart deployment coredns
   shell:  kubectl -n kube-system rollout restart deployment coredns
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+
   when: app_resources is changed
