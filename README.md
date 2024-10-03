@@ -30,8 +30,11 @@ cd cbi
 
 ## Setup container management platform of your choice:
 
+You must specify the name the primary network interface.
+Add `-e iface=IFACE_NAME`.
+
 To additionally grant Kubernetes access to a non-privileged user,
-add `-e user=USERNAME`:
+add `-e user=USERNAME` if necessary:
 
 ```
 sudo ./cbi up k3s/environment -e user=USERNAME

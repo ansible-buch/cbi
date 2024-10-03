@@ -3,5 +3,3 @@
   include_vars: "{{root_env}}"
 
 - include_tasks: "{{ task_file }}"
-  environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"

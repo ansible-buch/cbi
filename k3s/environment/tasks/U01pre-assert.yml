@@ -1,3 +1,15 @@
+---
 - assert:
     that:
       - iface is defined and iface  != ""
+
+- command: printenv PATH
+  register: p
+
+- assert:
+    that:
+      - "'/usr/local/bin' in p.stdout"
+    fail_msg: |
+      /usr/local/bin is not in your PATH. If you are using sudo,
+      you most likely have to add it to the secure_path
+      in /etc/sudoers.
