@@ -24,6 +24,7 @@
 - assert:
     that:
       - lookup('pipe', 'getent passwd '+user)
+    fail_msg: "The user '{{user}}' does not seem to exist"
   when: user is defined
 
       
