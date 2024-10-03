@@ -6,6 +6,11 @@
   environments
 - Supports Docker (via Compose) and K3s
 
+It has been tested on:
+
+- Debian 12
+- Rocky Linux 9
+
 
 ## Requirements:
 
