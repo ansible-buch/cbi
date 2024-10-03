@@ -21,7 +21,7 @@
       in /etc/sudoers.
 
 - block:
-  - command: "id -n {{user}}"
+  - command: "id {{user}}"
     ignore_errors: true
     register: id_cmd
     
