@@ -1,7 +1,7 @@
 ---
 - name: Gather facts
   setup:
-    
+
 - name: Create Bash completion plugin dir
   file:
     path: /etc/bash_completion.d
@@ -11,8 +11,6 @@
   shell:
     cmd: "kubectl completion bash >/etc/bash_completion.d/kubectl"
     creates: /etc/bash_completion.d/kubectl
-  environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
 
 - name: Create ~root/.kube dir
   file:

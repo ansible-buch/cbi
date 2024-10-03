@@ -3,6 +3,7 @@
     that:
       - iface is defined and iface  != ""
 
+
 - command: printenv PATH
   register: p
 

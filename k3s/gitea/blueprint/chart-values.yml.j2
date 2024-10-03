@@ -15,7 +15,7 @@ persistence:
 
 image:
   tag: {{versions['gitea']}}
-  
+
 gitea:
   config:
     database:
@@ -37,7 +37,7 @@ service:
 
 ingress:
   enabled: true
-  hosts: 
+  hosts:
     - host: gitea.{{domain}}
       paths:
         - path: /

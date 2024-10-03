@@ -29,7 +29,7 @@
   when: generate.dirs is defined
 
 
-- name: Process blueprint Jinja templates 
+- name: Process blueprint Jinja templates
   template:
     src: "blueprint/{{item.src}}"
     dest: "run/{% if item.dest is defined %}{{item.dest}}{% else %}{{item.src | splitext | first}}{% endif%}"

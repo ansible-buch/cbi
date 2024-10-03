@@ -1,12 +1,10 @@
 ---
 - name: Gather facts
   setup:
-    
+
 - name: Call k3s-uninstall.sh
   command: k3s-uninstall.sh
   ignore_errors: true
-  environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
 
 - name: Remove K3s files
   file:
@@ -16,7 +14,7 @@
     - /var/lib/rancher
     - /etc/rancher
     - /etc/bash_completion.d/kubectl
-    
+
 - name: Remove Helm files
   file:
     path: "{{item}}"

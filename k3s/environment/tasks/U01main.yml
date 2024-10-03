@@ -1,7 +1,7 @@
 ---
 - name: Gather facts
   setup:
-    
+
 - name: Setup K3s
   shell:
     cmd: >-
@@ -22,15 +22,13 @@
   shell: "curl -fsSL https://raw.githubusercontent.com/\
           helm/helm/main/scripts/get-helm-3 | bash"
   register: cmd
-  environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
-  
+
 - debug:
     msg: |
       {{cmd.stdout}}
       {{cmd.stderr}}
 
-      
+
 - name: Install Python Kubernetes support
   package:
     name: python3-kubernetes
