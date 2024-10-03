@@ -4,7 +4,8 @@
 
 - Deploying/managing containerized apps in test labs or small private
   environments
-- Supports Docker (via Compose) and K3s
+- Currently supports K3s
+- Docker (via Compose) will come soon (not relevant for Ansible Book :-)
 
 It has been tested on:
 
@@ -33,24 +34,20 @@ cd cbi
 ```
 
 
-## Setup container management platform of your choice:
+## Setup K3s environment:
 
 You must specify the name the primary network interface.
 Add `-e iface=IFACE_NAME`.
 
+```
+sudo ./cbi up k3s/environment -e iface=IFACE_NAME
+```
+
 To additionally grant Kubernetes access to a non-privileged user,
-add `-e user=USERNAME` if necessary:
+add `-e user=USERNAME`:
 
 ```
-sudo ./cbi up k3s/environment -e user=USERNAME
-```
-
-__or__:
-
-```
-sudo ./cbi up docker/environment
-# CURRENTLY NOT IMPLEMENTED!
-# Please use https://github.com/ansible-buch/docker-installer instead.
+sudo ./cbi up k3s/environment -e iface=IFACE_NAME -e user=USERNAME
 ```
 
 
@@ -60,7 +57,7 @@ sudo ./cbi up docker/environment
 
 - Gitea
   ```
-  ./cbi up k3s/gitea
+  sudo ./cbi up k3s/gitea
   ```
 
 - AWX
