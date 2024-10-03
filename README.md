@@ -12,12 +12,13 @@ It has been tested on:
 - Debian 12
 - Ubuntu 24.04
 - Rocky Linux 9
-
+- openSUSE Leap 15.6
 
 ## Requirements:
 
 - Server with at least 4 GB RAM
 - `ansible` (community package) and `git` installed on this server
+- On SUSE: Package `python3-PyYAML` installed
 
 
 ## Clone this repo on your server and ch'dir into directory:
