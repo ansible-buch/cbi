@@ -5,6 +5,7 @@
 
 
 - command: printenv PATH
+  changed_when: false
   register: p
 
 - assert:
