@@ -27,7 +27,7 @@
     
   - assert:
       that: id_cmd is success
-    fail_msg: "The user '{{user}}' does not seem to exist"
+      fail_msg: "The user '{{user}}' does not seem to exist"
     
   when: user is defined
 
