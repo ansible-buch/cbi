@@ -1,4 +1,7 @@
 ---
+- name: Gather facts
+  setup:
+    
 - name: Setup K3s
   shell:
     cmd: >-
@@ -19,6 +22,8 @@
   shell: "curl -fsSL https://raw.githubusercontent.com/\
           helm/helm/main/scripts/get-helm-3 | bash"
   register: cmd
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
   ignore_errors: true # Rocky 9 / sudo: No /usr/local/bin in PATH
   
 - debug:
