@@ -11,6 +11,10 @@ It has been successfully tested on:
 - Debian 12
 - Ubuntu 24.04
 - Rocky Linux 9
+- openSUSE Leap 15
+
+openSUSE Leap 15 has some issues with Gitea under K3s,
+I will investigate this further.
 
 <br/>
 

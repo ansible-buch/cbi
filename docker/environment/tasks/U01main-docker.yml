@@ -37,4 +37,3 @@
     name: docker
     state: reloaded
   when: config is changed
-
