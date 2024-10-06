@@ -4,8 +4,7 @@
 
 - Deploying/managing containerized apps in test labs or small private
   environments
-- Currently supports K3s
-- Docker (via Compose) will come soon (not relevant for Ansible Book :-)
+- Supports K3s and Docker
 
 It has been successfully tested on:
 
@@ -17,7 +16,7 @@ It has been successfully tested on:
 
 ## Requirements:
 
-- Server with at least 4 GB RAM
+- Server with sufficient RAM, depending on the applications you intend to run.
 - `ansible` (community package) and `git` installed on this server
 
 <!--
@@ -58,6 +57,15 @@ add `-e user=USERNAME`:
 sudo ./cbi up k3s/environment -e iface=IFACE_NAME -e user=USERNAME
 ```
 
+## Setup Docker environment:
+
+
+To additionally grant Docker permissions to a non-privileged user,
+add `-e user=USERNAME`:
+
+```
+sudo ./cbi up docker/environment -e user=USERNAME
+```
 
 <br/>
 
