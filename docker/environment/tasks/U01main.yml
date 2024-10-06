@@ -18,8 +18,18 @@
     
 - name: Upload daemon.json
   copy:
-    src: daemon.json
     dest: /etc/docker/daemon.json
+    content: |
+      {
+          "log-driver": "json-file",
+          "log-opts": {
+              "max-size": "20m",
+              "max-file": "5",
+              "compress": "true"
+          },
+
+          "live-restore": true
+      }
   register: config
 
 - name: Reload docker service if needed
@@ -27,5 +37,4 @@
     name: docker
     state: reloaded
   when: config is changed
-
 
