@@ -1,4 +1,6 @@
 ---
-- name: Install bash-completion package
+- name: Install required base packages
   package:
-    name: bash-completion
+    name:
+      - bash-completion
+      - curl
