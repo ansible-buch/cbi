@@ -1,5 +1,5 @@
 ---
-- name: Download installer script
+- name: Download lazydocker installer script
   get_url:
     url: https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh
     dest: /tmp/lazydocker_install_update_linux.sh
@@ -12,3 +12,13 @@
   environment:
     DIR: /usr/local/bin
   when: get_url_task is changed
+
+
+- include_tasks: include/lazydocker-create-config-for-user.yml
+  vars:
+    user: root
+
+- include_tasks: include/lazydocker-create-config-for-user.yml
+  vars:
+    user: "{{user}}"
+  when: user is defined

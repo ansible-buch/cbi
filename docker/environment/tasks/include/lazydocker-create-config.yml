@@ -1,0 +1,32 @@
+- set_fact:
+    lazydocker_config_dir: "~{{user}}/.config/lazydocker"
+      
+- name: Create lazydocker config dir {{lazydocker_config_dir}}
+  file:
+    path: "{{lazydocker_config_dir}}"
+    owner: "{{user}}"
+    group: "{{lookup('pipe', 'id -gn ' + user)}}"
+    state: directory
+
+- name: Create lazydocker config {{lazydocker_config_dir}}/config.yml
+  copy:
+    dest: "{{lazydocker_config_dir}}/config.yml"
+    owner: "{{user}}"
+    group: "{{lookup('pipe', 'id -gn ' + user)}}"
+    content: |
+      ---
+      # https://github.com/jesseduffield/lazydocker/blob/master/docs/Config.md
+
+      gui:
+        language: en
+        theme:
+          selectedLineBgColor:
+            - cyan
+
+      logs:
+        timestamps: false  # pretty much what you would get with docker logs
+        since: ''          # to show all log lines no matter how old
+        tail: '200'        # show last 200 lines of logs
+
+      commandTemplates:
+        dockerCompose: docker compose
