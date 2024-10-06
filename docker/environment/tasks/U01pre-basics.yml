@@ -1,0 +1,4 @@
+---
+- name: Install bash-completion package
+  package:
+    name: bash-completion
