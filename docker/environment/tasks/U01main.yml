@@ -1,0 +1,3 @@
+---
+- set_fact:
+    distname: "{{ ansible_distribution| lower| replace(' ', '_') }}"
