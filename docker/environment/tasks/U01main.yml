@@ -4,3 +4,5 @@
 
 - set_fact:
     distname: "{{ ansible_distribution| lower| replace(' ', '_') }}"
+
+- debug: msg="Using '{{distname}}' as internal distribution name."
