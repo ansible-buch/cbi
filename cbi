@@ -298,10 +298,6 @@ def create_sample_config():
 # The default domain under which apps will be accessible:
 domain: example.org
 
-# # # The default FQDN under which apps will be accessible.
-# # # In most cases you should use this global setting, and only change
-# # # it in individual applications if necessary:
-# # #app_fqdn: ${COMPOSE_PROJECT_NAME}.{{domain}}
 
 # Default initial password for apps (if needed):
 default_password: secret
