@@ -1,0 +1,11 @@
+---
+- name: Setup Docker repo
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+
+- name: Install Docker Engine and Compose plugin
+  dnf:
+    name:
+      - docker-ce
+      - docker-compose-plugin

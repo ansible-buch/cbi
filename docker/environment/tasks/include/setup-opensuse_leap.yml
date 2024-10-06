@@ -1,0 +1,6 @@
+---
+- name: Install Docker Engine and Compose plugin from openSUSE repo
+  zypper:
+    name:
+      - docker
+      - docker-compose
