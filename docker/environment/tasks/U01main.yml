@@ -1,3 +1,6 @@
 ---
+- name: Gather facts
+  setup:
+
 - set_fact:
     distname: "{{ ansible_distribution| lower| replace(' ', '_') }}"
