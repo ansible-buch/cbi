@@ -299,8 +299,9 @@ def create_sample_config():
 domain: example.org
 
 
-# Default initial password for apps (if needed):
-default_password: secret
+# Default initial password for apps. This one should fulfill all
+# complexitiy requirements. If you change it, don't use less then 8 chars!
+default_password: Secret-1234
 
 # Default salt for password hashes (we need at least 22 chars):
 default_salt:     really.salty.salt.0123456789

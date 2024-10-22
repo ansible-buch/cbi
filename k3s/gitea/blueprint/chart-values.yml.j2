@@ -20,6 +20,9 @@ gitea:
   config:
     database:
       DB_TYPE: postgres
+    indexer:
+      ISSUE_INDEXER_TYPE: bleve
+      REPO_INDEXER_ENABLED: true
     service:
       DISABLE_REGISTRATION: true
     server:
