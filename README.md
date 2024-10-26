@@ -16,7 +16,7 @@ It has been successfully tested on:
 
 <br/>
 
-## Requirements:
+## Requirements
 
 - Server with sufficient RAM, depending on the applications you intend to run
 - Firewall/package filters disabled
@@ -31,14 +31,14 @@ pip3.11 install kubernetes
 
 <br/>
 
-## Clone this repo on your server and ch'dir into directory:
+## Clone this repo on your server and ch'dir into directory.
 
 ```
 git clone https://github.com/ansible-buch/cbi.git
 cd cbi
 ```
 
-## Generate config and review/adjust it:
+## Generate config and review/adjust it.
 ```
 ./cbi config
 
@@ -46,7 +46,12 @@ cd cbi
 ```
 
 
-## Setup K3s environment:
+## Setup K3s or Docker environment
+
+_Please choose one of the two options. 
+Both at the same time is not currently supported!_
+
+### Setup K3s 
 
 You must specify the name the primary network interface.
 Add `-e iface=IFACE_NAME`.
@@ -62,8 +67,11 @@ add `-e user=USERNAME`:
 sudo ./cbi up k3s/environment -e iface=IFACE_NAME -e user=USERNAME
 ```
 
-## Setup Docker environment:
+### Setup Docker
 
+```
+sudo ./cbi up docker/environment
+```
 
 To additionally grant Docker permissions to a non-privileged user,
 add `-e user=USERNAME`:
@@ -75,21 +83,21 @@ sudo ./cbi up docker/environment -e user=USERNAME
 <br/>
 
 
-# Kubernetes apps:
+# Kubernetes apps
 
-- Gitea
+## Gitea
   ```
   sudo ./cbi up k3s/gitea
   ```
   Username: `root`
 
-- AWX
+## AWX
   ```
   ./cbi up k3s/awx
   ```
   Username: `admin`
 
-- Semaphore
+## Semaphore
   ```
   ./cbi up k3s/semaphore
   ```
@@ -100,7 +108,12 @@ sudo ./cbi up docker/environment -e user=USERNAME
 
 <br/>
 
+# Docker apps
 
+Coming soon!
+
+
+<br/>
 
 # Internals
 
