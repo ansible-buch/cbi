@@ -32,3 +32,15 @@
       fail_msg: "The user '{{user}}' does not seem to exist"
 
   when: user is defined
+
+
+- name: Gather service facts
+  service_facts:
+
+- assert:
+    that:
+      ansible_facts['services']['firewalld.service']['state'] != "running"
+    fail_msg: |
+      The firewalld service is be active, which will interfere with K3s.
+      Please disable it to proceed.
+  when: ansible_facts['services']['firewalld.service'] is defined

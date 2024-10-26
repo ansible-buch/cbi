@@ -13,21 +13,22 @@ It has been successfully tested on:
 - Rocky Linux 9
 - openSUSE Leap 15
 
-openSUSE Leap 15 has some issues with Gitea under K3s,
-I will investigate this further.
 
 <br/>
 
 ## Requirements:
 
-- Server with sufficient RAM, depending on the applications you intend to run.
+- Server with sufficient RAM, depending on the applications you intend to run
+- Firewall/package filters disabled
 - `ansible` (community package) and `git` installed on this server
 
-<!--
 ### Special additional requirements on openSUSE:
-- Package `python3-PyYAML` installed
-- `pip3.11 install kubernetes`
--->
+
+```
+zypper install python3-PyYAML
+pip3.11 install kubernetes
+```
+
 <br/>
 
 ## Clone this repo on your server and ch'dir into directory:

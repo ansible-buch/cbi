@@ -4,14 +4,16 @@
 redis-cluster:
   enabled: false
 redis:
-  enabled: true
+  enabled: false
 postgresql:
-  enabled: true
+  enabled: false
 postgresql-ha:
   enabled: false
 
 persistence:
   enabled: true
+cache:
+  enabled: false
 
 image:
   tag: {{versions['gitea']}}
@@ -19,7 +21,7 @@ image:
 gitea:
   config:
     database:
-      DB_TYPE: postgres
+      DB_TYPE: sqlite3
     indexer:
       ISSUE_INDEXER_TYPE: bleve
       REPO_INDEXER_ENABLED: true
