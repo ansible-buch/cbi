@@ -298,7 +298,6 @@ def create_sample_config():
 # The default domain under which apps will be accessible:
 domain: example.org
 
-
 # Default initial password for apps. This one should fulfill all
 # complexitiy requirements. If you change it, don't use less then 8 chars!
 default_password: Secret-1234
