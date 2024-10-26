@@ -353,18 +353,20 @@ def engine_type():
 ##################
 
     try:
-        p = subprocess.run(["k3s",  "--version"], capture_output=True)
+        p = subprocess.run(["k3s",  "--version"])
         if p.returncode == 0:
             return Engine.K3S
     except:
         pass
 
     try:
-        p = subprocess.run(["docker",  "--version"], capture_output=True)
+        p = subprocess.run(["docker",  "--version"])
         if p.returncode == 0:
             return Engine.DOCKER
     except:
-        return Engine.NONE
+        pass
+    
+    return Engine.NONE
 
 
 
