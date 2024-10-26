@@ -81,12 +81,19 @@ sudo ./cbi up docker/environment -e user=USERNAME
   ```
   sudo ./cbi up k3s/gitea
   ```
+  Username: `root`
 
 - AWX
   ```
   ./cbi up k3s/awx
   ```
+  Username: `admin`
 
+- Semaphore
+  ```
+  ./cbi up k3s/semaphore
+  ```
+  Username: `admin`
 
 
 
