@@ -46,10 +46,11 @@ cd cbi
 ```
 
 
+
 ## Setup K3s or Docker environment
 
 _Please choose one of the two options. 
-Both at the same time is not currently supported!_
+Both at the same time is currently not supported!_
 
 ### Setup K3s 
 
@@ -119,19 +120,33 @@ Coming soon!
 
 ## Naming of task files:
 
-### Up tasks:
-- `U01pre*`
-- `U01main*`
-- `U01wait*`
-- `U01post*`
+### Up tasks
+- `U[0-9][0-9]pre*`
+- `U[0-9][0-9]main*`
+- `U[0-9][0-9]wait*`
+- `U[0-9][0-9]post*`
 
-### Down tasks:
-- `D01pre*`
-- `D01main*`
-- `D01wait*`
-- `D01post*`
+### Down tasks
+- `D[0-9][0-9]pre*`
+- `D[0-9][0-9]main*`
+- `D[0-9][0-9]wait*`
+- `D[0-9][0-9]post*`
 
 
+
+<br/>
+
+# *Feature ideas*
+
+-
+  ```
+  ./cbi up/down
+  ./cbi start/stop
+  
+  # (with same meaning as in docker compose)
+  ```
+
+- `up/down` commands show somehow "know", whether root permissions are required
 
 
 
