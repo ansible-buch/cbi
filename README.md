@@ -146,8 +146,6 @@ Coming soon!
   # (with same meaning as in docker compose)
   ```
 
-- `up/down` commands show somehow "know", whether root permissions are required
-
 - Password in env.yml base64-encoded
 
 

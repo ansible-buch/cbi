@@ -325,9 +325,11 @@ environment: k3s
 # The default domain under which apps will be accessible:
 domain: example.org
 
-# Default initial password for apps. This one should fulfill all
-# complexitiy requirements. If you change it, don't use less then 8 chars!
-default_password: Secret-1234
+# Default initial base64-encoded password for apps.
+# Create one with echo -n <YOUR_PASSWORD> | base64
+# Make it visible with echo <ENCODED_PASSWORD> | base64 -d
+# If you change it, don't use less then 8 chars!
+default_password: U2VjcmV0LTEyMzQ=
 
 # Default salt for password hashes (we need at least 22 chars):
 default_salt:     really.salty.salt.0123456789
