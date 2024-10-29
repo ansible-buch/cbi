@@ -25,10 +25,6 @@ opts   = {}
 stash  = {}
 config = {}
 
-class Engine(Enum):
-    NONE   = 0
-    DOCKER = 1
-    K3S    = 2
 
 
 ###########
@@ -61,16 +57,17 @@ def main():
             config = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
 
-    # if opts['which'] == 'setup':
-    #     setup_environment(opts['server_type'])
-
-
     if opts['which'] == 'up':
         go(target="up")
 
     if opts['which'] == 'down':
         go(target="down")
 
+    if opts['which'] == 'start':
+        go(target="start")
+
+    if opts['which'] == 'stop':
+        go(target="stop")
 
 
 ##################
@@ -119,6 +116,17 @@ def get_options():
                              'CURRENTY THE DEFAULT ACTION!')
 
 
+    # start subcommand
+    parser_start = subparsers.add_parser('start', help='start existent app')
+    parser_start.add_argument('app_path', help='path to app')
+    # parser_start.add_argument('--pre', action='store_true', dest='pre',
+    #                        help='perform pre tasks and generate files')
+    # parser_start.add_argument('--main', action='store_true', dest='main',
+    #                        help='perform up tasks')
+    # parser_start.add_argument('--wait', action='store_true', dest='wait',
+    #                        help='perform wait tasks')
+    # parser_start.add_argument('--post', action='store_true', dest='post',
+    #                        help='perform post tasks')
     args = parser.parse_args()
     opts = vars(args)
 
@@ -130,13 +138,27 @@ def go(target):
 ###############
 
     global stash
-
+    global config
+    
     try:
         os.chdir(opts['app_path'])
         stash['app_path'] = os.getcwd()
     except:
         sys.exit(f"App directory does not exist: {opts['app_path']}")
 
+    try:
+        yamlfile = open("info.yml", "r")
+
+    except FileNotFoundError:
+        config['permissions'] = {}
+    else:
+        with yamlfile:
+            config['permissions'] = \
+                yaml.load(yamlfile, Loader=yaml.FullLoader)['permissions']
+
+    assert_sufficient_permissions(target)
+    
+    #ic(config)
 
     todo = {
         'pre':  True,
@@ -168,12 +190,14 @@ def go(target):
     wait_files = []
     post_files = []
 
-    if target == "up":
-        selector = 'U'
-    elif target == "down":
-        selector = 'D'
-    else:
-        system.exit(f"Bad target: {target}")
+
+    selectors = {
+        'up':    'U',
+        'down':  'D',
+        'start': 'S',
+        'stop':  'K', # Like the ancient SysV-init :-)
+    }
+    selector = selectors[target]
 
 
     if todo['pre']:
@@ -201,7 +225,7 @@ def go(target):
 
 
     if todo['main']:
-        if (engine_type() == Engine.DOCKER
+        if (config['environment'] == "docker"
             and
             os.path.exists('docker-compose.yml')):
 
@@ -210,7 +234,7 @@ def go(target):
             if target == "down":
                 p = subprocess.run(['docker', 'compose', 'down', '--volumes'])
 
-        if engine_type() == Engine.K3S:
+        if config['environment'] == "k3s":
             manifest = None
             if os.path.isfile('run/manifest.yml'):
                 manifest = 'run/manifest.yml'
@@ -295,6 +319,9 @@ def create_sample_config():
 
 
     text = """
+# The environment you want to manage (docker or k3s):
+environment: k3s
+
 # The default domain under which apps will be accessible:
 domain: example.org
 
@@ -348,27 +375,42 @@ versions:
 
 
 ##################
-def engine_type():
+#def engine_type():
 ##################
 
-    try:
-        p = subprocess.run(["k3s",  "--version"])
-        if p.returncode == 0:
-            return Engine.K3S
-    except:
-        pass
+    # try:
+    #     p = subprocess.run(["k3s",  "--version"])
+    #     if p.returncode == 0:
+    #         return Engine.K3S
+    # except:
+    #     pass
 
-    try:
-        p = subprocess.run(["docker",  "--version"])
-        if p.returncode == 0:
-            return Engine.DOCKER
-    except:
-        pass
+    # try:
+    #     p = subprocess.run(["docker",  "--version"])
+    #     if p.returncode == 0:
+    #         return Engine.DOCKER
+    # except:
+    #     pass
     
-    return Engine.NONE
+    # return Engine.NONE
 
 
 
+##########################################
+def assert_sufficient_permissions(target):
+##########################################
+    global config
+
+    # No special permissions required? That's ok!
+    if not target in config['permissions']:
+        return True
+
+    # Need root?
+    if config['permissions'][target] == 'root' and os.geteuid() != 0:
+        sys.exit(f"Root privileges required for target '{target}'.")
+    
+
+    
 
 #######################
 def is_executable(cmd):

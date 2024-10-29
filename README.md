@@ -148,6 +148,7 @@ Coming soon!
 
 - `up/down` commands show somehow "know", whether root permissions are required
 
+- Password in env.yml base64-encoded
 
 
 
