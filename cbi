@@ -286,10 +286,10 @@ environment: k3s
 # The default domain under which apps will be accessible:
 domain: example.org
 
-# Default initial base64-encoded password for apps.
+# Default initial *base64-encoded* password for apps.
 # Create encoded string with: echo -n <YOUR_PASSWORD> | base64
 # Make password visible with: echo <ENCODED_PASSWORD> | base64 -d
-# If you change it, don't use less then 8 chars!
+# If you choose another one, don't use less then 8 chars!
 default_password: U2VjcmV0LTEyMzQ=
 
 # Default salt for password hashes (we need at least 22 chars):

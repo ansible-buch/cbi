@@ -1,0 +1,13 @@
+- name: Scale deployments to zero
+  kubernetes.core.k8s_scale:
+    api_version: v1
+    kind: Deployment
+    namespace: awx
+    replicas: 0
+    
+- name: Scale statefulsets to zero
+  kubernetes.core.k8s_scale:
+    api_version: apps/v1
+    kind: StatefulSet
+    namespace: awx
+    replicas: 0

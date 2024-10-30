@@ -47,7 +47,7 @@ spec:
         - name: SEMAPHORE_ADMIN
           value: admin
         - name: SEMAPHORE_ADMIN_PASSWORD
-          value: {{default_password}}
+          value: {{default_password | b64decode}}
         - name: SEMAPHORE_ADMIN_EMAIL
           value: admin@{{domain}}
       volumes:

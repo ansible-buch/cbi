@@ -84,6 +84,16 @@ sudo ./cbi up docker/environment -e user=USERNAME
 <br/>
 
 
+# General usage
+
+- `./cbi up APP_PATH`: Create and start app
+- `./cbi down APP_PATH`: Stop and purge app
+- `./cbi start APP_PATH`: Start existing app
+- `./cbi stop APP_PATH`: Stop existing app
+
+
+
+
 # Kubernetes apps
 
 ## Gitea
@@ -132,47 +142,24 @@ Coming soon!
 - `D[0-9][0-9]wait*`
 - `D[0-9][0-9]post*`
 
+### Start tasks
+- `S[0-9][0-9]pre*`
+- `S[0-9][0-9]main*`
+- `S[0-9][0-9]wait*`
+- `S[0-9][0-9]post*`
 
-
-<br/>
-
-# *Feature ideas*
-
--
-  ```
-  ./cbi up/down
-  ./cbi start/stop
-  
-  # (with same meaning as in docker compose)
-  ```
-
-- Password in env.yml base64-encoded
-
-
-
-
+### Stop tasks
+- `K[0-9][0-9]pre*`
+- `K[0-9][0-9]main*`
+- `K[0-9][0-9]wait*`
+- `K[0-9][0-9]post*`
 
 
 <!--
-## Start apps/init:
-```
-./cbi start apps/init
-```
+<br/>
 
-## Start step-ca (if needed):
-```
-./cbi start apps/base/step-ca
-```
-
-## Start Traefik (the most important part of the puzzle :-)
-```
-./cbi start apps/base/traefik
-```
+# *Feature ideas*
+-->
 
 
-## Apps:
 
-- Development (Gitea)
-  ```
-  ./cbi start apps/development/gitea
-  ```

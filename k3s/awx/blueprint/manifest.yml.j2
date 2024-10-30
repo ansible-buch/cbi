@@ -6,7 +6,7 @@ metadata:
   namespace: awx
 type: Opaque
 data:
-  password: {{ default_password | b64encode }}
+  password: {{ default_password }}
 
 ---
 apiVersion: awx.ansible.com/v1beta1
