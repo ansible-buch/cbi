@@ -1,0 +1,7 @@
+- name: Scale to one
+  kubernetes.core.k8s_scale:
+    api_version: v1
+    kind: Deployment
+    name: gitea
+    namespace: gitea
+    replicas: 1

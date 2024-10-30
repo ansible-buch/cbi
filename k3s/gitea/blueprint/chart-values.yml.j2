@@ -32,7 +32,7 @@ gitea:
       SSH_PORT: {{gitea_ssh_nodeport}}
   admin:
     username: {{gitea_admin_username}}
-    password: {{default_password}}
+    password: {{default_password | b64decode}}
     email: {{gitea_admin_username}}@{{domain}}
 
 service:

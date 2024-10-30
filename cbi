@@ -57,17 +57,8 @@ def main():
             config = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
 
-    if opts['which'] == 'up':
-        go(target="up")
+    go(target=opts['which'])
 
-    if opts['which'] == 'down':
-        go(target="down")
-
-    if opts['which'] == 'start':
-        go(target="start")
-
-    if opts['which'] == 'stop':
-        go(target="stop")
 
 
 ##################
@@ -84,54 +75,42 @@ def get_options():
     parser_config.add_argument('-f', '--force', action='store_true',
                                dest='force', help='overwrite existing config')
 
+    all_subtasks = 'pre,main,wait,post'
 
     # up subcommand
     parser_up = subparsers.add_parser('up', help='create and start app')
     parser_up.add_argument('app_path', help='path to app')
-    parser_up.add_argument('--pre', action='store_true', dest='pre',
-                           help='perform pre tasks and generate files')
-    parser_up.add_argument('--main', action='store_true', dest='main',
-                           help='perform up tasks')
-    parser_up.add_argument('--wait', action='store_true', dest='wait',
-                           help='perform wait tasks')
-    parser_up.add_argument('--post', action='store_true', dest='post',
-                           help='perform post tasks')
-
+    parser_up.add_argument('--do', dest='do', default=all_subtasks,
+                           help=f'{all_subtasks} selection')
     parser_up.add_argument('-e', dest='extra', action="append",
                            help='extra vars')
 
     # down subcommand
     parser_down = subparsers.add_parser('down', help='stop and remove app')
     parser_down.add_argument('app_path', help='path to app')
-    parser_down.add_argument('--pre', action='store_true', dest='pre',
-                           help='perform pre tasks')
-    parser_down.add_argument('--main', action='store_true', dest='main',
-                           help='perform down tasks')
-    parser_down.add_argument('--wait', action='store_true', dest='wait',
-                           help='perform wait tasks')
-    parser_down.add_argument('--post', action='store_true', dest='post',
-                           help='perform post tasks')
+    parser_down.add_argument('--do', dest='do', default=all_subtasks,
+                           help=f'{all_subtasks} selection')
     parser_down.add_argument('--volumes', action='store_true', dest='volumes',
                              help='remove all volumes/PVs. '
                              'CURRENTY THE DEFAULT ACTION!')
 
-
     # start subcommand
-    parser_start = subparsers.add_parser('start', help='start existent app')
+    parser_start = subparsers.add_parser('start', help='start app')
     parser_start.add_argument('app_path', help='path to app')
-    # parser_start.add_argument('--pre', action='store_true', dest='pre',
-    #                        help='perform pre tasks and generate files')
-    # parser_start.add_argument('--main', action='store_true', dest='main',
-    #                        help='perform up tasks')
-    # parser_start.add_argument('--wait', action='store_true', dest='wait',
-    #                        help='perform wait tasks')
-    # parser_start.add_argument('--post', action='store_true', dest='post',
-    #                        help='perform post tasks')
+    parser_start.add_argument('--do', dest='do', default=all_subtasks,
+                           help=f'{all_subtasks} selection')
+
+    # stop subcommand
+    parser_stop = subparsers.add_parser('stop', help='stop app')
+    parser_stop.add_argument('app_path', help='path to app')
+    parser_stop.add_argument('--do', dest='do', default=all_subtasks,
+                           help=f'{all_subtasks} selection')
+
     args = parser.parse_args()
     opts = vars(args)
 
-
-
+    #ic(opts)
+    
 
 ###############
 def go(target):
@@ -160,30 +139,8 @@ def go(target):
     
     #ic(config)
 
-    todo = {
-        'pre':  True,
-        'main': True,
-        'wait': True,
-        'post': True,
-    }
-
-    if opts['pre']:
-        todo['main'] = False
-        todo['wait'] = False
-        todo['post'] = False
-    if opts['main']:
-        todo['pre']  = False
-        todo['wait'] = False
-        todo['post'] = False
-    if opts['wait']:
-        todo['pre']  = False
-        todo['main'] = False
-        todo['post'] = False
-    if opts['post']:
-        todo['pre']  = False
-        todo['main'] = False
-        todo['wait'] = False
-
+    todo = opts['do'].split(',')
+    #ic(todo)
 
     pre_files  = []
     main_files = []
@@ -200,23 +157,23 @@ def go(target):
     selector = selectors[target]
 
 
-    if todo['pre']:
+    if 'pre' in todo:
         pre_files = sorted(glob.glob(f'tasks/{selector}[0-9][0-9]pre*'))
-    if todo['main']:
+    if 'main' in todo:
         main_files = sorted(glob.glob(f'tasks/{selector}[0-9][0-9]main*'))
-    if todo['wait']:
+    if 'wait' in todo:
         wait_files = sorted(glob.glob(f'tasks/{selector}[0-9][0-9]wait*'))
-    if todo['post']:
+    if 'post' in todo:
         post_files = sorted(glob.glob(f'tasks/{selector}[0-9][0-9]post*'))
 
 
-    # ic(pre_files)
-    # ic(main_files)
-    # ic(wait_files)
-    # ic(post_files)
-    # exit()
+    ic(pre_files)
+    ic(main_files)
+    ic(wait_files)
+    ic(post_files)
+    #exit()
 
-    if todo['pre']:
+    if 'pre' in todo:
         for file in pre_files:
             ansible_runner(action='run_tasks', arg=file)
 
@@ -224,7 +181,7 @@ def go(target):
             ansible_runner(action='generate_files')
 
 
-    if todo['main']:
+    if 'main' in todo:
         if (config['environment'] == "docker"
             and
             os.path.exists('docker-compose.yml')):
@@ -232,7 +189,11 @@ def go(target):
             if target == "up":
                 p = subprocess.run(['docker', 'compose', 'up', '-d'])
             if target == "down":
-                p = subprocess.run(['docker', 'compose', 'down', '--volumes'])
+                p = subprocess.run(['docker', 'compose', 'down'])
+            if target == "start":
+                p = subprocess.run(['docker', 'compose', 'start'])
+            if target == "stop":
+                p = subprocess.run(['docker', 'compose', 'stop'])
 
         if config['environment'] == "k3s":
             manifest = None
@@ -251,12 +212,12 @@ def go(target):
             ansible_runner(action='run_tasks', arg=file)
 
 
-    if todo['wait']:
+    if 'wait' in todo:
         for file in wait_files:
             ansible_runner(action='run_tasks', arg=file)
 
 
-    if todo['post']:
+    if 'post' in todo:
         for file in post_files:
             ansible_runner(action='run_tasks', arg=file)
 
@@ -326,8 +287,8 @@ environment: k3s
 domain: example.org
 
 # Default initial base64-encoded password for apps.
-# Create one with echo -n <YOUR_PASSWORD> | base64
-# Make it visible with echo <ENCODED_PASSWORD> | base64 -d
+# Create encoded string with: echo -n <YOUR_PASSWORD> | base64
+# Make password visible with: echo <ENCODED_PASSWORD> | base64 -d
 # If you change it, don't use less then 8 chars!
 default_password: U2VjcmV0LTEyMzQ=
 
