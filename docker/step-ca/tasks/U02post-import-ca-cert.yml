@@ -1,0 +1,26 @@
+---
+- set_fact:
+    ca_cert_path: /root/.step/certs/root_ca.crt
+
+
+- name: Import root ca cert into local step client
+  shell: |
+    cd run
+    
+    CA_FINGERPRINT=$(docker compose exec app step certificate fingerprint certs/root_ca.crt)
+
+    step ca bootstrap --force --ca-url https://localhost:9000 --fingerprint $CA_FINGERPRINT
+
+- name: Install root ca cert into system
+  command: step certificate install {{ca_cert_path}}
+  register: step_cmd
+
+
+- debug:
+    msg: |
+      {{step_cmd.stdout}}
+      
+      Test if root cert is installed properly:
+      curl -I https://localhost:9000/health
+
+      Import into your browser: {{ca_cert_path}}

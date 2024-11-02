@@ -1,0 +1,40 @@
+---
+- name: Gather facts
+  setup:
+
+- name: Install package jq
+  package:
+    name: jq
+
+    
+- set_fact:
+    package_filebase: step-cli_{{version.step_cli}}_amd64
+
+    
+- block:
+  - name: Download step-cli {{version.step_cli}}
+    get_url:
+      url: https://dl.smallstep.com/gh-release/cli/gh-release-header/v{{version.step_cli}}/{{package_filebase}}.deb
+      dest: /tmp/{{package_filebase}}.deb
+
+  - name: Install package
+    apt:
+      deb: /tmp/{{package_filebase}}.deb
+    become: true
+
+  when: ansible_os_family == "Debian"
+
+
+- block:
+  - name: Download step-cli {{version.step_cli}}
+    get_url:
+      url: https://dl.smallstep.com/gh-release/cli/gh-release-header/v{{version.step_cli}}/{{package_filebase}}.rpm
+      dest: /tmp/{{package_filebase}}.rpm
+
+  - name: Install package
+    command:
+      cmd: rpm -i /tmp/{{package_filebase}}.rpm
+      creates: /usr/bin/step
+    become: true
+
+  when: ansible_os_family != "Debian"

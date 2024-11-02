@@ -1,0 +1,10 @@
+---
+- name: Wait for service to come up
+  uri:
+    url: https://localhost:9000/health
+    method: GET
+    validate_certs: no
+    status_code: 200
+  register: result
+  until: result.status == 200
+  retries: 10

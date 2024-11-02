@@ -81,6 +81,9 @@ add `-e user=USERNAME`:
 sudo ./cbi up docker/environment -e user=USERNAME
 ```
 
+If you are currently using this non-privileged account, please
+re-login now, so that the new group membership comes into effect.
+
 <br/>
 
 
@@ -121,12 +124,23 @@ sudo ./cbi up docker/environment -e user=USERNAME
 
 # Docker apps
 
-Coming soon!
+## Step-CA
+  ```
+  sudo ./cbi up k3s/step-ca
+  ```
 
 
 <br/>
 
 # Internals
+
+## Content of an app directory:
+
+- `app.yml`: Optional file that contains app-specific informations
+  like required permissions or version information
+- `blueprint`: contains Jinja-Templates and `info.yml`, which describes
+  the transformation sources and targets
+- `tasks`: Task files
 
 ## Naming of task files:
 

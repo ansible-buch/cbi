@@ -1,0 +1,22 @@
+---
+- name: Adjust config (increase validity periods)
+  shell: |
+    cd run
+    
+    # Copy current config from container:
+    docker compose cp app:/home/step/config/ca.json .
+
+    # Configuration change:
+    # Maximum cert validity: 2 years
+    # Default validity: 90 days like Lets Encrypt
+    jq '.authority += {"claims": { "maxTLSCertDuration": "17568h", "defaultTLSCertDuration": "2160h" }}' ca.json >tmp.json
+    mv tmp.json ca.json
+
+    # Copy back into container:
+    docker compose cp ca.json app:/home/step/config
+
+    # App reload:
+    docker compose exec app kill -HUP 1
+
+    # Cleanup:
+    rm -f ca.json

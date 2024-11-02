@@ -126,7 +126,7 @@ def go(target):
         sys.exit(f"App directory does not exist: {opts['app_path']}")
 
     try:
-        yamlfile = open("info.yml", "r")
+        yamlfile = open("app.yml", "r")
 
     except FileNotFoundError:
         config['permissions'] = {}
@@ -181,18 +181,18 @@ def go(target):
 
 
     if 'main' in todo:
-        if (config['environment'] == "docker"
-            and
-            os.path.exists('docker-compose.yml')):
+        if config['environment'] == "docker":
 
+            compose_cmd = "docker compose -f run/docker-compose.yml".split()
+            
             if target == "up":
-                p = subprocess.run(['docker', 'compose', 'up', '-d'])
+                p = subprocess.run(compose_cmd + ['up', '-d'])
             if target == "down":
-                p = subprocess.run(['docker', 'compose', 'down'])
+                p = subprocess.run(compose_cmd + ['down'])
             if target == "start":
-                p = subprocess.run(['docker', 'compose', 'start'])
+                p = subprocess.run(compose_cmd + ['start'])
             if target == "stop":
-                p = subprocess.run(['docker', 'compose', 'stop'])
+                p = subprocess.run(compose_cmd + ['stop'])
 
         if config['environment'] == "k3s":
             manifest = None
@@ -295,39 +295,44 @@ default_password: U2VjcmV0LTEyMzQ=
 default_salt:     really.salty.salt.0123456789
 
 
-# Name of the internal Docker network for proxy communication (Docker only):
+# (Docker:)
+# Name of the internal network for proxy communication:
 docker_internal_network: traefik
 
-
-# Where do we get certificates from (Docker only)?
+# (Docker:)
+# Where do we get certificates from?
 # - letsencrypt: Let's Encrypt (only suitable for internet servers)
 # - private_ca:  private CA
 cert_resolver_type:
 
+# (Docker:)
 # Mail address to which the CA can send notifications when certificate
 # expiration is too near (if you don't need this, just leave it out):
 #cert_resolver_email: webmaster@{{domain}}
 
 
+# (Docker:)
 # LDAP: Do you plan to deploy an OpenLDAP container (Docker only)?
 # Then Traefik will open port 127.0.0.1:636 to make the LDAP service
 # accessible from our host.
 ldap_open_host_port: false
 
+# (Docker:)
 # LDAP directory tree root
 # (of course you can ignore this if you don't use LDAP):
 ldap_root: dc=example,dc=org
 
+# (Docker:)
 # Are LDAP-Accounts visible from the host (e.g. for SSH-Login)?
 # (of course you can ignore this if you don't use LDAP):
 ldap_host_uses_ldap: false
 
 
-# Define some well-tested versions as of September 2024:
+# Define some well-tested versions as of November 2024.
+# Everything else is "latest", "stable", ... (whatever tag is used):
 versions:
   k3s:   v1.30.5+k3s1
   gitea: 1.22.2
-  #awx:  Always latest. Anything else is magic.
 """
     with open('env.yml', 'w') as f:
         f.write(text)

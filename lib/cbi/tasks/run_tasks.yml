@@ -2,4 +2,10 @@
 - name: Include environment file '{{root_env}}'
   include_vars: "{{root_env}}"
 
-- include_tasks: "{{ task_file }}"
+- name: Include app-specific file 'app.yml'
+  include_vars:
+    dir: "{{app_path}}"
+    files_matching: app.yml
+
+- include_tasks: "{{task_file}}"
+
