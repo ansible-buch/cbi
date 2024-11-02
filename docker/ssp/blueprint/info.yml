@@ -1,0 +1,9 @@
+---
+generate:
+  dirs:
+    - path: mnt
+
+  files:
+    - src:  docker-compose.yml.j2
+    - src:  ssp.conf.php.j2
+      dest: mnt/ssp.conf.php

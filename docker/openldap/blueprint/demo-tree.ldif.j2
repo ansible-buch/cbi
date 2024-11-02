@@ -1,0 +1,74 @@
+dn: {{ldap_root}}
+objectClass: dcObject
+objectClass: organization
+dc: {{ (ldap_root.split(',')[0]).split('=')[1] }}
+o: An example organization
+
+dn: ou=users,{{ldap_root}}
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=groups,{{ldap_root}}
+objectClass: organizationalUnit
+ou: groups
+
+dn: uid=jdoe,ou=users,{{ldap_root}}
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: MailAccount
+uid: jdoe
+cn: John Doe
+sn: Doe
+uidNumber: 3000
+gidNumber: 100
+homeDirectory: /home/jdoe
+mailAccountActive: yes
+loginShell: /bin/bash
+givenName: John
+userPassword: {{default_password | b64decode | password_hash("ldap_salted_sha1")}}
+mail: jdoe@{{domain}}
+mailAlias: john.doe@{{domain}}
+
+dn: uid=emustermann,ou=users,{{ldap_root}}
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: MailAccount
+uid: emustermann
+cn: Erika Mustermann
+sn: Mustermann
+uidNumber: 3001
+gidNumber: 100
+homeDirectory: /home/emustermann
+mailAccountActive: yes
+loginShell: /bin/bash
+givenName: Erika
+userPassword: {{default_password | b64decode | password_hash("ldap_salted_sha1")}}
+mail: emustermann@{{domain}}
+mailAlias: erika.mustermann@{{domain}}
+mailAlias: erika@{{domain}}
+
+dn: uid=wwinzig,ou=users,{{ldap_root}}
+objectClass: inetOrgPerson
+objectClass: MailAccount
+uid: wwinzig
+cn: Willi Winzig
+sn: Winzig
+mailAccountActive: yes
+givenName: Willi
+userPassword: {{default_password | b64decode | password_hash("ldap_salted_sha1")}}
+mail: wwinzig@{{domain}}
+mailAlias: willi.winzig@{{domain}}
+
+
+dn: cn=gitea-users,ou=groups,{{ldap_root}}
+objectClass: groupOfNames
+description: Gitea users
+cn: gitea-users
+member: uid=jdoe,ou=users,{{ldap_root}}
+member: uid=wwinzig,ou=users,{{ldap_root}}
+
+dn: cn=gitea-admins,ou=groups,{{ldap_root}}
+objectClass: groupOfNames
+description: Gitea admins
+cn: gitea-admins
+member: uid=emustermann,ou=users,{{ldap_root}}

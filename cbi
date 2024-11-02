@@ -91,8 +91,8 @@ def get_options():
     parser_down.add_argument('--do', dest='do', default=all_subtasks,
                            help=f'{all_subtasks} selection')
     parser_down.add_argument('--volumes', action='store_true', dest='volumes',
-                             help='remove all volumes/PVs. '
-                             'CURRENTY THE DEFAULT ACTION!')
+                             help='remove all volumes/PVs '
+                             '(Default action with K3s).')
 
     # start subcommand
     parser_start = subparsers.add_parser('start', help='start app')
@@ -176,25 +176,34 @@ def go(target):
         for file in pre_files:
             ansible_runner(action='run_tasks', arg=file)
 
-        if os.path.isdir('blueprint') and target == "up":
+        if (os.path.isdir('blueprint') and
+            os.path.isfile('blueprint/info.yml') and
+            target == "up"):
             ansible_runner(action='generate_files')
 
 
     if 'main' in todo:
-        if config['environment'] == "docker":
+        if (environment_type() == "docker" and
+            os.path.isfile('run/docker-compose.yml')):
 
             compose_cmd = "docker compose -f run/docker-compose.yml".split()
             
             if target == "up":
                 p = subprocess.run(compose_cmd + ['up', '-d'])
+
             if target == "down":
-                p = subprocess.run(compose_cmd + ['down'])
+                if opts['volumes']:
+                    p = subprocess.run(compose_cmd + ['down', '-v'])
+                else:
+                    p = subprocess.run(compose_cmd + ['down'])
+                    
             if target == "start":
                 p = subprocess.run(compose_cmd + ['start'])
+                
             if target == "stop":
                 p = subprocess.run(compose_cmd + ['stop'])
 
-        if config['environment'] == "k3s":
+        if environment_type() == "k3s":
             manifest = None
             if os.path.isfile('run/manifest.yml'):
                 manifest = 'run/manifest.yml'
@@ -277,11 +286,7 @@ def create_sample_config():
         sys.exit("env.yml already exists; use --force to overwrite.")
 
 
-
     text = """
-# The environment you want to manage (docker or k3s):
-environment: k3s
-
 # The default domain under which apps will be accessible:
 domain: example.org
 
@@ -295,38 +300,37 @@ default_password: U2VjcmV0LTEyMzQ=
 default_salt:     really.salty.salt.0123456789
 
 
-# (Docker:)
+#####################################################################
+# The remaining settings have no significance for the K3s environment
+# discussed in the Ansible book.
+#####################################################################
+
+# (Docker only:)
 # Name of the internal network for proxy communication:
 docker_internal_network: traefik
 
-# (Docker:)
-# Where do we get certificates from?
+# (Docker only:)
+# Where do we get TLS certificates from?
+# - <empty>:     Use only self-signed certificates
 # - letsencrypt: Let's Encrypt (only suitable for internet servers)
-# - private_ca:  private CA
+# - stepca:      Smallstep private CA
 cert_resolver_type:
 
-# (Docker:)
+# (Docker only:)
 # Mail address to which the CA can send notifications when certificate
 # expiration is too near (if you don't need this, just leave it out):
 #cert_resolver_email: webmaster@{{domain}}
 
-
-# (Docker:)
-# LDAP: Do you plan to deploy an OpenLDAP container (Docker only)?
+# (Docker only:)
+# LDAP: Do you plan to deploy an OpenLDAP container?
 # Then Traefik will open port 127.0.0.1:636 to make the LDAP service
 # accessible from our host.
 ldap_open_host_port: false
 
-# (Docker:)
+# (Docker only:)
 # LDAP directory tree root
 # (of course you can ignore this if you don't use LDAP):
 ldap_root: dc=example,dc=org
-
-# (Docker:)
-# Are LDAP-Accounts visible from the host (e.g. for SSH-Login)?
-# (of course you can ignore this if you don't use LDAP):
-ldap_host_uses_ldap: false
-
 
 # Define some well-tested versions as of November 2024.
 # Everything else is "latest", "stable", ... (whatever tag is used):
@@ -339,27 +343,6 @@ versions:
 
     sys.exit(0)
 
-
-
-##################
-#def engine_type():
-##################
-
-    # try:
-    #     p = subprocess.run(["k3s",  "--version"])
-    #     if p.returncode == 0:
-    #         return Engine.K3S
-    # except:
-    #     pass
-
-    # try:
-    #     p = subprocess.run(["docker",  "--version"])
-    #     if p.returncode == 0:
-    #         return Engine.DOCKER
-    # except:
-    #     pass
-    
-    # return Engine.NONE
 
 
 
@@ -377,6 +360,18 @@ def assert_sufficient_permissions(target):
         sys.exit(f"Root privileges required for target '{target}'.")
     
 
+#######################
+def environment_type():
+#######################
+    p = os.path.normpath(opts['app_path'])
+    components = os.path.split(p)
+
+    if 'docker' in components:
+        return 'docker'
+    if 'k3s' in components:
+        return 'k3s'
+
+    sys.exit("Cannot detect environment type (docker|k3s). Exiting.")
     
 
 #######################

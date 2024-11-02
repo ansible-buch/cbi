@@ -126,9 +126,19 @@ re-login now, so that the new group membership comes into effect.
 
 ## Step-CA
   ```
-  sudo ./cbi up k3s/step-ca
+  sudo ./cbi up docker/step-ca
   ```
 
+## Traefik
+  ```
+  ./cbi up docker/traefik
+  ```
+  Username: `admin`
+
+## OpenLDAP
+  ```
+  sudo ./cbi up docker/openldap
+  ```
 
 <br/>
 

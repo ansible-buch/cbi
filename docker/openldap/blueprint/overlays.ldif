@@ -1,0 +1,35 @@
+# Modules memberOf+refint
+dn: cn=module{0},cn=config
+changetype: modify
+add: olcModuleLoad
+olcModuleLoad: /opt/bitnami/openldap/lib/openldap/memberof
+olcModuleLoad: /opt/bitnami/openldap/lib/openldap/refint
+
+dn: olcOverlay=memberof,olcDatabase={2}mdb,cn=config
+changetype: add
+objectClass: olcMemberOf
+objectClass: olcOverlayConfig
+olcOverlay: memberof
+olcMemberOfGroupOC: groupOfNames
+olcMemberOfMemberAD: member
+olcMemberOfDangling: error
+olcMemberOfRefInt: TRUE
+
+dn: olcOverlay=memberof,olcDatabase={2}mdb,cn=config
+changetype: add
+objectClass: olcMemberOf
+objectClass: olcOverlayConfig
+olcOverlay: memberof
+olcMemberOfGroupOC: groupOfUniqueNames
+olcMemberOfMemberAD: uniqueMember
+olcMemberOfDangling: error
+olcMemberOfRefInt: TRUE
+
+dn: olcOverlay=refint,olcDatabase={2}mdb,cn=config
+changetype: add
+objectClass: olcRefintConfig
+objectClass: olcOverlayConfig
+olcOverlay: refint
+olcRefintAttribute: uniqueMember
+olcRefintAttribute: member
+olcRefintNothing: cn=dummy,dc=example,dc=org

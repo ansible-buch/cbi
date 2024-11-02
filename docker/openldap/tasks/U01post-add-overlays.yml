@@ -1,0 +1,32 @@
+---
+- set_fact:
+    run: docker compose exec app
+    slapdconf: /opt/bitnami/openldap/etc/slapd.d
+
+- name: Add overlays
+  shell: |
+    cd run
+
+    {{run}} ldapadd -Q -Y EXTERNAL -H ldapi:/// -f /incoming/overlays.ldif
+
+    {{run}} slapcat -F {{slapdconf}} -n 0 | grep olcModuleLoad
+    
+  register: cmd
+
+- debug: var=cmd.stdout
+
+
+- name: Add acls
+  shell: |
+    cd run
+    
+    if ! {{run}} slapcat -F {{slapdconf}} -n 0 | grep olcAccess | grep -q "by self write"
+    then
+        {{run}} ldapadd -Q -Y EXTERNAL -H ldapi:/// -f /incoming/acls.ldif
+    fi
+
+    {{run}} slapcat -F {{slapdconf}} -n 0 | grep olcAccess
+
+  register: cmd
+
+- debug: var=cmd.stdout

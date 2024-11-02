@@ -1,0 +1,17 @@
+---
+- name: Gather facts
+  setup:
+
+- block:
+  - name: Install ldapvi
+    package:
+      name: ldapvi
+
+  - name: Install shortcut command lv
+    copy:
+      dest: /usr/local/bin/lv
+      mode: 0755
+      content: |
+        ldapvi -h ldaps://localhost --tls never -D cn=admin,{{ldap_root}}
+
+  when: ansible_os_family == "Debian"

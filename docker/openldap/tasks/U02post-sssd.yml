@@ -1,0 +1,66 @@
+---
+- name: Gather facts
+  setup:
+
+- set_fact:
+    settings:
+      Debian:
+        sssd_package_name: sssd
+        sssd_service_name: sssd
+        pam_session_file:  /etc/pam.d/common-session
+
+- name: Install sssd
+  package:
+    name: "{{settings[ansible_os_family].sssd_package_name}}"
+
+
+- name: Copy sssd.conf
+  copy:
+    dest: /etc/sssd/sssd.conf
+    mode: 0600
+    content: |
+      [sssd]
+      config_file_version = 2
+      services = nss, pam
+      domains = LDAP
+
+      [nss]
+      enum_cache_timeout = 60
+
+      [pam]
+      reconnection_retries = 4
+      offline_credentials_expiration = 2
+      offline_failed_login_attempts = 3
+      offline_failed_login_delay = 5
+
+      [domain/LDAP]
+      ldap_uri = ldaps://localhost
+      ldap_search_base = {{ldap_root}}
+      ldap_tls_reqcert = never
+      id_provider = ldap
+      auth_provider = ldap
+      chpass_provider = ldap
+
+      cache_credentials = false
+      enumerate = true
+
+  register: sssd_config
+
+
+- name: Enable autostart and start service
+  service:
+    name: "{{settings[ansible_os_family].sssd_service_name}}"
+    enabled: yes
+    state: started
+
+- name: Restart sssh service on demand
+  service:
+    name: "{{settings[ansible_os_family].sssd_service_name}}"
+    state: restarted
+  when: sssd_config.changed
+
+
+- name: Activate PAM module pam_mkhomedir
+  lineinfile:
+    path: "{{settings[ansible_os_family].pam_session_file}}"
+    line: "session    required    pam_mkhomedir.so umask=0077"

@@ -1,0 +1,7 @@
+---
+- name: Wait for service to come up
+  command: timeout 5s ldapsearch -x -H ldaps://localhost
+  register: ldapsearch_cmd
+  failed_when: false
+  until: ldapsearch_cmd.rc in [0, 32]
+  retries: 10

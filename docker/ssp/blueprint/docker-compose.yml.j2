@@ -1,0 +1,23 @@
+---
+name: ssp
+
+services:
+  ssp:
+    image: ltbproject/self-service-password:latest
+    
+    container_name: ${COMPOSE_PROJECT_NAME}
+    networks:
+      - {{docker_internal_network}}
+    volumes:
+      - ./mnt/ssp.conf.php:/var/www/conf/config.inc.local.php
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_PROJECT_NAME}.{{domain}}`)
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=80
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver={{cert_resolver_type}}
+
+networks:
+  {{docker_internal_network}}:
+    external: true

@@ -1,0 +1,27 @@
+<?php
+$keyphrase = "{{default_salt}}";
+$debug = true;
+
+$ldap_url = "ldap://ldap.internal";
+$ldap_base = "{{ldap_root}}";
+
+$ldap_binddn = "";
+$ldap_bindpw = "";
+
+$hash = "SSHA";
+
+$ldap_filter = "(&(objectClass=person)(uid={login}))";
+
+$who_change_password = "user";
+$pwd_min_length = 8;
+$pwd_max_length = 0;
+
+$use_sms = false;    // no sms
+$use_tokens = false; // no mail
+$use_questions = false;
+
+$show_menu = false;
+$show_help = false;
+
+$use_captcha = true;
+?>

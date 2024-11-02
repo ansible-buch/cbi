@@ -1,0 +1,11 @@
+---
+generate:
+  dirs:
+    - path: mnt/dynamic
+
+  files:
+    - src:  docker-compose.yml.j2
+    - src:  traefik.yml.j2
+      dest: mnt/traefik.yml
+    - src:  basicauth.yml.j2
+      dest: mnt/dynamic/basicauth.yml

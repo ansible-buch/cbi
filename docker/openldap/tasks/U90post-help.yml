@@ -1,0 +1,10 @@
+---
+- debug:
+    msg: |
+      Test LDAP server e.g. with:
+
+      ldapsearch -x
+
+      ldapadd -x -D cn=admin,{{ldap_root}} -W -f {{app_path}}/run/example/demo-tree.ldif
+
+      ldapsearch -x -LLL "(&(objectClass=Person)(|(memberOf=cn=gitea-users,ou=groups,{{ldap_root}})(memberOf=cn=gitea-admins,ou=groups,{{ldap_root}})))"  memberof

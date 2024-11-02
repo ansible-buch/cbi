@@ -1,0 +1,48 @@
+---
+name: traefik
+
+services:
+  app:
+    image: "traefik:2.11"
+    
+    container_name: ${COMPOSE_PROJECT_NAME}
+    ports:
+      - 80:80
+      - 443:443
+{% if ldap_open_host_port %}
+      - 127.0.0.1:636:636
+{% endif %}
+{% if cert_resolver_type == 'stepca' %}
+    environment:
+      - LEGO_CA_CERTIFICATES=/step-ca/certs/root_ca.crt
+      - LEGO_CA_SYSTEM_CERT_POOL=true
+{% endif %}
+    networks:
+      - {{docker_internal_network}}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./mnt/traefik.yml:/etc/traefik/traefik.yml
+      - ./mnt/dynamic:/etc/traefik/dynamic
+      - acme:/etc/traefik/acme
+{% if cert_resolver_type == 'stepca' %}
+      - step-ca_files:/step-ca:ro
+{% endif %}
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_PROJECT_NAME}.{{domain}}`)
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.service=api@internal
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver={{cert_resolver_type}}
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.middlewares=auth@file
+
+networks:
+  traefik:
+    external: true
+
+volumes:
+  acme:
+{% if cert_resolver_type == 'stepca' %}
+  step-ca_files:
+    external: true
+{% endif %}

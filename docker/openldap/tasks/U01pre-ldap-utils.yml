@@ -1,0 +1,26 @@
+---
+- name: Gather facts
+  setup:
+    
+- set_fact:
+    settings:
+      Debian:
+        utils_package_name: ldap-utils
+        ldapconf_path:      /etc/ldap/ldap.conf
+
+
+- name: Install ldap-utils
+  package:
+    name: "{{settings[ansible_os_family].utils_package_name}}"
+
+
+- name: Copy ldap.conf
+  copy:
+    dest: "{{settings[ansible_os_family].ldapconf_path}}"
+    content: |
+      BASE {{ldap_root}}
+      URI ldaps://localhost
+
+      TLS_REQCERT allow
+
+      TLS_CACERT      /etc/ssl/certs/ca-certificates.crt

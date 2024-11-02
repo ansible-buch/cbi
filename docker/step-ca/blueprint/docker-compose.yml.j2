@@ -12,7 +12,7 @@ services:
       - DOCKER_STEPCA_INIT_DNS_NAMES=localhost,ca.{{domain}}
       - DOCKER_STEPCA_INIT_REMOTE_MANAGEMENT=true
       - DOCKER_STEPCA_INIT_ACME=true
-      - DOCKER_STEPCA_INIT_PASSWORD={{default_password}}
+      - DOCKER_STEPCA_INIT_PASSWORD={{default_password | b64decode}}
     networks:
       {{docker_internal_network}}:
         aliases:

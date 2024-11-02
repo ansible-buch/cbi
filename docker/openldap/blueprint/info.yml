@@ -1,0 +1,21 @@
+---
+generate:
+  dirs:
+    - path: mnt/schemas
+    - path: mnt/incoming
+    - path: example
+
+  files:
+    - src:  docker-compose.yml.j2
+
+    - src: mail.schema.ldif
+      dest: mnt/schemas
+      
+    - src: overlays.ldif
+      dest: mnt/incoming
+      
+    - src: acls.ldif
+      dest: mnt/incoming
+
+    - src: demo-tree.ldif.j2
+      dest: example/demo-tree.ldif

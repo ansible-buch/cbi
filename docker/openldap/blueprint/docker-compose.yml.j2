@@ -1,0 +1,39 @@
+---
+name: openldap
+
+services:
+  app:
+    # https://hub.docker.com/r/bitnami/openldap/
+    image: bitnami/openldap:2.6
+    
+    container_name: ${COMPOSE_PROJECT_NAME}
+    environment:
+      - BITNAMI_DEBUG=true
+      - LDAP_PORT_NUMBER=389
+      - LDAP_ROOT={{ldap_root}}
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD={{default_password | b64decode}}
+      - LDAP_SKIP_DEFAULT_TREE=yes
+
+    networks:
+      {{docker_internal_network}}:
+        aliases:
+          - ldap.internal
+    volumes:
+      - ./mnt/schemas:/schemas
+      - ./mnt/incoming:/incoming
+      - data:/bitnami/openldap
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.tcp.routers.${COMPOSE_PROJECT_NAME}.entrypoints=ldaps
+      - traefik.tcp.routers.${COMPOSE_PROJECT_NAME}.rule=HostSNI(`*`)
+      - traefik.tcp.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=389
+      - traefik.tcp.routers.${COMPOSE_PROJECT_NAME}.tls=true
+
+networks:
+  {{docker_internal_network}}:
+    external: true
+
+volumes:
+  data:

@@ -1,0 +1,8 @@
+---
+# See: https://doc.traefik.io/traefik/middlewares/http/basicauth/
+http:
+  middlewares:
+    auth:
+      basicAuth:
+        users:
+          - "admin:{{default_password | b64decode | password_hash('md5', default_salt | truncate(8, False, ''))}}"

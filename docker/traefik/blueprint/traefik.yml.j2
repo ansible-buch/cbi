@@ -1,0 +1,60 @@
+---
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+log:
+  level: TRACE
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entrypoint:
+          to: websecure
+          scheme: https
+              
+  websecure:
+    address: ":443"
+
+{% if ldap_open_host_port %}
+  ldaps:
+    address: ":636"
+{% endif %}
+
+
+api:
+  dashboard: true
+
+  
+providers:
+  docker:
+    exposedByDefault: false
+    network: {{docker_internal_network}}
+    
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true
+
+
+certificatesResolvers:
+{% if cert_resolver_type == 'letsencrypt' %}
+  letsencrypt:
+    acme:
+      tlschallenge: true
+      {% if cert_resolver_email is defined %}
+      email: {{cert_resolver_email}}
+      {% endif -%}
+      storage: /etc/traefik/acme/acme.json
+{% endif %}
+{% if cert_resolver_type == 'stepca' %}
+  stepca:
+    acme:
+      tlschallenge: true
+      {% if cert_resolver_email is defined %}
+      email: {{cert_resolver_email}}
+      {% endif -%}
+      storage: /etc/traefik/acme/acme.json
+      caServer: https://ca.{{domain}}:9000/acme/acme/directory
+{% endif %}
