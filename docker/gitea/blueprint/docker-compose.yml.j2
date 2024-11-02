@@ -1,0 +1,45 @@
+---
+# See: https://docs.gitea.com/installation/install-with-docker
+#      https://github.com/go-gitea/gitea/tree/main/contrib/environment-to-ini
+name: gitea
+
+services:
+  app:
+    image: gitea/gitea:{{version}}
+    
+    container_name: ${COMPOSE_PROJECT_NAME}
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+
+      - GITEA__security__INSTALL_LOCK=true
+
+      - GITEA__service__DISABLE_REGISTRATION=true
+      
+      - GITEA__server__ROOT_URL=https://${COMPOSE_PROJECT_NAME}.{{domain}}/
+      - GITEA__server__SSH_DOMAIN=${COMPOSE_PROJECT_NAME}.{{domain}}
+      - GITEA__server__SSH_PORT=2222
+
+    networks:
+      - {{docker_internal_network}}
+    ports:
+      - "2222:22"  # make internal SSH accessible
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - data:/data
+      #- ./mnt/app.ini:/data/gitea/conf/app.ini
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_PROJECT_NAME}.{{domain}}`)
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=3000
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver={{cert_resolver_type}}
+
+networks:
+  {{docker_internal_network}}:
+    external: true
+
+volumes:
+  data:

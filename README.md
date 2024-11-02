@@ -139,6 +139,19 @@ re-login now, so that the new group membership comes into effect.
   ```
   sudo ./cbi up docker/openldap
   ```
+  
+## SSP (Self Service Password)
+  ```
+  ./cbi up docker/ssp
+  ```
+
+## Gitea
+  ```
+  ./cbi up docker/gitea
+  ```
+  Username: `root`
+
+
 
 <br/>
 

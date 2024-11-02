@@ -125,15 +125,18 @@ def go(target):
     except:
         sys.exit(f"App directory does not exist: {opts['app_path']}")
 
+
+    config['permissions'] = {}
     try:
         yamlfile = open("app.yml", "r")
-
-    except FileNotFoundError:
-        config['permissions'] = {}
+    except:
+        pass
     else:
         with yamlfile:
-            config['permissions'] = \
-                yaml.load(yamlfile, Loader=yaml.FullLoader)['permissions']
+            settings = yaml.load(yamlfile, Loader=yaml.FullLoader)
+            ic(settings)
+            if 'permissions' in settings:
+                config['permissions'] = settings['permissions']
 
     assert_sufficient_permissions(target)
     
@@ -336,7 +339,7 @@ ldap_root: dc=example,dc=org
 # Everything else is "latest", "stable", ... (whatever tag is used):
 versions:
   k3s:   v1.30.5+k3s1
-  gitea: 1.22.2
+  gitea: 1.22
 """
     with open('env.yml', 'w') as f:
         f.write(text)

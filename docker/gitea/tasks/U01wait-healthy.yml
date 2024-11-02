@@ -1,0 +1,11 @@
+---
+- set_fact:
+    gitea_admin_cmd: "docker compose exec --user git app gitea admin"
+
+- name: Wait until gitea is online
+  shell:
+    chdir: run
+    cmd: "{{gitea_admin_cmd}} user list || true"
+  register: list_cmd
+  until: '"Username" in list_cmd.stdout'
+  retries: 10

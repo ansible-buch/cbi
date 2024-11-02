@@ -1,0 +1,13 @@
+---
+- set_fact:
+    gitea_admin_cmd: "docker compose exec --user git app gitea admin"
+
+- name: Create admin user 'root'
+  command:
+    chdir: run
+    cmd: >-
+      {{gitea_admin_cmd}} user create
+      --username root
+      --password {{default_password | b64decode}}
+      --admin
+      --email root@{{domain}}
