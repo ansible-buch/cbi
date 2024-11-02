@@ -151,6 +151,12 @@ re-login now, so that the new group membership comes into effect.
   ```
   Username: `root`
 
+## Nextcloud
+  ```
+  ./cbi up docker/nextcloud
+  ```
+  Username: `admin`
+
 
 
 <br/>

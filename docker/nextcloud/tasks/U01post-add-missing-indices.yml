@@ -1,0 +1,8 @@
+---
+- set_fact:
+    nextcloud_occ_cmd: "docker compose exec --user www-data app php occ"
+
+- name: Add missing indices
+  shell:
+    chdir: run
+    cmd: "{{nextcloud_occ_cmd}} db:add-missing-indices"

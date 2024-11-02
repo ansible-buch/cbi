@@ -1,0 +1,18 @@
+---
+- set_fact:
+    nextcloud_occ_cmd: "docker compose exec --user www-data app php occ"
+
+- name: Set maintenance_window_start
+  shell:
+    chdir: run
+    cmd: >-
+      {{nextcloud_occ_cmd}} config:system:set
+      maintenance_window_start --type=integer --value=0
+
+- name: Establish housekeeping cronjob since container has no cron
+  cron:
+    cron_file: docker_nextcloud
+    user: root
+    name: Run cron.php in nextcloud-app container
+    special_time: hourly
+    job: docker exec --user www-data  nextcloud-app php cron.php

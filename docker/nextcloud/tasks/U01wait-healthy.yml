@@ -1,0 +1,11 @@
+---
+- set_fact:
+    nextcloud_occ_cmd: "docker compose exec --user www-data app php occ"
+
+- name: Wait until nextcloud instance is online
+  shell:
+    chdir: run
+    cmd: "{{nextcloud_occ_cmd}} status"
+  register: status_cmd
+  until: '"installed: true" in status_cmd.stdout'
+  retries: 10

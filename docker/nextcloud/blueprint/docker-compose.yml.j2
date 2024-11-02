@@ -1,0 +1,83 @@
+---
+name: nextcloud
+
+services:
+  app:
+    image: nextcloud:stable
+    
+    container_name: ${COMPOSE_PROJECT_NAME}-app
+    environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=nextcloud
+      - POSTGRES_HOST=db
+
+      - REDIS_HOST=memcache
+      
+      - NEXTCLOUD_ADMIN_USER=admin
+      - NEXTCLOUD_ADMIN_PASSWORD={{default_password | b64decode}}
+      - NEXTCLOUD_TRUSTED_DOMAINS=${COMPOSE_PROJECT_NAME}.{{domain}}
+      # - APACHE_DISABLE_REWRITE_IP=1
+      - TRUSTED_PROXIES={{lookup('pipe', 'docker network inspect traefik --format "{% raw %}{{range .IPAM.Config}}{{.Subnet}}{{end}}{% endraw %}"')}}
+      - OVERWRITEHOST=${COMPOSE_PROJECT_NAME}.{{domain}}
+      - OVERWRITEPROTOCOL=https
+      - OVERWRITECLIURL=https://${COMPOSE_PROJECT_NAME}.{{domain}}
+    networks:
+      - {{docker_internal_network}}
+      - backend
+    volumes:
+      - files:/var/www/html
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_PROJECT_NAME}.{{domain}}`)
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=80
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver={{cert_resolver_type}}
+
+      
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.middlewares=nc-well-known-dav,nc-hsts-headers
+
+      - traefik.http.middlewares.nc-well-known-dav.redirectregex.permanent=true
+      - traefik.http.middlewares.nc-well-known-dav.redirectregex.regex=https://(.*)/.well-known/(card|cal)dav
+      - traefik.http.middlewares.nc-well-known-dav.redirectregex.replacement=https://$${1}/remote.php/dav/
+
+      - traefik.http.middlewares.nc-hsts-headers.headers.stsSeconds=15552000
+      - traefik.http.middlewares.nc-hsts-headers.headers.stsPreload=true
+      
+    depends_on:
+      - db
+      - memcache
+
+  db:
+    image: postgres:16
+    container_name: ${COMPOSE_PROJECT_NAME}-db
+    environment:
+      - POSTGRES_PASSWORD=nextcloud
+      - POSTGRES_USER=nextcloud
+    networks:
+      - backend
+    volumes:
+      - data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+
+  memcache:
+    image: redis:latest
+    container_name: ${COMPOSE_PROJECT_NAME}-memcache
+    command: redis-server --save ''
+    networks:
+      - backend
+    volumes:
+      - empty:/data
+    restart: unless-stopped
+
+networks:
+  backend:
+  {{docker_internal_network}}:
+    external: true
+
+volumes:
+  files:
+  data:
+  empty:
