@@ -1,3 +1,4 @@
 ---
+version: 1.22
 gitea_admin_username: root  # "admin" ist not possible in gitea :-(
 gitea_ssh_nodeport:   30022

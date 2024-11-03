@@ -9,7 +9,7 @@
           --write-kubeconfig-mode 644
 
   environment:
-    INSTALL_K3S_VERSION: "{{versions['k3s']}}"
+    INSTALL_K3S_VERSION: "{{version}}"
   register: cmd
 
 - debug:

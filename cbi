@@ -334,12 +334,6 @@ ldap_open_host_port: false
 # LDAP directory tree root
 # (of course you can ignore this if you don't use LDAP):
 ldap_root: dc=example,dc=org
-
-# Define some well-tested versions as of November 2024.
-# Everything else is "latest", "stable", ... (whatever tag is used):
-versions:
-  k3s:   v1.30.5+k3s1
-  gitea: 1.22
 """
     with open('env.yml', 'w') as f:
         f.write(text)

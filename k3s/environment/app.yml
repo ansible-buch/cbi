@@ -1,0 +1,6 @@
+---
+permissions:
+  up: root
+  down: root
+
+version: v1.30.5+k3s1
