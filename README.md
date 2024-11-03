@@ -6,13 +6,16 @@
   environments
 - Supports K3s and Docker
 
-It has been successfully tested on:
+The K3s environment has been successfully tested on:
 
 - Debian 12
 - Ubuntu 24.04
 - Rocky Linux 9
 - openSUSE Leap 15
 
+The Docker environment has been successfully tested on:
+
+- Debian 12
 
 <br/>
 
@@ -49,10 +52,7 @@ cd cbi
 
 ## Setup K3s or Docker environment
 
-_Please choose one of the two options. 
-Both at the same time is currently not supported!_
-
-### Setup K3s 
+### K3s 
 
 You must specify the name the primary network interface.
 Add `-e iface=IFACE_NAME`.
@@ -68,7 +68,7 @@ add `-e user=USERNAME`:
 sudo ./cbi up k3s/environment -e iface=IFACE_NAME -e user=USERNAME
 ```
 
-### Setup Docker
+### Docker
 
 ```
 sudo ./cbi up docker/environment
@@ -95,28 +95,16 @@ re-login now, so that the new group membership comes into effect.
 - `./cbi stop APP_PATH`: Stop existing app
 
 
+<br/>
 
 
 # Kubernetes apps
 
-## Gitea
-  ```
-  sudo ./cbi up k3s/gitea
-  ```
-  Username: `root`
-
-## AWX
-  ```
-  ./cbi up k3s/awx
-  ```
-  Username: `admin`
-
-## Semaphore
-  ```
-  ./cbi up k3s/semaphore
-  ```
-  Username: `admin`
-
+|App |App_Path |Root/sudo? |Login Username |
+|---|---|---|---|
+|Gitea |`k3s/gitea` |Yes |`root` |
+|AWX |`k3s/awx`   |No |`admin` |
+|Semaphore |`k3s/semaphore` |No |`admin` |
 
 
 
@@ -124,50 +112,26 @@ re-login now, so that the new group membership comes into effect.
 
 # Docker apps
 
-## Step-CA
-  ```
-  sudo ./cbi up docker/step-ca
-  ```
 
-## Traefik
-  ```
-  ./cbi up docker/traefik
-  ```
-  Username: `admin`
+|App |App_Path |Root/sudo? |Login Username |
+|---|---|---|---|
+|Step-CA |`docker/step-ca` |Yes |- |
+|Traefik |`docker/traefik` |No |`admin` |
+|OpenLDAP |`docker/openldap`|Yes |- |
+|SSP (Self Service Password) |`docker/ssp`|No |- |
+|Gitea |`docker/gitea` |No |`root` |
+|Nextcloud |`docker/nextcloud` |No |`admin` |
+|Roundcube |`docker/roundcube` |No |*Mail address* |
+|Mailserver |`docker/mailserver` |No |- |
+|Guacamole |`docker/guacamole` |No |- |
 
-## OpenLDAP
-  ```
-  sudo ./cbi up docker/openldap
-  ```
+- Roundcube
   
-## SSP (Self Service Password)
-  ```
-  ./cbi up docker/ssp
-  ```
-
-## Gitea
-  ```
-  ./cbi up docker/gitea
-  ```
-  Username: `root`
-
-## Nextcloud
-  ```
-  ./cbi up docker/nextcloud
-  ```
-  Username: `admin`
-
-## Roundcube
-  ```
-  ./cbi up docker/roundcube
-  ```
   FQDN: mail.{{domain}}
+- Mailserver
+
+  Only useable with OpenLDAP, Letsencrypt + Roundcube!
   
-## Mailserver
-(Only useable with OpenLDAP, Letsencrypt + Roundcube!)
-  ```
-  ./cbi up docker/mailserver
-  ```
   FQDN: mail.{{domain}}
 
 
@@ -183,6 +147,7 @@ re-login now, so that the new group membership comes into effect.
 - `blueprint`: contains Jinja-Templates and `info.yml`, which describes
   the transformation sources and targets
 - `tasks`: Task files
+- `run`: All generated files and bind mounts (in case of Docker)
 
 ## Naming of task files:
 
