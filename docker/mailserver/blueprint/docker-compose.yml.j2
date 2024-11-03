@@ -48,7 +48,7 @@ services:
       - LDAP_SERVER_HOST=ldap://ldap.internal
       - LDAP_SEARCH_BASE={{ldap_root}}
       - LDAP_BIND_DN=cn=admin,{{ldap_root}}
-      - LDAP_BIND_PW={{default_password}}
+      - LDAP_BIND_PW={{default_password | b64decode}}
 
       - LDAP_QUERY_FILTER_USER=(&(mail=%s)(mailAccountActive=yes))
       - LDAP_QUERY_FILTER_GROUP=(&(objectclass=organizationalPerson)(mail=%s))
