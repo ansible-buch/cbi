@@ -157,6 +157,19 @@ re-login now, so that the new group membership comes into effect.
   ```
   Username: `admin`
 
+## Roundcube
+  ```
+  ./cbi up docker/roundcube
+  ```
+  FQDN: mail.{{domain}}
+  
+## Mailserver
+(Only useable with OpenLDAP, Letsencrypt + Roundcube!)
+  ```
+  ./cbi up docker/mailserver
+  ```
+  FQDN: mail.{{domain}}
+
 
 
 <br/>

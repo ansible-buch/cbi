@@ -1,0 +1,63 @@
+---
+name: roundcube
+
+services:
+  app:
+    image: "roundcube/roundcubemail:latest-apache"
+    container_name: ${COMPOSE_PROJECT_NAME}-app
+    environment:
+      - ROUNDCUBEMAIL_DEFAULT_HOST=tls://mail.{{domain}}
+      - ROUNDCUBEMAIL_SMTP_SERVER=tls://mail.{{domain}}
+      - ROUNDCUBEMAIL_PLUGINS=archive,zipdownload,managesieve
+      - ROUNDCUBEMAIL_UPLOAD_MAX_FILESIZE=50M
+      
+      - ROUNDCUBEMAIL_DB_TYPE=pgsql
+      - ROUNDCUBEMAIL_DB_HOST=db
+      - ROUNDCUBEMAIL_DB_USER=roundcube
+      - ROUNDCUBEMAIL_DB_PASSWORD=roundcube
+      - ROUNDCUBEMAIL_DB_NAME=roundcube
+
+    networks:
+      - {{docker_internal_network}}
+      - backend
+
+    volumes:
+      - ./mnt/config:/var/roundcube/config
+      - app_files:/var/www/html
+      - app_tmp:/tmp/roundcube-temp
+      
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.roundcube.rule=Host(`mail.{{domain}}`)
+      - traefik.http.services.roundcube.loadbalancer.server.port=80
+      - traefik.http.routers.roundcube.tls=true
+      - traefik.http.routers.roundcube.tls.certresolver={{cert_resolver_type}}
+    depends_on:
+      - db
+
+
+  db:
+    image: postgres:16
+    container_name: ${COMPOSE_PROJECT_NAME}-db
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=roundcube
+      - POSTGRES_USER=roundcube
+    networks:
+      - backend
+    restart: unless-stopped
+
+networks:
+  backend:
+  {{docker_internal_network}}:
+    external: true
+
+volumes:
+  app_files:
+  app_tmp:
+  data:

@@ -1,0 +1,9 @@
+---
+generate:
+  dirs:
+    - path: mnt/config
+    
+  files:
+    - src:  docker-compose.yml.j2
+    - src:  managesieve.inc.php.j2
+      dest: mnt/config/managesieve.inc.php
