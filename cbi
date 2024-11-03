@@ -3,10 +3,9 @@ import os
 import sys
 import subprocess
 import glob
-import re
-import getpass
+#import re
+#import getpass
 import yaml
-from enum import Enum
 
 try:
     from icecream import ic
@@ -15,10 +14,9 @@ except ModuleNotFoundError as e:
         print(arg)
 
 from argparse import ArgumentParser
-from enum import Enum
 
 progname = os.path.basename(sys.argv[0])
-version  = "0.41.1"
+version  = "0.41.2"
 
 
 opts   = {}
