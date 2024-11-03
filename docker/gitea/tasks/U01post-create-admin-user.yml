@@ -11,4 +11,5 @@
       --password {{default_password | b64decode}}
       --admin
       --email root@{{domain}}
+  no_log: true
   ignore_errors: true
