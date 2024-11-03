@@ -13,7 +13,7 @@ services:
       - {{docker_internal_network}}
       - backend
     volumes:
-      - ./config:/guacamole_home
+      - ./mnt/config:/guacamole_home
     restart: unless-stopped
     labels:
       - traefik.enable=true

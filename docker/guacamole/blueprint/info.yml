@@ -1,4 +1,6 @@
 ---
 generate:
+  dirs:
+    - path: mnt
   files:
     - src:  docker-compose.yml.j2
