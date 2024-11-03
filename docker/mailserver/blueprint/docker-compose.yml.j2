@@ -1,0 +1,104 @@
+---
+name: mailserver
+
+services:
+  mailserver:
+    image: mailserver/docker-mailserver
+    hostname: mail
+    domainname: {{domain}}
+    container_name: ${COMPOSE_PROJECT_NAME}
+    environment:
+    # See: https://docker-mailserver.github.io/docker-mailserver/latest/config/environment/
+      - ENABLE_UPDATE_CHECK=1
+      - UPDATE_CHECK_INTERVAL=7d
+
+      - LOG_LEVEL=info
+
+      - ONE_DIR=1
+      - PERMIT_DOCKER=connected-networks
+
+      - ENABLE_AMAVIS=1
+      - ENABLE_CLAMAV=1
+
+      - ENABLE_POP3=1
+      - ENABLE_FAIL2BAN=0
+
+      - ENABLE_OPENDKIM=1
+      - ENABLE_OPENDMARC=1
+
+      - SSL_TYPE=letsencrypt
+      - SSL_DOMAIN=mail.{{domain}}
+
+      - ENABLE_QUOTAS=0
+      - POSTFIX_MESSAGE_SIZE_LIMIT=51200000
+      - ENABLE_MANAGESIEVE=1
+      - POSTMASTER_ADDRESS=postmaster@{{domain}}
+      - POSTFIX_INET_PROTOCOLS=ipv4
+      - DOVECOT_MAILBOX_FORMAT=maildir
+
+      - LOGROTATE_INTERVAL=weekly
+
+      - ENABLE_SPAMASSASSIN=1
+      - ENABLE_SPAMASSASSIN_KAM=1
+      - SPAMASSASSIN_SPAM_TO_INBOX=1
+      - MOVE_SPAM_TO_JUNK=1
+      - SA_KILL=100.0
+
+      - ACCOUNT_PROVISIONER=LDAP
+      - LDAP_SERVER_HOST=ldap://ldap.internal
+      - LDAP_SEARCH_BASE={{ldap_root}}
+      - LDAP_BIND_DN=cn=admin,{{ldap_root}}
+      - LDAP_BIND_PW={{default_password}}
+
+      - LDAP_QUERY_FILTER_USER=(&(mail=%s)(mailAccountActive=yes))
+      - LDAP_QUERY_FILTER_GROUP=(&(objectclass=organizationalPerson)(mail=%s))
+      - LDAP_QUERY_FILTER_ALIAS=(&(mailAlias=%s)(mailAccountActive=yes))
+      - LDAP_QUERY_FILTER_DOMAIN=(&(|(mail=*@%s)(mailAlias=*@%s))(mailAccountActive=yes))
+
+      # %u - username
+      # %n - user part in user@domain, same as %u if there's no domain
+      # %d - domain part in user@domain, empty if there's no domain
+      - DOVECOT_USER_FILTER=(&(mail=%u)(mailAccountActive=yes))
+      - DOVECOT_USER_ATTRS=mail=user,=home=/var/mail/%d/%n,=mail=maildir:/var/mail/%d/%n/Maildir,=uid=5000,=gid=5000
+
+      - DOVECOT_PASS_FILTER=(&(mail=%u)(mailAccountActive=yes))
+      - DOVECOT_PASS_ATTRS=mail=user,userPassword=password
+
+    networks:
+      - {{docker_internal_network}}
+
+    ports:
+      - "25:25"    # SMTP  (Mail in)
+
+      - "465:465"  # SMTPS (Mail submission SSL)
+      - "587:587"  # SMTP  (Mail submission STARTTLS)
+
+      - "143:143"  # IMAP STARTTLS
+      - "993:993"  # IMAPS
+
+      - "110:110"  # POP3 STARTTLS
+      - "995:995"  # POP3S
+
+      - "4190:4190" # Managesieve
+
+    volumes:
+      - data:/var/mail
+      - state:/var/mail-state
+      - logs:/var/log/mail
+      # This is REALLY UGLY but hard to avoid:
+      - /var/lib/docker/volumes/traefik_acme/_data/acme.json:/etc/letsencrypt/acme.json:ro
+
+    restart: unless-stopped
+
+    #cap_add:  # Only needed for fail2ban
+    #  - NET_ADMIN
+
+networks:
+  {{docker_internal_network}}:
+    external: true
+
+
+volumes:
+  data:
+  state:
+  logs:
