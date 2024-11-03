@@ -134,7 +134,6 @@ def go(target):
     else:
         with yamlfile:
             settings = yaml.load(yamlfile, Loader=yaml.FullLoader)
-            ic(settings)
             if 'permissions' in settings:
                 config['permissions'] = settings['permissions']
 
