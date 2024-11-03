@@ -16,7 +16,7 @@ except ModuleNotFoundError as e:
 from argparse import ArgumentParser
 
 progname = os.path.basename(sys.argv[0])
-version  = "0.41.2"
+version  = "0.41.3"
 
 
 opts   = {}
