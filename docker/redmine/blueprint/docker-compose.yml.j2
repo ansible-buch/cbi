@@ -16,6 +16,7 @@ services:
       - backend
     volumes:
       - files:/usr/src/redmine/files
+      - plugins:/usr/src/redmine/plugins
     restart: unless-stopped
     labels:
       - traefik.enable=true
@@ -45,4 +46,5 @@ networks:
 
 volumes:
   files:
+  plugins:
   data:
