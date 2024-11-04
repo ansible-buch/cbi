@@ -124,7 +124,7 @@ re-login now, so that the new group membership comes into effect.
 |Roundcube |`docker/roundcube` |No |*Mail address* |
 |Mailserver |`docker/mailserver` |No |- |
 |Guacamole |`docker/guacamole` |No |- |
-|BookStack |`docker/bookstack` |No |admin@admin.com|
+|BookStack |`docker/bookstack` |No |`admin@admin.com`|
 
 - Roundcube
   
