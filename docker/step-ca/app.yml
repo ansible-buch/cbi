@@ -2,6 +2,3 @@
 permissions:
   up: root
   down: root
-
-version:
-  step_cli: "0.26.1"

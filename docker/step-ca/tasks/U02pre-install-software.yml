@@ -1,6 +1,7 @@
 ---
 - name: Gather facts
   setup:
+    gather_subset: [distribution]
 
 - name: Install package jq
   package:
@@ -8,33 +9,27 @@
 
     
 - set_fact:
-    package_filebase: step-cli_{{version.step_cli}}_amd64
-
-    
-- block:
-  - name: Download step-cli {{version.step_cli}}
-    get_url:
-      url: https://dl.smallstep.com/gh-release/cli/gh-release-header/v{{version.step_cli}}/{{package_filebase}}.deb
-      dest: /tmp/{{package_filebase}}.deb
-
-  - name: Install package
-    apt:
-      deb: /tmp/{{package_filebase}}.deb
-    become: true
-
+    package: step-cli_amd64.deb
   when: ansible_os_family == "Debian"
 
+- set_fact:
+    package: step-cli_amd64.rpm
+  when: ansible_os_family != "Debian"
 
-- block:
-  - name: Download step-cli {{version.step_cli}}
-    get_url:
-      url: https://dl.smallstep.com/gh-release/cli/gh-release-header/v{{version.step_cli}}/{{package_filebase}}.rpm
-      dest: /tmp/{{package_filebase}}.rpm
+  
+- name: Download step-cli package
+  get_url:
+    url: https://dl.smallstep.com/cli/docs-cli-install/latest/{{package}}
+    dest: /tmp/{{package}}
 
-  - name: Install package
-    command:
-      cmd: rpm -i /tmp/{{package_filebase}}.rpm
-      creates: /usr/bin/step
-    become: true
+    
+- name: Install package
+  apt:
+    deb: /tmp/{{package}}
+  when: ansible_os_family == "Debian"
 
+- name: Install package
+  command:
+    cmd: rpm -i /tmp/{{package}}
+    creates: /usr/bin/step
   when: ansible_os_family != "Debian"
