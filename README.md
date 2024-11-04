@@ -124,7 +124,7 @@ re-login now, so that the new group membership comes into effect.
 |Roundcube |`docker/roundcube` |No |*Mail address* |
 |Mailserver |`docker/mailserver` |No |- |
 |Guacamole |`docker/guacamole` |No |- |
-|BookStack |`docker/bookstack` |No |- |
+|BookStack |`docker/bookstack` |No |admin@admin.com|
 
 - Roundcube
   
@@ -134,6 +134,9 @@ re-login now, so that the new group membership comes into effect.
   Only useable with OpenLDAP, Letsencrypt + Roundcube!
   
   FQDN: mail.{{domain}}
+- BookStack:
+  The default password is `password`. Unfortunately there
+  is no easy way to set it from outside.
 
 
 
