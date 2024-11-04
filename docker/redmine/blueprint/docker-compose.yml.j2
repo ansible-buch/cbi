@@ -1,0 +1,48 @@
+---
+name: redmine
+
+services:
+  app:
+    image: redmine:5
+    
+    container_name: ${COMPOSE_PROJECT_NAME}-app
+    environment:
+      - REDMINE_DB_POSTGRES=db
+      - REDMINE_DB_USERNAME=redmine
+      - REDMINE_DB_PASSWORD=redmine
+      - REDMINE_DB_DATABASE=redmine
+    networks:
+      - {{docker_internal_network}}
+      - backend
+    volumes:
+      - files:/usr/src/redmine/files
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_PROJECT_NAME}.{{domain}}`)
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=3000
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver={{cert_resolver_type}}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    container_name: ${COMPOSE_PROJECT_NAME}-db
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=redmine
+      - POSTGRES_USER=redmine
+    networks:
+      - backend
+    restart: unless-stopped
+
+networks:
+  backend:
+  {{docker_internal_network}}:
+    external: true
+
+volumes:
+  files:
+  data:
