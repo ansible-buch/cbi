@@ -117,6 +117,7 @@ re-login now, so that the new group membership comes into effect.
 |---|---|---|---|
 |Step-CA |`docker/step-ca` |Yes |- |
 |Traefik |`docker/traefik` |No |`admin` |
+|Portainer |`docker/portainer` |No |`admin` |
 |OpenLDAP |`docker/openldap`|Yes |- |
 |SSP (Self Service Password) |`docker/ssp`|No |- |
 |Gitea |`docker/gitea` |No |`root` |
