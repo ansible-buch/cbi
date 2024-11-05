@@ -113,7 +113,7 @@ re-login now, so that the new group membership comes into effect.
 # Docker apps
 
 
-|App |App_Path |Root/sudo? |Login Username |
+|App |App_Path |Root/sudo? |Username (Password)|
 |---|---|---|---|
 |Step-CA |`docker/step-ca` |Yes |- |
 |Traefik |`docker/traefik` |No |`admin` |
@@ -124,7 +124,8 @@ re-login now, so that the new group membership comes into effect.
 |Roundcube |`docker/roundcube` |No |*Mail address* |
 |Mailserver |`docker/mailserver` |No |- |
 |Guacamole |`docker/guacamole` |No |- |
-|BookStack |`docker/bookstack` |No |`admin@admin.com`|
+|BookStack |`docker/bookstack` |No |`admin@admin.com` (`password`)|
+|Redmine |`docker/redmine` |No |`admin` (`admin`)|
 
 - Roundcube
   
@@ -134,9 +135,6 @@ re-login now, so that the new group membership comes into effect.
   Only useable with OpenLDAP, Letsencrypt + Roundcube!
   
   FQDN: mail.{{domain}}
-- BookStack:
-  The default password is `password`. Unfortunately there
-  is no easy way to set it from outside.
 
 
 

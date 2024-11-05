@@ -1,0 +1,22 @@
+---
+- debug:
+    msg: |
+      Required steps to install the Checklists plugin:
+      ================================================
+
+      cd docker/redmine/run
+
+      docker compose cp [...]/redmine_checklists-3_1_25-light.zip app:/tmp
+
+      docker compose exec app bash
+      apt update; apt install -y unzip
+
+      pushd plugins
+      unzip /tmp/redmine_checklists*.zip
+      popd
+
+      bundle install
+      bundle exec rake redmine:plugins NAME=redmine_checklists RAILS_ENV=production
+      exit
+
+      docker compose restart app
