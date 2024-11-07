@@ -1,18 +1,18 @@
 - set_fact:
-    lazydocker_config_dir: "~{{user}}/.config/lazydocker"
+    lazydocker_config_dir: "~{{lazy_user}}/.config/lazydocker"
       
 - name: Create lazydocker config dir {{lazydocker_config_dir}}
   file:
     path: "{{lazydocker_config_dir}}"
-    owner: "{{user}}"
-    group: "{{lookup('pipe', 'id -gn ' + user)}}"
+    owner: "{{lazy_user}}"
+    group: "{{lookup('pipe', 'id -gn ' + lazy_user)}}"
     state: directory
 
 - name: Create lazydocker config {{lazydocker_config_dir}}/config.yml
   copy:
     dest: "{{lazydocker_config_dir}}/config.yml"
-    owner: "{{user}}"
-    group: "{{lookup('pipe', 'id -gn ' + user)}}"
+    owner: "{{lazy_user}}"
+    group: "{{lookup('pipe', 'id -gn ' + lazy_user)}}"
     content: |
       ---
       # https://github.com/jesseduffield/lazydocker/blob/master/docs/Config.md

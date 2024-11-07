@@ -16,9 +16,9 @@
 
 - include_tasks: include/lazydocker-create-config-for-user.yml
   vars:
-    user: root
+    lazy_user: root
 
 - include_tasks: include/lazydocker-create-config-for-user.yml
   vars:
-    user: "{{user | default(omit)}}"
+    lazy_user: "{{user}}"
   when: user is defined
