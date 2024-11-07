@@ -22,7 +22,7 @@ services:
       - 3478:3478/udp # STUN/TURN non-TLS
 
     #network_mode: host
-      	
+
     volumes:
       - ./mnt/config/eturnal.yml:/etc/eturnal.yml:ro
     restart: unless-stopped
