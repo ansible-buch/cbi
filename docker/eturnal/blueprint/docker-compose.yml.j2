@@ -10,21 +10,17 @@ services:
       - ETURNAL_RELAY_MIN_PORT=50000
       - ETURNAL_RELAY_MAX_PORT=50500
 
-    ### security options
-    # read_only: true
-    # cap_drop:
-    #   - ALL
-    # cap_add:
-    #   - NET_BIND_SERVICE
-    # security_opt:
-    #   - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
 
-    # ports:
-    #   - 3478:3478     # STUN/TURN non-TLS
-    #   - 3478:3478/udp # STUN/TURN non-TLS
-    #   - 50000-50500:50000-50500/udp
-
-    network_mode: host
+    ports:
+      - 3478:3478     # STUN/TURN non-TLS
+      - 3478:3478/udp # STUN/TURN non-TLS
+      - 50000-50500:50000-50500/udp
 
     volumes:
       - ./mnt/eturnal.yml:/etc/eturnal.yml:ro
