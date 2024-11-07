@@ -24,4 +24,10 @@ services:
 
     volumes:
       - ./mnt/eturnal.yml:/etc/eturnal.yml:ro
+      - files:/opt/eturnal
+      
     restart: unless-stopped
+
+
+volumes:
+  files:
