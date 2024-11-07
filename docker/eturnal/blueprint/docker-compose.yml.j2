@@ -1,0 +1,28 @@
+---
+name: eturnal
+
+services:
+  app:
+    image: ghcr.io/processone/eturnal:latest
+    hostname:       ${COMPOSE_PROJECT_NAME}
+    container_name: ${COMPOSE_PROJECT_NAME}
+    #environment:
+
+    ### security options
+    read_only: true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+
+    ports:
+      - 3478:3478     # STUN/TURN non-TLS
+      - 3478:3478/udp # STUN/TURN non-TLS
+
+    network-mode: host
+      	
+    volumes:
+      - ./mnt/config/eturnal.yml:/etc/eturnal.yml:ro
+    restart: unless-stopped

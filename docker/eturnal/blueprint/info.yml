@@ -1,0 +1,9 @@
+---
+generate:
+  dirs:
+    - path: mnt
+  files:
+    - src:  docker-compose.yml.j2
+
+    - src:  eturnal.yml.j2
+      dest: mnt/eturnal.yml
