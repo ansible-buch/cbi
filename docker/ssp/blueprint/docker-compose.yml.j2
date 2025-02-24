@@ -9,7 +9,9 @@ services:
     networks:
       - {{docker_internal_network}}
     volumes:
-      - ./mnt/ssp.conf.php:/var/www/conf/config.inc.local.php
+      - ./mnt/conf:/var/www/conf
+      - ./mnt/templates_c:/var/www/templates_c
+      - ./mnt/cache:/var/www/cache
     restart: unless-stopped
     labels:
       - traefik.enable=true

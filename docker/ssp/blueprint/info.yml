@@ -1,9 +1,13 @@
 ---
 generate:
   dirs:
-    - path: mnt
+    - path: mnt/conf
+    - path: mnt/cache
+      mode: '777'
+    - path: mnt/templates_c
+      mode: '777'
 
   files:
     - src:  docker-compose.yml.j2
     - src:  ssp.conf.php.j2
-      dest: mnt/ssp.conf.php
+      dest: mnt/conf/config.inc.local.php
