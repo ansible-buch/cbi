@@ -6,7 +6,7 @@ name: gitea
 services:
   app:
     image: gitea/gitea:{{version}}
-    
+
     container_name: ${COMPOSE_PROJECT_NAME}
     environment:
       - USER_UID=1000
@@ -15,7 +15,8 @@ services:
       - GITEA__security__INSTALL_LOCK=true
 
       - GITEA__service__DISABLE_REGISTRATION=true
-      
+      - GITEA__service_0X2E_EXPLORE__REQUIRE_SIGNIN_VIEW=true
+
       - GITEA__server__ROOT_URL=https://${COMPOSE_PROJECT_NAME}.{{domain}}/
       - GITEA__server__SSH_DOMAIN=${COMPOSE_PROJECT_NAME}.{{domain}}
       - GITEA__server__SSH_PORT=2222
