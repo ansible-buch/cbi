@@ -1,7 +1,7 @@
 ---
 - name: Gather facts
   setup:
-
+  no_log: true
 
 - assert:
     that:

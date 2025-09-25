@@ -1,6 +1,7 @@
 ---
 - name: Gather facts
   setup:
+  no_log: true
 
 - name: Create Bash completion plugin dir
   file:

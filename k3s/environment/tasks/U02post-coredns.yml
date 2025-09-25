@@ -1,6 +1,7 @@
 ---
 - name: Gather facts
   setup:
+  no_log: true
 
 - name: Apply coredns custom configmap
   kubernetes.core.k8s:

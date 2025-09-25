@@ -1,6 +1,7 @@
 ---
 - name: Gather facts
   setup:
+  no_log: true
 
 - name: Call k3s-uninstall.sh
   command: k3s-uninstall.sh

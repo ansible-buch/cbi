@@ -1,6 +1,7 @@
 ---
 - name: Gather facts
   setup:
+  no_log: true
 
 - name: Setup K3s
   shell:
