@@ -267,7 +267,7 @@ def ansible_runner(action=None, arg=None):
             ANSIBLE_ROLES_PATH=stash['roles_path'],
             ANSIBLE_DISPLAY_SKIPPED_HOSTS='false',
             ANSIBLE_LOAD_CALLBACK_PLUGINS='true',
-            ANSIBLE_STDOUT_CALLBACK='yaml'
+            ANSIBLE_CALLBACK_RESULT_FORMAT='yaml'
         )
     )
 
