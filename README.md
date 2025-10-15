@@ -15,7 +15,7 @@ The K3s environment has been successfully tested on:
 
 The Docker environment has been successfully tested on:
 
-- Debian 12
+- Debian 13
 
 <br/>
 
@@ -145,8 +145,6 @@ re-login now, so that the new group membership comes into effect.
 
 ## Content of an app directory:
 
-- `app.yml`: Optional file that contains app-specific informations
-  like required permissions or version information
 - `blueprint`: contains Jinja-Templates and `info.yml`, which describes
   the transformation sources and targets
 - `tasks`: Task files
@@ -157,25 +155,21 @@ re-login now, so that the new group membership comes into effect.
 ### Up tasks
 - `U[0-9][0-9]pre*`
 - `U[0-9][0-9]main*`
-- `U[0-9][0-9]wait*`
 - `U[0-9][0-9]post*`
 
 ### Down tasks
 - `D[0-9][0-9]pre*`
 - `D[0-9][0-9]main*`
-- `D[0-9][0-9]wait*`
 - `D[0-9][0-9]post*`
 
 ### Start tasks
 - `S[0-9][0-9]pre*`
 - `S[0-9][0-9]main*`
-- `S[0-9][0-9]wait*`
 - `S[0-9][0-9]post*`
 
 ### Stop tasks
 - `K[0-9][0-9]pre*`
 - `K[0-9][0-9]main*`
-- `K[0-9][0-9]wait*`
 - `K[0-9][0-9]post*`
 
 
@@ -184,6 +178,3 @@ re-login now, so that the new group membership comes into effect.
 
 # *Feature ideas*
 -->
-
-
-
