@@ -1,0 +1,6 @@
+---
+- name: Add entry '{{docker.infra.ldap.host_fqdn}}' to /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{app.bind_ip}} {{docker.infra.ldap.host_fqdn}}"
+    regexp: "^{{app.bind_ip}}"

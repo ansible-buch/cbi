@@ -1,22 +1,22 @@
 ---
-name: step-ca
+name: {{app.name}}
 
 services:
   app:
     image: smallstep/step-ca
     # https://hub.docker.com/r/smallstep/step-ca
 
-    container_name: ${COMPOSE_PROJECT_NAME}
+    container_name: {{app.name}}
     environment:
-      - DOCKER_STEPCA_INIT_NAME=Smallstep Local ({{domain}})
-      - DOCKER_STEPCA_INIT_DNS_NAMES=localhost,ca.{{domain}}
+      - DOCKER_STEPCA_INIT_NAME=Smallstep Local ({{global.domain}})
+      - DOCKER_STEPCA_INIT_DNS_NAMES=localhost,ca.{{global.domain}}
       - DOCKER_STEPCA_INIT_REMOTE_MANAGEMENT=true
       - DOCKER_STEPCA_INIT_ACME=true
-      - DOCKER_STEPCA_INIT_PASSWORD={{default_password | b64decode}}
+      - DOCKER_STEPCA_INIT_PASSWORD={{global.password | b64decode}}
     networks:
-      {{docker_internal_network}}:
+      {{docker.infra.proxy_network}}:
         aliases:
-          - ca.{{domain}}
+          - ca.{{global.domain}}
     volumes:
       - files:/home/step
     ports:
@@ -24,7 +24,7 @@ services:
     restart: unless-stopped
 
 networks:
-  {{docker_internal_network}}:
+  {{docker.infra.proxy_network}}:
     external: true
 
 volumes:

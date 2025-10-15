@@ -28,7 +28,7 @@
               "compress": "true"
           },
 
-          "live-restore": true
+          "live-restore": {{app.live_restore}}
       }
   register: config
 

@@ -1,0 +1,13 @@
+---
+- set_fact:
+    ldap_cmd: "docker compose exec app ldapwhoami"
+    ldapi_url:   "ldapi://%2Fdata%2Frun%2Fslapd-localhost.socket"
+
+- name: Wait until 389 DS is online
+  shell:
+    chdir: "{{app_path}}/run"
+    cmd: >-
+      {{ldap_cmd}} -Y EXTERNAL -H {{ldapi_url}}
+  register: cmd
+  until: cmd.rc == 0
+  retries: 10

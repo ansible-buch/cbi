@@ -1,0 +1,23 @@
+---
+- set_fact:
+    group_dn: ou=groups,{{docker.infra.ldap.base_dn}}
+    
+- debug:
+    msg: |
+      Use LDAP? ==> Site Administration -> Identity & Access -> Auth. Sources
+
+      Add Source.
+
+      Authentication Name: ldap
+      Host: {{docker.infra.ldap.host_fqdn}}
+      Port: 389
+
+      User Search Base: ou=users,{{docker.infra.ldap.base_dn}}
+
+      User Filter: (&(uid=%[1]s)(|(memberOf=cn=gitea-users,{{group_dn}})(memberOf=cn=gitea-admins,{{group_dn}})))
+
+      Admin Filter: (memberOf=cn=gitea-admins,{{group_dn}})
+
+      First Name Attribute: givenName
+      Surname Attribute:    sn
+      Email Attribute:      mail

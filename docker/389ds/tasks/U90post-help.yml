@@ -1,0 +1,15 @@
+---
+- set_fact:
+    admin_dn: cn=Directory Manager
+
+- debug:
+    msg: |
+      Test LDAP server e.g. with:
+
+      LDAP_OPTS=(-x -D "{{admin_dn}}" -w YOURPASS)
+      
+      ldapsearch "${LDAP_OPTS[@]}"
+
+      ldapadd "${LDAP_OPTS[@]}" -c -f {{app_path}}/run/mnt/ldif/demo-tree.ldif
+
+      ldapsearch "${LDAP_OPTS[@]}" -LLL "(&(objectClass=Person)(|(memberOf=cn=gitea-users,ou=groups,{{docker.infra.ldap.base_dn}})(memberOf=cn=gitea-admins,ou=groups,{{docker.infra.ldap.base_dn}})))"  memberof

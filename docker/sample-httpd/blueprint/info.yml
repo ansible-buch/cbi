@@ -1,0 +1,10 @@
+---
+generate:
+  dirs:
+    - path: mnt
+
+  files:
+    - src:  docker-compose.yml.j2
+
+    - src: index.html.j2
+      dest: mnt/index.html

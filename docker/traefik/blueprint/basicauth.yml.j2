@@ -5,4 +5,4 @@ http:
     auth:
       basicAuth:
         users:
-          - "admin:{{default_password | b64decode | password_hash('md5', default_salt | truncate(8, False, ''))}}"
+          - "admin:{{global.password | b64decode | password_hash('md5', global.salt | truncate(8, False, ''))}}"

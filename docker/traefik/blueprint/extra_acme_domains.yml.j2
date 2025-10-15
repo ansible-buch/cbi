@@ -1,0 +1,15 @@
+---
+http:
+  routers:
+{% for d in app.extra_acme_domains | default([]) %}
+    {{ d.router }}:
+      rule: Host(`{{d.domain}}`)
+      entryPoints: [web]
+      tls:
+        certResolver: {{docker.infra.cert_resolver}}
+      service: noop
+{% endfor %}
+  services:
+    noop:
+      loadBalancer:
+        servers: [{ url: "http://127.0.0.1" }]

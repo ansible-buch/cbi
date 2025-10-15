@@ -1,11 +1,11 @@
 ---
-name: {{app.name}}
+name: redmine
 
 services:
   app:
     image: redmine:6
     
-    container_name: {{app.name}}-app
+    container_name: ${COMPOSE_PROJECT_NAME}-app
     environment:
       - REDMINE_DB_POSTGRES=db
       - REDMINE_DB_USERNAME=redmine
@@ -13,7 +13,7 @@ services:
       - REDMINE_DB_DATABASE=redmine
       - REDMINE_PLUGINS_MIGRATE=true
     networks:
-      - {{docker.infra.proxy_network}}
+      - traefik
       - backend
     volumes:
       - files:/usr/src/redmine/files
@@ -21,16 +21,16 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.{{app.name}}.rule=Host(`{{app.fqdn}}`)
-      - traefik.http.services.{{app.name}}.loadbalancer.server.port=3000
-      - traefik.http.routers.{{app.name}}.tls=true
-      - traefik.http.routers.{{app.name}}.tls.certresolver={{docker.infra.cert_resolver}}
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_PROJECT_NAME}.home.lan`)
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=3000
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver=stepca
     depends_on:
       - db
 
   db:
     image: postgres:17
-    container_name: {{app.name}}-db
+    container_name: ${COMPOSE_PROJECT_NAME}-db
     volumes:
       - data:/var/lib/postgresql/data
     environment:
@@ -42,7 +42,7 @@ services:
 
 networks:
   backend:
-  {{docker.infra.proxy_network}}:
+  traefik:
     external: true
 
 volumes:

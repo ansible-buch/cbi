@@ -1,0 +1,21 @@
+---
+- set_fact:
+    dsconf_cmd: "docker compose exec app dsconf"
+
+- name: Import mail schema
+  shell:
+    chdir: "{{app_path}}/run"
+    stdin: "\n"
+    cmd: >-
+      {{dsconf_cmd}} localhost schema
+      import-openldap-file /ldif/mail.schema.ldif --confirm
+  register: import_cmd
+  failed_when: import_cmd.rc != 0
+    and not 'no actions to perform' in import_cmd.stderr
+
+# - name: Restart server
+#   shell:
+#     chdir: "{{app_path}}/run"
+#     cmd: docker compose restart
+
+# - include_tasks: "{{app_path}}/tasks/U01wait-healthy.yml"

@@ -1,0 +1,5 @@
+dn: {{docker.infra.ldap.base_dn}}
+objectClass: dcObject
+objectClass: organization
+dc: {{ (docker.infra.ldap.base_dn.split(',')[0]).split('=')[1] }}
+o: {{docker.infra.ldap.org_name | default("Example Organization")}}

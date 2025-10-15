@@ -1,0 +1,19 @@
+---
+generate:
+  dirs:
+    - path: mnt/ldif
+
+  files:
+    - src:  docker-compose.yml.j2
+
+    - src: mail.schema.ldif
+      dest: mnt/ldif/mail.schema.ldif
+      
+    - src: acis.ldif.j2
+      dest: mnt/ldif/acis.ldif
+      
+    - src: root.ldif.j2
+      dest: mnt/ldif/root.ldif
+      
+    - src: demo-tree.ldif.j2
+      dest: mnt/ldif/demo-tree.ldif

@@ -1,0 +1,30 @@
+---
+name: 389ds
+
+services:
+  app:
+    image: 389ds/dirsrv:latest
+    
+    container_name: ${COMPOSE_PROJECT_NAME}
+    ports:
+      - {{app.bind_ip}}:389:389
+      - {{app.bind_ip}}:636:636
+    environment:
+      - DS_DM_PASSWORD={{global.password | b64decode}}
+      
+
+    networks:
+      {{docker.infra.proxy_network}}:
+        aliases:
+          - {{docker.infra.ldap.host_fqdn}}
+    volumes:
+      - data:/data
+      - ./mnt/ldif:/ldif
+    restart: unless-stopped
+
+networks:
+  {{docker.infra.proxy_network}}:
+    external: true
+
+volumes:
+  data:

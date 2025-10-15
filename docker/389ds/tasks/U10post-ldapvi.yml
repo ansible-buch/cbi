@@ -1,0 +1,19 @@
+---
+- set_fact:
+    admin_dn: cn=Directory Manager
+
+- block:
+  - name: Install ldapvi
+    package:
+      name: ldapvi
+
+  - name: Install shortcut command lv
+    copy:
+      dest: /usr/local/bin/lv
+      mode: 0755
+      content: >-
+        ldapvi -h ldaps://{{docker.infra.ldap.host_fqdn}}
+        --tls never
+        -D "{{admin_dn}}"
+
+  when: ansible_os_family == "Debian"

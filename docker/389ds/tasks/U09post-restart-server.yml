@@ -1,0 +1,6 @@
+- name: Restart server
+  shell:
+    chdir: "{{app_path}}/run"
+    cmd: docker compose restart
+
+- include_tasks: "{{app_path}}/tasks/U00post-wait-healthy.yml"

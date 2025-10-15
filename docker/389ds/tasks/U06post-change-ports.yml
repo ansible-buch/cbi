@@ -1,0 +1,15 @@
+---
+- set_fact:
+    dsconf_cmd: "docker compose exec app dsconf"
+
+- name: Change 389 port
+  shell:
+    chdir: "{{app_path}}/run"
+    cmd: >-
+      {{dsconf_cmd}} localhost config replace nsslapd-port=389
+
+- name: Change 636 port
+  shell:
+    chdir: "{{app_path}}/run"
+    cmd: >-
+      {{dsconf_cmd}} localhost config replace nsslapd-securePort=636

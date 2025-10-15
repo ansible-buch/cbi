@@ -4,7 +4,7 @@
 
 - name: Set maintenance_window_start
   shell:
-    chdir: run
+    chdir: "{{app_path}}/run"
     cmd: >-
       {{nextcloud_occ_cmd}} config:system:set
       maintenance_window_start --type=integer --value=0

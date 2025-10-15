@@ -1,0 +1,21 @@
+---
+- set_fact:
+    settings:
+      Debian:
+        utils_packages: [ldap-utils, libldap-common]
+        ldapconf_path:      /etc/ldap/ldap.conf
+
+
+- name: Install needed packages
+  package:
+    name: "{{settings[ansible_os_family].utils_packages}}"
+
+
+- name: Copy ldap.conf
+  copy:
+    dest: "{{settings[ansible_os_family].ldapconf_path}}"
+    content: |
+      BASE {{docker.infra.ldap.base_dn}}
+      URI ldaps://{{docker.infra.ldap.host_fqdn}}
+
+      TLS_REQCERT never

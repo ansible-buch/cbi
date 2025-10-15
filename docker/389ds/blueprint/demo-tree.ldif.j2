@@ -1,0 +1,74 @@
+dn: {{docker.infra.ldap.base_dn}}
+objectClass: dcObject
+objectClass: organization
+dc: {{ (docker.infra.ldap.base_dn.split(',')[0]).split('=')[1] }}
+o: An example organization
+
+dn: ou=users,{{docker.infra.ldap.base_dn}}
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=groups,{{docker.infra.ldap.base_dn}}
+objectClass: organizationalUnit
+ou: groups
+
+dn: uid=jdoe,ou=users,{{docker.infra.ldap.base_dn}}
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: MailAccount
+uid: jdoe
+cn: John Doe
+sn: Doe
+uidNumber: 3000
+gidNumber: 100
+homeDirectory: /home/jdoe
+mailAccountActive: yes
+loginShell: /bin/bash
+givenName: John
+userPassword: {CRYPT}{{global.password | b64decode | password_hash("sha512")}}
+mail: jdoe@{{global.domain}}
+mailAlias: john.doe@{{global.domain}}
+
+dn: uid=emustermann,ou=users,{{docker.infra.ldap.base_dn}}
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: MailAccount
+uid: emustermann
+cn: Erika Mustermann
+sn: Mustermann
+uidNumber: 3001
+gidNumber: 100
+homeDirectory: /home/emustermann
+mailAccountActive: yes
+loginShell: /bin/bash
+givenName: Erika
+userPassword: {CRYPT}{{global.password | b64decode | password_hash("sha512")}}
+mail: emustermann@{{global.domain}}
+mailAlias: erika.mustermann@{{global.domain}}
+mailAlias: erika@{{global.domain}}
+
+dn: uid=wwinzig,ou=users,{{docker.infra.ldap.base_dn}}
+objectClass: inetOrgPerson
+objectClass: MailAccount
+uid: wwinzig
+cn: Willi Winzig
+sn: Winzig
+mailAccountActive: yes
+givenName: Willi
+userPassword: {CRYPT}{{global.password | b64decode | password_hash("sha512")}}
+mail: wwinzig@{{global.domain}}
+mailAlias: willi.winzig@{{global.domain}}
+
+
+dn: cn=gitea-users,ou=groups,{{docker.infra.ldap.base_dn}}
+objectClass: groupOfNames
+description: Gitea users
+cn: gitea-users
+member: uid=jdoe,ou=users,{{docker.infra.ldap.base_dn}}
+member: uid=wwinzig,ou=users,{{docker.infra.ldap.base_dn}}
+
+dn: cn=gitea-admins,ou=groups,{{docker.infra.ldap.base_dn}}
+objectClass: groupOfNames
+description: Gitea admins
+cn: gitea-admins
+member: uid=emustermann,ou=users,{{docker.infra.ldap.base_dn}}

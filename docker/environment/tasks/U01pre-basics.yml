@@ -4,3 +4,4 @@
     name:
       - bash-completion
       - curl
+      - python3-passlib

@@ -1,0 +1,10 @@
+---
+- name: run_tasks
+  hosts: localhost
+
+  tasks:
+    - name: "Include environment file 'env.yml'"
+      include_vars: "{{config_path}}"
+
+    - name: "Including task file '{{task_file}}'"
+      include_tasks: "{{app_path}}/{{task_file}}"

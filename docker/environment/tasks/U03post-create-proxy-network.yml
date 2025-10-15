@@ -1,0 +1,4 @@
+---
+- name: Create proxy network '{{docker.infra.proxy_network}}'
+  docker_network:
+    name: "{{docker.infra.proxy_network}}"

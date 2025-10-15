@@ -1,0 +1,28 @@
+---
+- set_fact:
+    dsconf_cmd: "docker compose exec app dsconf"
+
+- name: Enable plugins
+  shell:
+    chdir: "{{app_path}}/run"
+    cmd: >-
+      {{dsconf_cmd}} localhost plugin {{item}} enable
+  with_items:
+    - referential-integrity
+    - memberof
+
+
+# - name: Restart server
+#   shell:
+#     chdir: "{{app_path}}/run"
+#     cmd: docker compose restart
+
+# - include_tasks: "{{app_path}}/tasks/U01wait-healthy.yml"
+
+    
+- name: Set scope for memberof plugin
+  shell:
+    chdir: "{{app_path}}/run"
+    cmd: >-
+      {{dsconf_cmd}} localhost plugin memberof
+      set --scope {{docker.infra.ldap.base_dn}} || true

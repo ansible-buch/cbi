@@ -2,6 +2,7 @@
 generate:
   dirs:
     - path: mnt/dynamic
+    - path: mnt/var_lib_docker
 
   files:
     - src:  docker-compose.yml.j2
@@ -9,3 +10,5 @@ generate:
       dest: mnt/traefik.yml
     - src:  basicauth.yml.j2
       dest: mnt/dynamic/basicauth.yml
+    - src:  extra_acme_domains.yml.j2
+      dest: mnt/dynamic/extra_acme_domains.yml

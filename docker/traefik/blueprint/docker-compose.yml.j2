@@ -1,40 +1,50 @@
 ---
-name: traefik
+name: {{app.name}}
 
 services:
   app:
-    image: "traefik:2.11"
+    image: "traefik:3"
     
-    container_name: ${COMPOSE_PROJECT_NAME}
+    container_name: {{app.name}}
     ports:
       - 80:80
       - 443:443
-{% if ldap_open_host_port %}
-      - 127.0.0.1:636:636
-{% endif %}
-{% if cert_resolver_type == 'stepca' %}
+{% if docker.infra.cert_resolver == 'stepca' %}
     environment:
       - LEGO_CA_CERTIFICATES=/step-ca/certs/root_ca.crt
       - LEGO_CA_SYSTEM_CERT_POOL=true
 {% endif %}
     networks:
-      - {{docker_internal_network}}
+      {{docker.infra.proxy_network}}:
+        aliases:
+          - traefik.{{global.domain}}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./mnt/traefik.yml:/etc/traefik/traefik.yml
       - ./mnt/dynamic:/etc/traefik/dynamic
       - acme:/etc/traefik/acme
-{% if cert_resolver_type == 'stepca' %}
+{% if docker.infra.cert_resolver  == 'stepca' %}
       - step-ca_files:/step-ca:ro
 {% endif %}
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_PROJECT_NAME}.{{domain}}`)
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.service=api@internal
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver={{cert_resolver_type}}
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.middlewares=auth@file
+      - traefik.http.routers.{{app.name}}.rule=Host(`{{app.fqdn}}`)
+      - traefik.http.routers.{{app.name}}.service=api@internal
+      - traefik.http.routers.{{app.name}}.tls=true
+      - traefik.http.routers.{{app.name}}.tls.certresolver={{docker.infra.cert_resolver}}
+      - traefik.http.routers.{{app.name}}.middlewares=auth@file
+
+{% if docker.traefik.use_certdumper %}
+  certdumper:
+    image: ghcr.io/kereis/traefik-certs-dumper:latest
+    container_name: traefik-certdumper
+    volumes:
+    - acme:/traefik:ro
+    - certdumper_files:/output:rw
+    - ./mnt/var_lib_docker:/var/lib/docker # Otherwise we get anonymous volume :-(
+    restart: unless-stopped
+{% endif %}
 
 networks:
   traefik:
@@ -42,7 +52,10 @@ networks:
 
 volumes:
   acme:
-{% if cert_resolver_type == 'stepca' %}
+{% if docker.infra.cert_resolver == 'stepca' %}
   step-ca_files:
     external: true
+{% endif %}
+{% if docker.traefik.use_certdumper %}
+  certdumper_files:
 {% endif %}

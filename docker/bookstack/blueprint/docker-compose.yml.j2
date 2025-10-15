@@ -1,42 +1,47 @@
 ---
-name: bookstack
+name: {{app.name}}
 
 services:
   app:
     image: linuxserver/bookstack
+    # https://hub.docker.com/r/linuxserver/bookstack
     
-    container_name: ${COMPOSE_PROJECT_NAME}-app
+    container_name: {{app.name}}-app
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Berlin
-      - APP_URL=https://${COMPOSE_PROJECT_NAME}.{{domain}}
+      - APP_URL=https://{{app.fqdn}}
+      
+      # docker run -it --rm --entrypoint /bin/bash  linuxserver/bookstack appkey
+      - APP_KEY={{app.app_key}}
+
       - DB_HOST=db
-      - DB_USER=bookstack
-      - DB_PASS=bookstack
+      - DB_USERNAME=bookstack
+      - DB_PASSWORD=bookstack
       - DB_DATABASE=bookstack
     networks:
-      - {{docker_internal_network}}
+      - {{docker.infra.proxy_network}}
       - backend
     volumes:
       - files:/config
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_PROJECT_NAME}.{{domain}}`)
-      - traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=80
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver={{cert_resolver_type}}
+      - traefik.http.routers.{{app.name}}.rule=Host(`{{app.fqdn}}`)
+      - traefik.http.services.{{app.name}}.loadbalancer.server.port=80
+      - traefik.http.routers.{{app.name}}.tls=true
+      - traefik.http.routers.{{app.name}}.tls.certresolver={{docker.infra.cert_resolver}}
     depends_on:
       - db
 
   db:
     image: mariadb:11
-    container_name: ${COMPOSE_PROJECT_NAME}-db
+    container_name: {{app.name}}-db
     volumes:
       - data:/var/lib/mysql
     environment:
-      - MARIADB_ROOT_PASSWORD={{default_password}}
+      - MARIADB_ROOT_PASSWORD={{global.password| b64decode}}
       - MARIADB_DATABASE=bookstack
       - MARIADB_USER=bookstack
       - MARIADB_PASSWORD=bookstack
@@ -46,7 +51,7 @@ services:
 
 networks:
   backend:
-  {{docker_internal_network}}:
+  {{docker.infra.proxy_network}}:
     external: true
 
 volumes:

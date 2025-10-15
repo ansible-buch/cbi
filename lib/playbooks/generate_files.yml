@@ -1,0 +1,38 @@
+---
+- name: generate_files
+  hosts: localhost
+
+  tasks:
+    - name: "Include environment file 'env.yml'"
+      include_vars: "{{config_path}}"
+
+    - name: Create run/ directory
+      file:
+        path: "{{app_path}}/run"
+        state: directory
+
+
+    - name: Include blueprint information file
+      include_vars: "{{app_path}}/blueprint/info.yml"
+
+    # This will get us (if present):
+    # - generate.dirs
+    # - generate.files
+
+
+    - name: Create target directories
+      file:
+        path: "{{app_path}}/run/{{item.path}}"
+        mode: "{{item.mode | default(omit)}}"
+        state: directory
+      with_items: "{{generate.dirs}}"
+      when: generate.dirs is defined
+
+
+    - name: Process blueprint Jinja templates
+      template:
+        src: "{{app_path}}/blueprint/{{item.src}}"
+        dest: "{{app_path}}/run/{% if item.dest is defined %}{{item.dest}}{% else %}{{item.src | splitext | first}}{% endif%}"
+        mode: "{{item.mode | default(omit)}}"
+      with_items: "{{generate.files}}"
+      when: generate.files is defined

@@ -1,0 +1,14 @@
+---
+- set_fact:
+    dsconf_cmd: "docker compose exec app dsconf"
+
+- name: Create data backend
+  shell:
+    chdir: "{{app_path}}/run"
+    cmd: |
+      if ! {{dsconf_cmd}} localhost backend suffix list | grep -q "userroot"
+      then
+          {{dsconf_cmd}} localhost backend create \
+          --suffix "{{docker.infra.ldap.base_dn}}" \
+          --be-name userroot
+      fi

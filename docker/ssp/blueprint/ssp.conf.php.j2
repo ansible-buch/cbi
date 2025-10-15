@@ -1,20 +1,25 @@
 <?php
-$keyphrase = "{{default_salt}}";
+$keyphrase = "{{global.salt}}";
 $debug = true;
 
-$ldap_url = "ldap://ldap.internal";
-$ldap_base = "{{ldap_root}}";
+$ldap_url = "ldap://{{docker.infra.ldap.host_fqdn}}";
+$ldap_base = "{{docker.infra.ldap.base_dn}}";
 
 $ldap_binddn = "";
 $ldap_bindpw = "";
 
-$hash = "SSHA";
+# https://self-service-password.readthedocs.io/en/latest/config_ppolicy.html
+$hash = "SSHA256";
 
 $ldap_filter = "(&(objectClass=person)(uid={login}))";
+# $ldap_use_exop_passwd = false;
+# $ldap_use_ppolicy_control = false;
 
 $who_change_password = "user";
 $pwd_min_length = 8;
 $pwd_max_length = 0;
+
+$hash = "clear";
 
 $use_sms = false;    // no sms
 $use_tokens = false; // no mail

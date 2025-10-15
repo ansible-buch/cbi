@@ -5,7 +5,7 @@
 
 - name: Import root ca cert into local step client
   shell: |
-    cd run
+    cd {{app_path}}/run
     
     CA_FINGERPRINT=$(docker compose exec app step certificate fingerprint certs/root_ca.crt)
 

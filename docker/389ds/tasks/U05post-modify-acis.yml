@@ -1,0 +1,12 @@
+---
+- set_fact:
+    ldap_cmd: "docker compose exec app ldapmodify"
+    ldapi_url:   "ldapi://%2Fdata%2Frun%2Fslapd-localhost.socket"
+    
+- name: Modify ACIs
+  shell:
+    chdir: "{{app_path}}/run"
+    cmd: >-
+      {{ldap_cmd}} -Y EXTERNAL -H {{ldapi_url}} -f /ldif/acis.ldif
+  register: cmd
+  failed_when: cmd.rc != 0 and not 'exists' in cmd.stderr

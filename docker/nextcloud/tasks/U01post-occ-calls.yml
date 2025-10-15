@@ -1,0 +1,13 @@
+---
+- set_fact:
+    nextcloud_occ_cmd: "docker compose exec --user www-data app php occ"
+
+- name: Add missing indices
+  shell:
+    chdir: "{{app_path}}/run"
+    cmd: "{{nextcloud_occ_cmd}} db:add-missing-indices"
+
+- name: Migration of MIME-types
+  shell:
+    chdir: "{{app_path}}/run"
+    cmd: "{{nextcloud_occ_cmd}} maintenance:repair --include-expensive"

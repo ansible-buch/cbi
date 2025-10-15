@@ -4,12 +4,12 @@
 
 - name: Create admin user 'root'
   command:
-    chdir: run
+    chdir: "{{app_path}}/run"
     cmd: >-
       {{gitea_admin_cmd}} user create
       --username root
-      --password {{default_password | b64decode}}
+      --password {{global.password | b64decode}}
       --admin
-      --email root@{{domain}}
-  no_log: true
-  ignore_errors: true
+      --email root@{{global.domain}}
+  register: admin_cmd
+  failed_when: admin_cmd.rc != 0 and not 'user already exists' in admin_cmd.stderr

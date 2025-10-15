@@ -1,0 +1,14 @@
+dn: {{docker.infra.ldap.base_dn}}
+changetype: modify
+add: aci
+aci: (targetattr != "userPassword")
+  (version 3.0; acl "everyone-read-no-password";
+   allow (read, search, compare) userdn = "ldap:///anyone";)
+
+
+dn: {{docker.infra.ldap.base_dn}}
+changetype: modify
+add: aci
+aci: (targetattr = "userPassword")
+  (version 3.0; acl "self-passwd-write";
+   allow (write) userdn = "ldap:///self";)

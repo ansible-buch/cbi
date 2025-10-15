@@ -1,3 +1,4 @@
-**/env.yml
+**/env*.yml
 **/run
 */*.ext/
+test/
