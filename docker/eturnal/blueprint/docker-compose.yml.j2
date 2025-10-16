@@ -3,12 +3,9 @@ name: {{app.name}}
 
 services:
   app:
-    image: ghcr.io/processone/eturnal:latest
+    image: eturnal/eturnal:latest
     hostname:       {{app.name}}
     container_name: {{app.name}}
-    environment:
-      - ETURNAL_RELAY_MIN_PORT=50000
-      - ETURNAL_RELAY_MAX_PORT=50500
 
     cap_drop:
       - ALL
@@ -17,10 +14,7 @@ services:
     security_opt:
       - no-new-privileges:true
 
-    ports:
-      - 3478:3478     # STUN/TURN non-TLS
-      - 3478:3478/udp # STUN/TURN non-TLS
-      - 50000-50500:50000-50500/udp
+    network_mode: host
 
     volumes:
       - ./mnt/eturnal.yml:/etc/eturnal.yml:ro
