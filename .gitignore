@@ -1,4 +1,5 @@
 **/env*.yml
+!lib/templates/env*.yml
 **/run
 */*.ext/
 test/

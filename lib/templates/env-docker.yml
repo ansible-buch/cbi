@@ -1,0 +1,15 @@
+docker:
+
+  infra:
+    proxy_network: traefik
+    cert_resolver: none  # letsencrypt | stepca | none
+
+  environment:
+    live_restore: "false"
+    
+  traefik:
+    use_certdumper: False
+
+  sample-httpd:
+    name: testapp
+    msg: "Hello World!"
