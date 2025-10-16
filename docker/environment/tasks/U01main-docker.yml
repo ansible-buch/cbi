@@ -1,6 +1,6 @@
 ---
 - name: System-specific installation of docker-ce
-  include_tasks: "include/setup-{{ansible_os_familiy}}.yml"
+  include_tasks: "include/setup-{{ansible_os_family}}.yml"
 
 - name: Start and enable docker service
   service:
