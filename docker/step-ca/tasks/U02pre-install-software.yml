@@ -1,8 +1,4 @@
 ---
-- name: Gather facts
-  setup:
-    gather_subset: [distribution]
-
 - name: Install package jq
   package:
     name: jq
