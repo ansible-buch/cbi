@@ -6,17 +6,19 @@
   environments
 - Supports K3s and Docker
 
-The K3s environment has been successfully tested on:
+The K3s environment has been tested on:
 
 - Debian 12
 - Ubuntu 24.04
 - Rocky Linux 9
 - openSUSE Leap 15.6
 
-The Docker environment has been successfully tested on:
+The Docker environment has been tested on:
 
 - Debian 13
+- Ubuntu 24.04
 - Rocky Linux 10
+- openSUSE Leap 15.6
 
 <br/>
 
@@ -49,11 +51,15 @@ cd cbi
 # [Edit env.yml with your favourite editor]
 ```
 
+(Use `./cbi config --environment docker` if you want Docker instead of K3s.
+Please note that the Docker environment is not capable to provide
+apps like AWX discussed in the Ansible book.)
 
 
-## Setup K3s or Docker environment
 
-### K3s 
+## Setup environment
+
+### K3s
 
 You must specify the name the primary network interface.
 Add `-e iface=IFACE_NAME`.
