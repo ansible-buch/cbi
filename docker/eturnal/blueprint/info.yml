@@ -2,6 +2,10 @@
 generate:
   dirs:
     - path: mnt
+
+    - path: /etc/ansible/secrets
+      mode: '0600'
+
   files:
     - src:  docker-compose.yml.j2
 

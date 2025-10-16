@@ -1,8 +1,8 @@
 ---
 eturnal:
   secret: >-
-    {{ lookup('password', '/tmp/eturnal_secret length=32') }}
-    
+    {{ lookup('password', '/etc/ansible/secrets/eturnal length=32') }}
+
   relay_ipv4_addr: "{{ansible_default_ipv4.address}}"
 
   log_dir: stdout

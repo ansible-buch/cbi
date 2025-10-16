@@ -1,0 +1,4 @@
+---
+- debug:
+    msg: |
+      The secret is stored in `/etc/ansible/secrets/eturnal`.
