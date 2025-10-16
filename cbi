@@ -346,73 +346,18 @@ def create_sample_config():
     if os.path.exists('env.yml') and not opts['force']:
         sys.exit("env.yml already exists; use --force to overwrite.")
 
-
-    text = """
-# The default domain under which apps will be accessible:
-domain: example.org
-
-# Default initial *base64-encoded* password for apps.
-# Create encoded string with: echo -n <YOUR_PASSWORD> | base64
-# Make password visible with: echo <ENCODED_PASSWORD> | base64 -d
-# If you choose another one, don't use less then 8 chars!
-default_password: U2VjcmV0LTEyMzQ=
-
-# Default salt for password hashes (we need at least 22 chars):
-default_salt:     really.salty.salt.0123456789
-
-"""
-
-
-    dockertext = """
-# (Docker only:)
-# Name of the internal network for proxy communication:
-docker_internal_network: traefik
-
-# (Docker only:)
-# Where do we get TLS certificates from?
-# - <empty>:     Use only self-signed certificates
-# - letsencrypt: Let's Encrypt (only suitable for internet servers)
-# - stepca:      Smallstep private CA
-cert_resolver_type:
-
-# (Docker only:)
-# Mail address to which the CA can send notifications when certificate
-# expiration is too near (if you don't need this, just leave it out):
-#cert_resolver_email: webmaster@{{domain}}
-
-# (Docker only:)
-# LDAP: Do you plan to deploy an OpenLDAP container?
-# Then Traefik will open port 127.0.0.1:636 to make the LDAP service
-# accessible from our host.
-ldap_open_host_port: false
-
-# (Docker only:)
-# LDAP directory tree root
-# (of course you can ignore this if you don't use LDAP):
-ldap_root: dc=example,dc=org
-"""
-
-    if opts['environment'] == 'k3s':
-        text += """
-# K3s foo
-# K3s bar
-"""
-    elif opts['environment'] == 'docker':
-        text += """
-apps:
-  docker:
-    environment:
-      permissions:
-        up: root
-        down: root
-        
-    test.ext:
-      version: 1.2.3-beta4
     
-"""
+    with open("lib/templates/env-main.yml", "r", encoding="utf-8") as f:
+        global_part = f.read()
+
+
+    with open(f"lib/templates/env-{opts['environment']}.yml", "r",
+              encoding="utf-8") as f:
+        environment_part = f.read()
+
         
     with open('env.yml', 'w') as f:
-        f.write(text)
+        f.write(global_part + "\n\n" + environment_part)
 
     sys.exit(0)
 
