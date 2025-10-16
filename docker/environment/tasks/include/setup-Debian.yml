@@ -35,11 +35,12 @@
       Suites: {{ansible_lsb.codename}}
       Components: stable
       Signed-By: /etc/apt/keyrings/docker-archive-keyring.asc
-
+  register: deb822_task
+      
 - name: apt update
   apt:
     update_cache: yes
-    cache_valid_time: 3600
+  when: deb822_task.changed
 
 - name: Install Docker Engine and Compose plugin
   apt:
