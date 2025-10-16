@@ -1,4 +1,7 @@
 ---
 - name: Create proxy network '{{docker.infra.proxy_network}}'
-  docker_network:
-    name: "{{docker.infra.proxy_network}}"
+  # We don't use the docker_network module, because on some systems
+  # we don't have the community.docker collection installed :-(
+  cmd: "docker network create {{docker.infra.proxy_network}}"
+  register: docker_cmd
+  failed_when: docker_cmd.rc != 0 and not 'already exists' in docker_cmd.stderr
