@@ -11,11 +11,12 @@ The K3s environment has been successfully tested on:
 - Debian 12
 - Ubuntu 24.04
 - Rocky Linux 9
-- openSUSE Leap 15
+- openSUSE Leap 15.6
 
 The Docker environment has been successfully tested on:
 
 - Debian 13
+- Rocky Linux 10
 
 <br/>
 
