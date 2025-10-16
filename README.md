@@ -29,7 +29,7 @@ The Docker environment has been successfully tested on:
 ### Special additional requirements on openSUSE:
 
 ```
-zypper install python3-PyYAML
+zypper install python311 python311-PyYAML
 pip3.11 install kubernetes
 ```
 

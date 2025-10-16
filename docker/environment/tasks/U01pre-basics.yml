@@ -6,8 +6,14 @@
       - curl
 
 
+- set_fact:
+    settings:
+      Debian:
+        passlib_package_name: python3-passlib
+      Suse:
+        passlib_package_name: python311-passlib
+
 - name: Install passlib module
   package:
-    name:
-      - python3-passlib
-  when: ansible_os_family == "Debian"
+    name: "{{settings[ansible_os_family].passlib_package_name}}"
+  when: ansible_os_family != "RedHat"
