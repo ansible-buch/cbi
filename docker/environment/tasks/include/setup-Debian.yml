@@ -36,6 +36,10 @@
       Components: stable
       Signed-By: /etc/apt/keyrings/docker-archive-keyring.asc
 
+- name: apt update
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
 
 - name: Install Docker Engine and Compose plugin
   apt:

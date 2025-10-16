@@ -13,7 +13,7 @@
       Suse:
         passlib_package_name: python311-passlib
 
-- name: Install passlib module
+- name: Install Python passlib module
   package:
     name: "{{settings[ansible_os_family].passlib_package_name}}"
   when: ansible_os_family != "RedHat"
