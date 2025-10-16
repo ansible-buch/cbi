@@ -4,4 +4,10 @@
     name:
       - bash-completion
       - curl
+
+
+- name: Install passlib module
+  package:
+    name:
       - python3-passlib
+  when: ansible_os_family == "Debian"
