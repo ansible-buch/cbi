@@ -1,4 +1,5 @@
 ---
+{% import 'utils.j2' as utils %}
 name: {{app.name}}
 
 services:
@@ -19,12 +20,8 @@ services:
       - files:/usr/src/redmine/files
       - plugins:/usr/src/redmine/plugins
     restart: unless-stopped
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.{{app.name}}.rule=Host(`{{app.fqdn}}`)
-      - traefik.http.services.{{app.name}}.loadbalancer.server.port=3000
-      - traefik.http.routers.{{app.name}}.tls=true
-      - traefik.http.routers.{{app.name}}.tls.certresolver={{docker.infra.cert_resolver}}
+{{ utils.standard_labels(docker, app, app.fqdn, 3000) }}
+
     depends_on:
       - db
 
@@ -32,7 +29,7 @@ services:
     image: postgres:17
     container_name: {{app.name}}-db
     volumes:
-      - data:/var/lib/postgresql/data
+      - data_17:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=redmine
       - POSTGRES_USER=redmine
@@ -48,4 +45,4 @@ networks:
 volumes:
   files:
   plugins:
-  data:
+  data_17:
