@@ -1,15 +1,16 @@
 ---
 - set_fact:
     gitea_admin_cmd: "docker compose exec --user git app gitea admin"
-
-- name: Create admin user 'root'
+    user_name: "{{app.user_name | default('root')}}"
+    
+- name: Create admin user '{{user_name}}'
   command:
     chdir: "{{app_path}}/run"
     cmd: >-
       {{gitea_admin_cmd}} user create
-      --username root
+      --username {{user_name}}
       --password {{global.password | b64decode}}
       --admin
-      --email root@{{global.domain}}
+      --email {{user_name}}@{{global.domain}}
   register: admin_cmd
   failed_when: admin_cmd.rc != 0 and not 'user already exists' in admin_cmd.stderr

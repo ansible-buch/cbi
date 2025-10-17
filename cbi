@@ -28,7 +28,7 @@ if sys.version_info < (3, 9):
 
 
 progname = os.path.basename(sys.argv[0])
-version  = "0.42.1"
+version  = "0.84.1"
 
 
 opts   = {}
@@ -419,17 +419,6 @@ def debug(desc, var):
         print(f"{GRAY}DEBUG| {desc}: {TURQUOISE}")
         print(f"{pformat(var)}{RESET}")
     
-
-
-# #######################
-# def is_executable(cmd):
-# #######################
-#     try:
-#         p = subprocess.run(cmd, shell=True, stderr = subprocess.DEVNULL)
-#         return p.returncode == 0
-#     except:
-#         return False
-
 
 
 

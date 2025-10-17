@@ -1,13 +1,13 @@
 ---
 # See: https://docs.gitea.com/installation/install-with-docker
 #      https://github.com/go-gitea/gitea/tree/main/contrib/environment-to-ini
-name: gitea
+name: {{app.name}}
 
 services:
   app:
-    image: gitea/gitea:{{app.version}}
+    image: gitea/gitea:{{app.version | default("1.24")}}
 
-    container_name: ${COMPOSE_PROJECT_NAME}
+    container_name: {{app.name}}
     environment:
       - USER_UID=1000
       - USER_GID=1000
@@ -18,14 +18,14 @@ services:
       - GITEA__service__REQUIRE_SIGNIN_VIEW=true
       - GITEA__service_0X2E_EXPLORE__REQUIRE_SIGNIN_VIEW=true
 
-      - GITEA__server__ROOT_URL=https://${COMPOSE_PROJECT_NAME}.{{global.domain}}/
-      - GITEA__server__SSH_DOMAIN=${COMPOSE_PROJECT_NAME}.{{global.domain}}
-      - GITEA__server__SSH_PORT=2222
+      - GITEA__server__ROOT_URL=https://{{app.name}}.{{global.domain}}/
+      - GITEA__server__SSH_DOMAIN={{app.name}}.{{global.domain}}
+      - GITEA__server__SSH_PORT={{app.ssh_port | default('2222')}}
 
     networks:
       - {{docker.infra.proxy_network}}
     ports:
-      - "2222:22"  # make internal SSH accessible
+      - "{{app.ssh_port | default('2222')}}:22" # make internal SSH accessible
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -33,10 +33,10 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_PROJECT_NAME}.{{global.domain}}`)
-      - traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=3000
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver={{docker.infra.cert_resolver}}
+      - traefik.http.routers.{{app.name}}.rule=Host(`{{app.name}}.{{global.domain}}`)
+      - traefik.http.services.{{app.name}}.loadbalancer.server.port=3000
+      - traefik.http.routers.{{app.name}}.tls=true
+      - traefik.http.routers.{{app.name}}.tls.certresolver={{docker.infra.cert_resolver}}
 
 networks:
   {{docker.infra.proxy_network}}:
