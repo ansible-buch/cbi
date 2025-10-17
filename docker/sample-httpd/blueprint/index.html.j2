@@ -1,1 +1,3 @@
-<h1>{{app.msg | default("It really works!")}}</h1>
+{% set msg = app.msg | default("It really works!") %}
+
+<h1>{{msg}}</h1>
