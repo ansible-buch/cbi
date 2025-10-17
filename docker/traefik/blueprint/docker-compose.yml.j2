@@ -1,4 +1,5 @@
 ---
+{% set use_certdumper = app.use_certdumper | default(False) %}
 name: {{app.name}}
 
 services:
@@ -35,7 +36,7 @@ services:
       - traefik.http.routers.{{app.name}}.tls.certresolver={{docker.infra.cert_resolver}}
       - traefik.http.routers.{{app.name}}.middlewares=auth@file
 
-{% if docker.traefik.use_certdumper %}
+{% if use_certdumper %}
   certdumper:
     image: ghcr.io/kereis/traefik-certs-dumper:latest
     container_name: traefik-certdumper
@@ -56,6 +57,6 @@ volumes:
   step-ca_files:
     external: true
 {% endif %}
-{% if docker.traefik.use_certdumper %}
+{% if use_certdumper %}
   certdumper_files:
 {% endif %}

@@ -2,16 +2,16 @@
 global:
   
   # The domain under which apps will be accessible by default:
-  domain: example.org
+  domain: {{domain}}
 
   # Default initial *base64-encoded* password for apps.
   # Create encoded string with: printf <YOUR_PASSWORD>    | base64
   # Make password visible with: printf <ENCODED_PASSWORD> | base64 -d
   # If you choose another one, don't use less then 8 chars!
-  password: U2VjcmV0LTEyMzQ=
+  password: {{password_base64}}
 
   # Default salt for password hashes (we need at least 22 chars):
-  salt:     really.salty.salt.0123456789
+  salt:     {{salt}}
 
   # In most cases, root permissions are required for up/down-actions.
   # If you set this to False, cbi will not check this, and you have

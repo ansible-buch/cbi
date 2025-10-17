@@ -21,6 +21,7 @@ from pprint import pprint, pformat
 
 from argparse import ArgumentParser
 from pathlib import Path
+from jinja2 import Template
 
 if sys.version_info < (3, 9):
     sys.exit("Need Python ≥ 3.9")
@@ -161,19 +162,20 @@ def go(target):
         
         
     # E.g. we have:
-    # app_path          = /home/user1/cbi/docker/testapp
+    # app_path          = /home/user1/cbi/docker/sample-httpd
     # stash['cbi_root'] = /home/user1/cbi
         
     app_relpath = os.path.relpath(app_path, stash['cbi_root'])
     list = app_relpath.strip("/").split("/")
 
-    # Now we have list = ['docker', 'testapp']
+    # Now we have list = ['docker', 'sample-httpd']
 
 
     config['app'] = {}
     config['app']['name'] = list[-1].removesuffix('.ext') # (eventually an extension.)
-    config['app']['fqdn'] = config['app']['name']  + '.' + config['global']['domain'] 
 
+    # (name is just a default for now. It could be changed via env-yml.)
+    
     
     # We want everything under docker.testapp in env.yml
     # directly accessible under app:
@@ -181,7 +183,7 @@ def go(target):
     ptr = config
 
     while list:
-        key = list.pop(0)
+        key = list.pop(0)  # first element
         if key in ptr:
             ptr = ptr[key]
         else:
@@ -192,6 +194,8 @@ def go(target):
         ptr = {}
     
     config['app'].update(ptr)
+
+    config['app']['fqdn'] = config['app']['name']  + '.' + config['global']['domain'] 
 
     debug("config", config)
     debug("config['app']", config['app'])
@@ -363,17 +367,26 @@ def create_sample_config():
         sys.exit("env.yml already exists; use --force to overwrite.")
 
     
-    with open("lib/templates/env-main.yml", "r", encoding="utf-8") as f:
-        global_part = f.read()
+    with open("lib/templates/env-main.yml.j2", "r", encoding="utf-8") as f:
+        global_part = Template(f.read())
+
+    global_part_rendered = global_part.render(
+        domain="example.org",
+        password_base64="U2VjcmV0LTEyMzQ=",
+        salt="really.salty.salt.0123456789",
+    )
 
 
-    with open(f"lib/templates/env-{opts['environment']}.yml", "r",
+    with open(f"lib/templates/env-{opts['environment']}.yml.j2", "r",
               encoding="utf-8") as f:
-        environment_part = f.read()
+        environment_part = Template(f.read())
 
-        
+    environment_part_rendered = environment_part.render(
+        domain="example.org",
+    )
+       
     with open('env.yml', 'w') as f:
-        f.write(global_part + "\n\n" + environment_part)
+        f.write(global_part_rendered + "\n\n" + environment_part_rendered)
 
     sys.exit(0)
 

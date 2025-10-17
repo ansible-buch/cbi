@@ -2,13 +2,18 @@ docker:
 
   infra:
     proxy_network: traefik
-    cert_resolver: none  # letsencrypt | stepca | none
+    cert_resolver: Null  # letsencrypt | stepca | none
 
   environment:
   #  live_restore: "false"
 
+  step-ca:
+
   traefik:
     use_certdumper: False
+    #extra_acme_domains:
+    #  - router: maildummy
+    #    domain: mail.{{domain}}
 
   gitea:
   #  version:  1.24
