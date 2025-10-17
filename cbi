@@ -196,8 +196,7 @@ def go(target):
     config['app'].update(ptr)
 
     if not 'fqdn' in  config['app']:
-        config['app']['fqdn'] = config['app']['name']
-                                + '.' + config['global']['domain']
+        config['app']['fqdn'] = config['app']['name'] + '.' + config['global']['domain']
 
     debug("config", config)
     debug("config['app']", config['app'])
