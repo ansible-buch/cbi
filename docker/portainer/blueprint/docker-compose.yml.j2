@@ -1,5 +1,6 @@
 ---
-name: portainer
+{% import 'utils.j2' as utils %}
+name: {{app.name}}
 
 services:
   app:
@@ -7,7 +8,7 @@ services:
     # :sts    = Short-Term Support, "bleeding-edge"
     # :latest = LTS
 
-    container_name: ${COMPOSE_PROJECT_NAME}
+    container_name: {{app.name}}
     
     # See: https://docs.portainer.io/advanced/cli
     command: --admin-password {{ global.password | b64decode | password_hash('bcrypt', global.salt | truncate(22, False, '')) | replace('$', '$$') }}
@@ -17,12 +18,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - data:/data    
     restart: unless-stopped
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_PROJECT_NAME}.{{global.domain}}`)
-      - traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=9000
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver={{docker.infra.cert_resolver}}
+{{ utils.standard_labels(docker, app, app.fqdn, 9000) }}
 
 networks:
   {{docker.infra.proxy_network}}:

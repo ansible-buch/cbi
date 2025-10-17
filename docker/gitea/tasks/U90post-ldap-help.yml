@@ -1,6 +1,7 @@
 ---
 - set_fact:
     group_dn: ou=groups,{{docker.infra.ldap.base_dn}}
+  when: "'ldap' in docker.infra"
     
 - debug:
     msg: |
@@ -21,3 +22,4 @@
       First Name Attribute: givenName
       Surname Attribute:    sn
       Email Attribute:      mail
+  when: "'ldap' in docker.infra"
