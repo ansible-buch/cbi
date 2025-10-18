@@ -1,9 +1,7 @@
 ---
-{% set extra_acme_domains = app.extra_acme_domains | default([]) %}
-
 http:
   routers:
-{% for d in extra_acme_domains %}
+{% for d in app.extra_acme_domains %}
     {{ d.router }}:
       rule: Host(`{{d.domain}}`)
       entryPoints: [web]

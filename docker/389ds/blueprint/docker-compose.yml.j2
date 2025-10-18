@@ -1,11 +1,11 @@
 ---
-name: 389ds
+name: {{app.name}}
 
 services:
   app:
     image: 389ds/dirsrv:latest
     
-    container_name: ${COMPOSE_PROJECT_NAME}
+    container_name: {{app.cbiname}}
     ports:
       - {{app.bind_ip}}:389:389
       - {{app.bind_ip}}:636:636

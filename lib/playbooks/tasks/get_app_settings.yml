@@ -1,0 +1,42 @@
+---
+- name: "Include environment file '{{config_path}}'"
+  include_vars:
+    file: "{{config_path}}"
+
+- set_fact:
+    name_defaults:
+      name:    "{{app_name}}"
+      cbiname: "{{app_name}}" # the directory name.
+
+
+- name: "Include app defaults '{{app_path}}/defaults.yml' (if present)"
+  include_vars:
+    file: "{{item}}"
+    name: app_defaults
+  with_fileglob:
+    - "{{app_path}}/defaults.yml"
+
+
+- set_fact:
+    env_settings:
+      docker: "{{docker | default({})}}"
+      k3s:    "{{k3s    | default({})}}"
+
+- name: Extracting app settings from whole env information
+  set_fact:
+    env_settings: "{{ env_settings[item] if (env_settings is mapping and item in env_settings) else {} }}"
+  loop: "{{app_path_list}}"
+
+
+- name: Combining all app information
+  set_fact:
+    app: >-
+      {{ name_defaults |
+         combine(app_defaults | default({})) |
+         combine(env_settings)
+      }}
+
+- name: Set app fqdn if still missing
+  set_fact:
+    app: "{{ app | combine( {'fqdn': app.name ~ '.' ~ global.domain} ) }}"
+  when: "'fqdn' not in app"

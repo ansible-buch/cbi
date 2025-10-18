@@ -11,3 +11,7 @@
   register: cmd
   until: cmd.rc == 0
   retries: 10
+
+- name: Wait another 5 seconds
+  pause:
+    seconds: 5

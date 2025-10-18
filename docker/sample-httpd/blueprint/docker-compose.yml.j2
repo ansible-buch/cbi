@@ -6,14 +6,14 @@ services:
   app:
     image: httpd:latest
 
-    container_name: {{app.name}}
+    container_name: {{app.cbiname}}
     
     networks:
       - {{docker.infra.proxy_network}}
     volumes:
       - ./mnt:/usr/local/apache2/htdocs
     restart: unless-stopped
-{{ utils.standard_labels(docker, app, app.fqdn, 80) }}
+{{ utils.standard_labels(docker, app, 80) }}
 
 networks:
   {{docker.infra.proxy_network}}:

@@ -5,7 +5,6 @@
       - bash-completion
       - curl
 
-
 - set_fact:
     settings:
       Debian:

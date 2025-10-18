@@ -1,7 +1,7 @@
-{% macro standard_labels(docker, app, host, port) %}
+{% macro standard_labels(docker, app, port) %}
     labels:
       - traefik.enable=true
-      - traefik.http.routers.{{app.name}}.rule=Host(`{{host}}`)
+      - traefik.http.routers.{{app.name}}.rule=Host(`{{app.fqdn}}`)
       - traefik.http.services.{{app.name}}.loadbalancer.server.port={{port}}
       - traefik.http.routers.{{app.name}}.tls=true
 {% if docker.infra.cert_resolver %}

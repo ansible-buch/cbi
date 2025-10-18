@@ -1,0 +1,4 @@
+---
+# sts    = Short-Term Support, "bleeding-edge"
+# latest = LTS
+version: sts

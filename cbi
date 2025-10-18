@@ -29,12 +29,12 @@ if sys.version_info < (3, 9):
 
 
 progname = os.path.basename(sys.argv[0])
-version  = "0.84.1"
+version  = "0.84.2"
 
 
 opts   = {}
-stash  = {}
 config = {}
+stash  = {}
 
 
 
@@ -42,8 +42,8 @@ config = {}
 def main():
 ###########
     global opts
-    global stash
     global config
+    global stash
 
 
     get_options()
@@ -62,22 +62,22 @@ def main():
     stash['playbooks_path'] = os.path.join(stash['cbi_root'], 'lib/playbooks')
 
 
-    local_env_file = f"env-{os.uname().nodename.split('.', 1)[0]}.yml"
+    local_env_file    = f"env-{os.uname().nodename.split('.', 1)[0]}.yml"
+    standard_env_file = "env.yml"
 
-    if os.path.isfile(local_env_file):
-        stash['config_path'] = os.path.join(stash['cbi_root'], local_env_file)
-    else:
-        stash['config_path'] = os.path.join(stash['cbi_root'], "env.yml")
+    paths = [local_env_file, standard_env_file]
 
+    p = next(filter(Path.exists, map(Path, paths)), None)
+    if p is None:
+        raise FileNotFoundError("No config file found - exiting.")
 
-    try:
-        yamlfile = open(stash['config_path'], "r")
-    except FileNotFoundError:
-        sys.exit("No config file found - exiting.")
-    else:
-        with yamlfile:
-            config = yaml.load(yamlfile, Loader=yaml.FullLoader)
-        debug("Configfile", stash['config_path'])
+    stash['config_path'] = os.path.join(stash['cbi_root'], p)
+
+    with p.open(encoding="utf-8") as yamlfile:
+        config = yaml.load(yamlfile, Loader=yaml.FullLoader)
+
+    # debug("config_path", stash['config_path'])
+    debug("config", config)
 
     go(target=opts['target'])  # up, down, ...
 
@@ -159,47 +159,24 @@ def go(target):
         sys.exit(f"App directory does not exist: {opts['app_path']}")
 
     stash['app_path'] = app_path
-
-
+    debug("app_path", app_path)
+    
     # E.g. we have:
     # app_path          = /home/user1/cbi/docker/sample-httpd
     # stash['cbi_root'] = /home/user1/cbi
 
     app_relpath = os.path.relpath(app_path, stash['cbi_root'])
-    list = app_relpath.strip("/").split("/")
+    app_path_list = app_relpath.strip("/").split("/")
 
-    # Now we have list = ['docker', 'sample-httpd']
+    # Now we have app_path_list = ['docker', 'sample-httpd']
 
+    stash['app_path_list'] = app_path_list
 
-    config['app'] = {}
-    config['app']['name'] = list[-1].removesuffix('.ext') # (eventually an extension.)
+    stash['app_name'] = app_path_list[-1].removesuffix('.ext')
+    # (eventually an extension.)
 
-    # (name is just a default for now. It could be changed via env-yml.)
+    debug("Stash", stash)
 
-
-    # We want everything under docker.testapp in env.yml
-    # directly accessible under app:
-
-    ptr = config
-
-    while list:
-        key = list.pop(0)  # first element
-        if key in ptr:
-            ptr = ptr[key]
-        else:
-            ptr = None
-            break
-
-    if ptr == None:
-        ptr = {}
-
-    config['app'].update(ptr)
-
-    if not 'fqdn' in  config['app']:
-        config['app']['fqdn'] = config['app']['name'] + '.' + config['global']['domain']
-
-    debug("config", config)
-    debug("config['app']", config['app'])
 
     check_permissions()
 
@@ -314,7 +291,7 @@ def ansible_runner(action=None, arg=None):
     debug("ansible_runner|arg", arg)
 
 
-    app_config = {"app": config['app']}
+    app_path_list = {"app_path_list": stash['app_path_list']}
 
     cmd = [
         "ansible-playbook",
@@ -322,8 +299,9 @@ def ansible_runner(action=None, arg=None):
         "-c", "local",
         f"{stash['playbooks_path']}/{action}.yml",
         "-e", f"config_path={stash['config_path']}",
+        "-e", f"app_name={stash['app_name']}",
         "-e", f"app_path={stash['app_path']}",
-        "-e", f"{str(app_config)}",
+        "-e", f"{str(app_path_list)}",
     ]
 
     if 'extra' in opts and opts['extra'] != None:

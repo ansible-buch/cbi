@@ -4,11 +4,9 @@ name: {{app.name}}
 
 services:
   app:
-    image: portainer/portainer-ce:sts
-    # :sts    = Short-Term Support, "bleeding-edge"
-    # :latest = LTS
+    image: portainer/portainer-ce:{{app.version}}
 
-    container_name: {{app.name}}
+    container_name: {{app.cbiname}}
     
     # See: https://docs.portainer.io/advanced/cli
     command: --admin-password {{ global.password | b64decode | password_hash('bcrypt', global.salt | truncate(22, False, '')) | replace('$', '$$') }}
@@ -18,7 +16,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - data:/data    
     restart: unless-stopped
-{{ utils.standard_labels(docker, app, app.fqdn, 9000) }}
+{{ utils.standard_labels(docker, app, 9000) }}
 
 networks:
   {{docker.infra.proxy_network}}:

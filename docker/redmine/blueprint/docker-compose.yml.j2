@@ -6,7 +6,7 @@ services:
   app:
     image: redmine:6
     
-    container_name: {{app.name}}-app
+    container_name: {{app.cbiname}}-app
     environment:
       - REDMINE_DB_POSTGRES=db
       - REDMINE_DB_USERNAME=redmine
@@ -20,14 +20,14 @@ services:
       - files:/usr/src/redmine/files
       - plugins:/usr/src/redmine/plugins
     restart: unless-stopped
-{{ utils.standard_labels(docker, app, app.fqdn, 3000) }}
+{{ utils.standard_labels(docker, app, 3000) }}
 
     depends_on:
       - db
 
   db:
     image: postgres:17
-    container_name: {{app.name}}-db
+    container_name: {{app.cbiname}}-db
     volumes:
       - data_17:/var/lib/postgresql/data
     environment:

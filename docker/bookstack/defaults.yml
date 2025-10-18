@@ -1,0 +1,7 @@
+---
+timezone: Europe/Berlin
+
+# Generate app key with
+# docker run -it --rm --entrypoint /bin/bash  linuxserver/bookstack appkey
+# and configure it in your env.yml
+app_key: Null

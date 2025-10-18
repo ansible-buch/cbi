@@ -1,0 +1,7 @@
+# Start additional certdumper container:
+use_certdumper: False
+
+# Can contain maps with 'router' and 'domain' entries, e.g.:
+#   - router: maildummy
+#     domain: mail.cbi.tdbuilder.de
+extra_acme_domains: []

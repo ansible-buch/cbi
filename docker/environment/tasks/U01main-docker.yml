@@ -1,7 +1,4 @@
 ---
-- set_fact:
-    live_restore: "{{app.live_restore | default('False')}}"
-
 - name: System-specific installation of docker-ce
   include_tasks: "include/setup-{{ansible_os_family}}.yml"
 
@@ -23,7 +20,7 @@
               "compress": "true"
           },
 
-          "live-restore": {{live_restore}}
+          "live-restore": {{app.live_restore}}
       }
   register: config
 

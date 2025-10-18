@@ -1,12 +1,11 @@
 ---
-{% set use_certdumper = app.use_certdumper | default(False) %}
 name: {{app.name}}
 
 services:
   app:
     image: "traefik:3"
     
-    container_name: {{app.name}}
+    container_name: {{app.cbiname}}
     ports:
       - 80:80
       - 443:443
@@ -36,14 +35,16 @@ services:
       - traefik.http.routers.{{app.name}}.tls.certresolver={{docker.infra.cert_resolver}}
       - traefik.http.routers.{{app.name}}.middlewares=auth@file
 
-{% if use_certdumper %}
+{% if app.use_certdumper %}
   certdumper:
     image: ghcr.io/kereis/traefik-certs-dumper:latest
     container_name: traefik-certdumper
     volumes:
     - acme:/traefik:ro
     - certdumper_files:/output:rw
-    - ./mnt/var_lib_docker:/var/lib/docker # Otherwise we get anonymous volume :-(
+    - ./mnt/var_lib_docker:/var/lib/docker
+    # Otherwise we get anonymous volume :-(
+
     restart: unless-stopped
 {% endif %}
 
@@ -57,6 +58,6 @@ volumes:
   step-ca_files:
     external: true
 {% endif %}
-{% if use_certdumper %}
+{% if app.use_certdumper %}
   certdumper_files:
 {% endif %}

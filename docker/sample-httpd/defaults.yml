@@ -1,0 +1,3 @@
+---
+message: "Hello from sample-httpd! Domain: {{global.domain}}"
+foo: 100

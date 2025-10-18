@@ -7,14 +7,13 @@ services:
     image: linuxserver/bookstack
     # https://hub.docker.com/r/linuxserver/bookstack
     
-    container_name: {{app.name}}-app
+    container_name: {{app.cbiname}}-app
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Berlin
+      - TZ={{app.timezone}}
       - APP_URL=https://{{app.fqdn}}
       
-      # docker run -it --rm --entrypoint /bin/bash  linuxserver/bookstack appkey
       - APP_KEY={{app.app_key}}
 
       - DB_HOST=db
@@ -27,14 +26,14 @@ services:
     volumes:
       - files:/config
     restart: unless-stopped
-{{ utils.standard_labels(docker, app, app.fqdn, 80) }}
+{{ utils.standard_labels(docker, app, 80) }}
 
     depends_on:
       - db
 
   db:
     image: mariadb:11
-    container_name: {{app.name}}-db
+    container_name: {{app.cbiname}}-db
     volumes:
       - data:/var/lib/mysql
     environment:

@@ -3,8 +3,8 @@
   hosts: localhost
 
   tasks:
-    - name: "Include environment file 'env.yml'"
-      include_vars: "{{config_path}}"
+    - name: Get app settings
+      include_tasks: tasks/get_app_settings.yml
 
     - name: "Including task file '{{task_file}}'"
       include_tasks: "{{app_path}}/{{task_file}}"
