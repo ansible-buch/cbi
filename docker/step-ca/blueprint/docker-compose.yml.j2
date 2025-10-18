@@ -6,7 +6,7 @@ services:
     image: smallstep/step-ca
     # https://hub.docker.com/r/smallstep/step-ca
 
-    container_name: {{app.name}}
+    container_name: {{app.cbiname}}
     environment:
       - DOCKER_STEPCA_INIT_NAME=Smallstep Local ({{global.domain}})
       - DOCKER_STEPCA_INIT_DNS_NAMES=localhost,ca.{{global.domain}}
