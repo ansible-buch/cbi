@@ -7,3 +7,13 @@
       - traefik.http.routers.{{app.name}}.tls.certresolver={{docker.infra.cert_resolver}}
 {% endif %}
 {% endmacro %}
+
+{% macro standard_multiname_labels(docker, app, fqdn_list, port) %}
+      - traefik.enable=true
+      - "traefik.http.routers.{{app.name}}.rule={{ fqdn_list | map('regex_replace', '^(.*)$', 'Host(`\\1`)') | join(' || ') }}"
+      - traefik.http.services.{{app.name}}.loadbalancer.server.port={{port}}
+      - traefik.http.routers.{{app.name}}.tls=true
+{% if docker.infra.cert_resolver %}
+      - traefik.http.routers.{{app.name}}.tls.certresolver={{docker.infra.cert_resolver}}
+{% endif %}
+{% endmacro %}

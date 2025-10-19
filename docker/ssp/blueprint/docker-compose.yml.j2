@@ -5,7 +5,8 @@ name: {{app.name}}
 services:
   ssp:
     image: ltbproject/self-service-password:latest
-    
+    # https://self-service-password.readthedocs.io/en/stable/
+
     container_name: {{app.cbiname}}
     networks:
       - {{docker.infra.proxy_network}}

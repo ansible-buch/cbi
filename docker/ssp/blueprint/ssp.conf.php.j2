@@ -9,7 +9,7 @@ $ldap_binddn = "";
 $ldap_bindpw = "";
 
 # https://self-service-password.readthedocs.io/en/latest/config_ppolicy.html
-$hash = "SSHA256";
+$hash = "CRYPT";
 
 $ldap_filter = "(&(objectClass=person)(uid={login}))";
 # $ldap_use_exop_passwd = false;
