@@ -3,24 +3,3 @@ docker:
   infra:
     proxy_network: traefik
     cert_resolver: Null  # letsencrypt | stepca | Null
-
-  environment:
-  #  live_restore: "false"
-
-  step-ca:
-
-  traefik:
-    use_certdumper: False
-    #extra_acme_domains:
-    #  - router: maildummy
-    #    domain: mail.{{domain}}
-
-  gitea:
-  #  version:  1.24
-  #  ssh_port: 2222
-  #  user_name: root
-
-  sample-httpd:
-    name: testapp
-    msg: "Hello World!"
-

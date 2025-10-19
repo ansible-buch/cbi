@@ -17,6 +17,8 @@ import subprocess
 import glob
 import getpass
 import yaml
+import secrets, string
+
 from pprint import pprint, pformat
 
 from argparse import ArgumentParser
@@ -29,7 +31,7 @@ if sys.version_info < (3, 9):
 
 
 progname = os.path.basename(sys.argv[0])
-version  = "0.84.2"
+version  = "0.84.8"
 
 
 opts   = {}
@@ -349,10 +351,13 @@ def create_sample_config():
     with open("lib/templates/env-main.yml.j2", "r", encoding="utf-8") as f:
         global_part = Template(f.read())
 
+    alphabet = string.ascii_letters + string.digits  # a-zA-Z0-9
+    salt = ''.join(secrets.choice(alphabet) for _ in range(30))
+    
     global_part_rendered = global_part.render(
         domain="example.org",
         password_base64="U2VjcmV0LTEyMzQ=",
-        salt="really.salty.salt.0123456789",
+        salt=salt,
     )
 
 

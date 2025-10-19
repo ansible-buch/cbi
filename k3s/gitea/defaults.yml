@@ -1,4 +1,4 @@
 ---
 version:   1.24
-ssh_port:  2222
+ssh_port:  30022
 user_name: root
