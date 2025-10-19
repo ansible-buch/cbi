@@ -1,3 +1,4 @@
 ---
-message: "Hello from sample-httpd! Domain: {{global.domain}}"
-foo: 100
+message: "Hello from {{app_name}} at {{global.domain}}!"
+
+color: lightblue

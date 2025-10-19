@@ -1,11 +1,12 @@
 ---
+{% import 'utils.j2' as utils %}
 name: {{app.name}}
 
 services:
   ssp:
     image: ltbproject/self-service-password:latest
     
-    container_name: {{app.name}}
+    container_name: {{app.cbiname}}
     networks:
       - {{docker.infra.proxy_network}}
     volumes:
@@ -14,11 +15,7 @@ services:
       - ./mnt/cache:/var/www/cache
     restart: unless-stopped
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.{{app.name}}.rule=Host(`{{app.fqdn}}`)
-      - traefik.http.services.{{app.name}}.loadbalancer.server.port=80
-      - traefik.http.routers.{{app.name}}.tls=true
-      - traefik.http.routers.{{app.name}}.tls.certresolver={{docker.infra.cert_resolver}}
+{{ utils.standard_labels(docker, app, 80) }}
 
 networks:
   {{docker.infra.proxy_network}}:

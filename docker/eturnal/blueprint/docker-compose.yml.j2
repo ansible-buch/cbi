@@ -4,8 +4,8 @@ name: {{app.name}}
 services:
   app:
     image: eturnal/eturnal:latest
-    hostname:       {{app.name}}
-    container_name: {{app.name}}
+    hostname:       {{app.cbiname}}
+    container_name: {{app.cbiname}}
 
     cap_drop:
       - ALL

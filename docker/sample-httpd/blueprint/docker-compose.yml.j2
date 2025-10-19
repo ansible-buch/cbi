@@ -13,6 +13,7 @@ services:
     volumes:
       - ./mnt:/usr/local/apache2/htdocs
     restart: unless-stopped
+    labels:
 {{ utils.standard_labels(docker, app, 80) }}
 
 networks:

@@ -1,5 +1,4 @@
 {% macro standard_labels(docker, app, port) %}
-    labels:
       - traefik.enable=true
       - traefik.http.routers.{{app.name}}.rule=Host(`{{app.fqdn}}`)
       - traefik.http.services.{{app.name}}.loadbalancer.server.port={{port}}

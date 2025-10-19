@@ -26,6 +26,7 @@ services:
     volumes:
       - files:/config
     restart: unless-stopped
+    labels:
 {{ utils.standard_labels(docker, app, 80) }}
 
     depends_on:

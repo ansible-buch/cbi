@@ -33,6 +33,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - data:/data
     restart: unless-stopped
+    labels:
 {{ utils.standard_labels(docker, app, 3000) }}
 
 networks:

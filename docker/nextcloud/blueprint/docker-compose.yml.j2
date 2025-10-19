@@ -1,4 +1,5 @@
 ---
+{% import 'utils.j2' as utils %}
 name: {{app.name}}
 
 {% set net_json = lookup('pipe',
@@ -10,7 +11,7 @@ services:
   app:
     image: nextcloud:stable
     
-    container_name: {{app.name}}-app
+    container_name: {{app.cbiname}}-app
     environment:
       - POSTGRES_DB=nextcloud
       - POSTGRES_USER=nextcloud
@@ -34,12 +35,7 @@ services:
       - files:/var/www/html
     restart: unless-stopped
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.{{app.name}}.rule=Host(`{{app.fqdn}}`)
-      - traefik.http.services.{{app.name}}.loadbalancer.server.port=80
-      - traefik.http.routers.{{app.name}}.tls=true
-      - traefik.http.routers.{{app.name}}.tls.certresolver={{docker.infra.cert_resolver}}
-
+{{ utils.standard_labels(docker, app, 80) }}
       
       - traefik.http.routers.{{app.name}}.middlewares=nc-well-known-dav,nc-hsts-headers
 
@@ -56,20 +52,20 @@ services:
 
   db:
     image: postgres:17
-    container_name: {{app.name}}-db
+    container_name: {{app.cbiname}}-db
     environment:
       - POSTGRES_PASSWORD=nextcloud
       - POSTGRES_USER=nextcloud
     networks:
       - backend
     volumes:
-      - data:/var/lib/postgresql/data
+      - data_17:/var/lib/postgresql/data
     restart: unless-stopped
 
 
   memcache:
     image: redis:latest
-    container_name: {{app.name}}-memcache
+    container_name: {{app.cbiname}}-memcache
     command: redis-server --save ''
     networks:
       - backend
@@ -84,5 +80,5 @@ networks:
 
 volumes:
   files:
-  data:
+  data_17:
   empty:
