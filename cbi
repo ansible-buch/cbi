@@ -370,7 +370,10 @@ def create_sample_config():
     )
 
     with open('env.yml', 'w') as f:
-        f.write(global_part_rendered + "\n\n" + environment_part_rendered)
+        f.write(global_part_rendered
+                + "\n\n"
+                + environment_part_rendered
+                + "\n")
 
     sys.exit(0)
 
