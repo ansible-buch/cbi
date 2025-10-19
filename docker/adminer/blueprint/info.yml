@@ -1,0 +1,5 @@
+---
+generate:
+
+  files:
+    - src:  docker-compose.yml.j2

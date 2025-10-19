@@ -1,0 +1,30 @@
+---
+{% import 'utils.j2' as utils %}
+name: {{app.name}}
+
+services:
+  app:
+    image: adminer:latest
+    container_name: {{app.cbiname}}
+
+    environment:
+      - ADMINER_DEFAULT_SERVER=""
+
+    networks:
+      - {{docker.infra.proxy_network}}
+{% for n in app.join_networks %}
+      - {{n}}
+{% endfor %}
+
+    restart: unless-stopped
+    labels:
+{{ utils.standard_labels(docker, app, 8080) }}
+      - traefik.http.routers.{{app.name}}.middlewares=auth@file
+
+networks:
+  {{docker.infra.proxy_network}}:
+    external: true
+{% for n in app.join_networks %}
+  {{n}}:
+    external: true
+{% endfor %}
