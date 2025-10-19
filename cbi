@@ -162,7 +162,7 @@ def go(target):
 
     stash['app_path'] = app_path
     debug("app_path", app_path)
-    
+
     # E.g. we have:
     # app_path          = /home/user1/cbi/docker/sample-httpd
     # stash['cbi_root'] = /home/user1/cbi
@@ -353,7 +353,7 @@ def create_sample_config():
 
     alphabet = string.ascii_letters + string.digits  # a-zA-Z0-9
     salt = ''.join(secrets.choice(alphabet) for _ in range(30))
-    
+
     global_part_rendered = global_part.render(
         domain="example.org",
         password_base64="U2VjcmV0LTEyMzQ=",
