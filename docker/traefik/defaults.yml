@@ -5,3 +5,6 @@ use_certdumper: False
 #   - router: maildummy
 #     domain: mail.cbi.tdbuilder.de
 extra_acme_domains: []
+
+# Log level: TRACE, DEBUG, INFO, WARN
+log_level: INFO
