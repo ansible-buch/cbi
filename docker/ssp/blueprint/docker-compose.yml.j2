@@ -16,7 +16,7 @@ services:
       - ./mnt/cache:/var/www/cache
     restart: unless-stopped
     labels:
-{{ utils.standard_labels(docker, app, 80) }}
+{{ utils.traefik_labels(docker, app.name, [app.fqdn], 80) }}
 
 networks:
   {{docker.infra.proxy_network}}:

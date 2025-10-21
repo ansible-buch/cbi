@@ -34,7 +34,7 @@ services:
       - data:/data
     restart: unless-stopped
     labels:
-{{ utils.standard_labels(docker, app, 3000) }}
+{{ utils.traefik_labels(docker, app.name, [app.fqdn], 3000) }}
 
 networks:
   {{docker.infra.proxy_network}}:

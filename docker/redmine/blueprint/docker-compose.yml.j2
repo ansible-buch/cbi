@@ -5,7 +5,7 @@ name: {{app.name}}
 services:
   app:
     image: redmine:6
-    
+
     container_name: {{app.cbiname}}-app
     environment:
       - REDMINE_DB_POSTGRES=db
@@ -21,7 +21,7 @@ services:
       - plugins:/usr/src/redmine/plugins
     restart: unless-stopped
     labels:
-{{ utils.standard_labels(docker, app, 3000) }}
+{{ utils.traefik_labels(docker, app.name, [app.fqdn], 3000) }}
 
     depends_on:
       - db

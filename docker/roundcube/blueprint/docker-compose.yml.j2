@@ -33,7 +33,7 @@ services:
 
     restart: unless-stopped
     labels:
-{{ utils.standard_multiname_labels(docker, app, [app.fqdn, 'webmail.' ~ global.domain], 80) }}
+{{ utils.traefik_labels(docker, app.name, [app.fqdn, 'webmail.' ~ global.domain], 80) }}
 
     depends_on:
       - db

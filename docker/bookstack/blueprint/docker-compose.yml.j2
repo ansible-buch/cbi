@@ -6,14 +6,14 @@ services:
   app:
     image: linuxserver/bookstack
     # https://hub.docker.com/r/linuxserver/bookstack
-    
+
     container_name: {{app.cbiname}}-app
     environment:
       - PUID=1000
       - PGID=1000
       - TZ={{app.timezone}}
       - APP_URL=https://{{app.fqdn}}
-      
+
       - APP_KEY={{app.app_key}}
 
       - DB_HOST=db
@@ -27,7 +27,7 @@ services:
       - files:/config
     restart: unless-stopped
     labels:
-{{ utils.standard_labels(docker, app, 80) }}
+{{ utils.traefik_labels(docker, app.name, [app.fqdn], 80) }}
 
     depends_on:
       - db
