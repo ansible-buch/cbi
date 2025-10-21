@@ -125,7 +125,7 @@ re-login now, so that the new group membership comes into effect.
 |Step-CA |`docker/step-ca` |Yes |- |
 |Traefik |`docker/traefik` |No |`admin` |
 |Portainer |`docker/portainer` |No |`admin` |
-|OpenLDAP |`docker/openldap`|Yes |- |
+|389 DS |`docker/389ds`|Yes |- |
 |SSP (Self Service Password) |`docker/ssp`|No |- |
 |Gitea |`docker/gitea` |No |`root` |
 |Nextcloud |`docker/nextcloud` |No |`admin` |
@@ -134,14 +134,16 @@ re-login now, so that the new group membership comes into effect.
 |Guacamole |`docker/guacamole` |No |- |
 |BookStack |`docker/bookstack` |No |`admin@admin.com` (`password`)|
 |Redmine |`docker/redmine` |No |`admin` (`admin`)|
+|Adminer |`docker/adminer` |No |`admin`|
 
 - Roundcube
-  
-  FQDN: mail.{{domain}}
+
+  FQDN: webmail.{{domain}} or roundcube.{{domain}}
+
 - Mailserver
 
-  Only useable with OpenLDAP, Letsencrypt + Roundcube!
-  
+  Only useable with 389 DS, Letsencrypt + Roundcube!
+
   FQDN: mail.{{domain}}
 
 
