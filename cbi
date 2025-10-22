@@ -32,7 +32,7 @@ if sys.version_info < (3, 9):
 
 
 progname = os.path.basename(sys.argv[0])
-version  = "0.84.8"
+version  = "0.85"
 
 
 opts   = {}
@@ -132,7 +132,7 @@ def get_options():
     # recreate subcommand
     parser_recreate = subparsers.add_parser(
         'recreate',
-        help='recreate app (mostly equivalent to down/up)')
+        help='recreate app (equivalent to down/up)')
     parser_recreate.add_argument('app_path', help='path to app')
     parser_recreate.add_argument('--stage', dest='stage', default=all_stages,
                                  help=f'{all_stages} selection')
@@ -176,6 +176,8 @@ def go(target):
     global stash
     global config
 
+    # handle "meta" targets:
+    
     if target == "restart":
         go(target="stop")
         go(target="start")
@@ -186,6 +188,8 @@ def go(target):
         go(target="up")
         return
 
+
+    # Here we go with up/down/start/stop:
 
     app_path = Path(opts['app_path']).resolve()
 
@@ -311,7 +315,7 @@ def go(target):
             ansible_runner(action='run_tasks', arg=file)
 
 
-    # Back to starting point:
+    # Back to starting point (important for restart/recreate!)
     os.chdir(stash['cbi_root'])
 
 
