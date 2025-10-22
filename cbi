@@ -177,7 +177,7 @@ def go(target):
     global config
 
     # handle "meta" targets:
-    
+
     if target == "restart":
         go(target="stop")
         go(target="start")
