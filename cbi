@@ -291,7 +291,8 @@ def go(target):
             ansible_runner(action='run_tasks', arg=file)
 
 
-
+    # Back to starting point:
+    os.chdir(stash['cbi_root'])
 
 
 
