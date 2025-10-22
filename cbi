@@ -176,7 +176,7 @@ def go(target):
         go(target="start")
         return
 
-    if target == "rercreate":
+    if target == "recreate":
         go(target="down")
         go(target="up")
         return
