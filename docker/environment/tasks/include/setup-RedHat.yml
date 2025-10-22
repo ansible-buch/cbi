@@ -4,8 +4,9 @@
     url: https://download.docker.com/linux/centos/docker-ce.repo
     dest: /etc/yum.repos.d/docker-ce.repo
 
-- name: Install Docker Engine and Compose plugin
+- name: Install Docker Engine and Compose+Buildx plugin
   dnf:
     name:
       - docker-ce
       - docker-compose-plugin
+      - docker-buildx-plugin
