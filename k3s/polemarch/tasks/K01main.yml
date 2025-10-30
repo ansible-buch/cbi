@@ -1,0 +1,6 @@
+- name: Scale deployments to zero
+  kubernetes.core.k8s_scale:
+    api_version: v1
+    kind: Deployment
+    namespace: polemarch
+    replicas: 0

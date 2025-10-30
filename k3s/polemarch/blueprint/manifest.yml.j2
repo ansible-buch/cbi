@@ -1,0 +1,89 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: polemarch
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: polemarch-pvc
+  namespace: polemarch
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: polemarch
+  namespace: polemarch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: polemarch
+  template:
+    metadata:
+      labels:
+        app: polemarch
+    spec:
+      containers:
+      - name: polemarch
+        image: vstconsulting/polemarch:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /projects
+          subPath: projects
+          name: polemarch-data
+        - mountPath: /hooks
+          subPath: hooks
+          name: polemarch-data
+        env:
+        - name: SECRET_KEY
+          value: {{global.salt ~ global.salt}}
+        - name: DATABASE_URL
+          value: sqlite:////home/polemarch/polemarch.sqlite3"
+      volumes:
+      - name: polemarch-data
+        persistentVolumeClaim:
+          claimName: polemarch-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: polemarch-http
+  namespace: polemarch
+spec:
+  type: ClusterIP
+  selector:
+    app: polemarch
+  ports:
+    - port: 80
+      targetPort: 8080
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: polemarch-ingress
+  namespace: polemarch
+spec:
+  rules:
+    - host: polemarch.{{global.domain}}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: polemarch-http
+                port:
+                  number: 80
