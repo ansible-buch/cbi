@@ -124,7 +124,9 @@ def get_options():
     parser_down = subparsers.add_parser('down', help='stop and remove app')
     parser_down.add_argument('app_path', help='path to app')
     parser_down.add_argument('--stage', dest='stage', default=all_stages,
-                           help=f'{all_stages} selection')
+                             help=f'{all_stages} selection')
+    parser_down.add_argument('--task', dest='task', default="",
+                             help=f'task name or substring')
     parser_down.add_argument('--volumes', action='store_true', dest='volumes',
                              help='remove all volumes/PVs '
                              '(Default action with K3s).')
@@ -146,13 +148,17 @@ def get_options():
     parser_start = subparsers.add_parser('start', help='start app')
     parser_start.add_argument('app_path', help='path to app')
     parser_start.add_argument('--stage', dest='stage', default=all_stages,
-                           help=f'{all_stages} selection')
+                              help=f'{all_stages} selection')
+    parser_start.add_argument('--task', dest='task', default="",
+                              help=f'task name or substring')
 
     # stop subcommand
     parser_stop = subparsers.add_parser('stop', help='stop app')
     parser_stop.add_argument('app_path', help='path to app')
     parser_stop.add_argument('--stage', dest='stage', default=all_stages,
-                           help=f'{all_stages} selection')
+                             help=f'{all_stages} selection')
+    parser_stop.add_argument('--task', dest='task', default="",
+                             help=f'task name or substring')
 
     # restart subcommand
     parser_restart = subparsers.add_parser(
@@ -161,6 +167,8 @@ def get_options():
     parser_restart.add_argument('app_path', help='path to app')
     parser_restart.add_argument('--stage', dest='stage', default=all_stages,
                                 help=f'{all_stages} selection')
+    parser_restart.add_argument('--task', dest='task', default="",
+                                help=f'task name or substring')
 
     args = parser.parse_args()
     opts = vars(args)
