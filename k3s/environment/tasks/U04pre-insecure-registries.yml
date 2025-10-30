@@ -10,10 +10,10 @@
 
 - name: Configure Podman for insecure private Gitea registry
   copy:
-    dest: /etc/containers/registries.conf.d/gitea.{{domain}}.conf
+    dest: /etc/containers/registries.conf.d/gitea.{{global.domain}}.conf
     content: |
       [[registry]]
-      location = "gitea.{{domain}}"
+      location = "gitea.{{global.domain}}"
       insecure = true
 
 
@@ -24,9 +24,9 @@
       mirrors:
         my-gitea-registry:
           endpoint:
-            - "https://gitea.{{domain}}"
+            - "https://gitea.{{global.domain}}"
 
       configs:
-        gitea.{{domain}}:
+        gitea.{{global.domain}}:
           tls:
             insecure_skip_verify: true

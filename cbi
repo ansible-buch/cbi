@@ -396,6 +396,8 @@ def create_sample_config():
         domain="example.org",
         password_base64="U2VjcmV0LTEyMzQ=",
         salt=salt,
+        # default behaviour in the 3rd edition for k3s:
+        require_root=(opts['environment'] == 'docker'),
     )
 
 

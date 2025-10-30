@@ -16,7 +16,7 @@ cache:
   enabled: false
 
 image:
-  tag: {{version}}
+  tag: {{app.version}}
 
 gitea:
   config:
@@ -28,22 +28,22 @@ gitea:
     service:
       DISABLE_REGISTRATION: true
     server:
-      SSH_DOMAIN: gitea.{{domain}}
-      SSH_PORT: {{gitea_ssh_nodeport}}
+      SSH_DOMAIN: gitea.{{global.domain}}
+      SSH_PORT: {{app.ssh_port}}
   admin:
-    username: {{gitea_admin_username}}
-    password: {{default_password | b64decode}}
-    email: {{gitea_admin_username}}@{{domain}}
+    username: {{app.user_name}}
+    password: {{global.password | b64decode}}
+    email: {{app.user_name}}@{{global.domain}}
 
 service:
   ssh:
     type: NodePort
-    nodePort: {{gitea_ssh_nodeport}}
+    nodePort: {{app.ssh_port}}
 
 ingress:
   enabled: true
   hosts:
-    - host: gitea.{{domain}}
+    - host: gitea.{{global.domain}}
       paths:
         - path: /
           pathType: Prefix

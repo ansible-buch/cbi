@@ -1,8 +1,4 @@
 ---
-- name: Gather facts
-  setup:
-  no_log: true
-
 - name: Create Bash completion plugin dir
   file:
     path: /etc/bash_completion.d

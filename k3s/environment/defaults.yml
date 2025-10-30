@@ -1,0 +1,3 @@
+---
+#version: v1.30.5+k3s1
+version: v1.34.1+k3s1

@@ -1,4 +1,6 @@
-- name: Install curl
+---
+- name: Install required base packages
   package:
-    name: curl
-    state: present
+    name:
+      - bash-completion
+      - curl

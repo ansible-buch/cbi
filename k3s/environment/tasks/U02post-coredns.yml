@@ -1,12 +1,8 @@
 ---
-- name: Gather facts
-  setup:
-  no_log: true
-
 - name: Apply coredns custom configmap
   kubernetes.core.k8s:
     state: present
-    definition: "{{ lookup('file', 'run/coredns-custom.yml') }}"
+    definition: "{{ lookup('file', app_path ~ '/run/coredns-custom.yml') }}"
   register: app_resources
 
 - name: Rollout restart deployment coredns

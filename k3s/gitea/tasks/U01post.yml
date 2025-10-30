@@ -6,7 +6,7 @@
     content: |
       [user]
           name = First User
-          email = user1@{{domain}}
+          email = user1@{{global.domain}}
       [color]
           ui = auto
       [diff]

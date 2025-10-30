@@ -7,13 +7,13 @@ metadata:
   namespace: kube-system
 data:
   tzone.server: |
-    {{domain}}:53 {
+    {{global.domain}}:53 {
       errors
       file /etc/coredns/custom/tzone.db
       reload
     }
   tzone.db: |
-    $ORIGIN {{domain}}.
+    $ORIGIN {{global.domain}}.
     $TTL 60
     @ 3600 IN SOA  sns.dns.icann.org. noc.dns.icann.org. (
       2024100201 ; serial

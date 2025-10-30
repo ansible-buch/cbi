@@ -1,8 +1,4 @@
 ---
-- name: Gather facts
-  setup:
-  no_log: true
-
 - name: Setup K3s
   shell:
     cmd: >-
@@ -10,7 +6,7 @@
           --write-kubeconfig-mode 644
 
   environment:
-    INSTALL_K3S_VERSION: "{{version}}"
+    INSTALL_K3S_VERSION: "{{app.version}}"
   register: cmd
 
 - debug:

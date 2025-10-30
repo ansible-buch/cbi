@@ -7,4 +7,4 @@
     create_namespace: true
     wait: true
     values_files:
-      - run/chart-values.yml
+      - "{{app_path}}/run/chart-values.yml"
