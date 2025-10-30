@@ -6,7 +6,7 @@ metadata:
   namespace: awx
 type: Opaque
 data:
-  password: {{ default_password }}
+  password: {{ global.password }}
 
 ---
 apiVersion: awx.ansible.com/v1beta1
@@ -17,6 +17,6 @@ metadata:
 spec:
   service_type: ClusterIP # default
   ingress_type: ingress
-  hostname: awx.{{domain}}
+  hostname: awx.{{global.domain}}
   admin_user: admin
   admin_password_secret: awx-admin-password
