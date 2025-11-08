@@ -39,13 +39,13 @@ services:
   certdumper:
     image: ghcr.io/kereis/traefik-certs-dumper:latest
     container_name: traefik-certdumper
-{% if certdumper_restart_containers %}
-    command: --restart-containers {{certdumper_restart_containers | join(',')}}
+{% if app.certdumper_restart_containers %}
+    command: --restart-containers {{app.certdumper_restart_containers | join(',')}}
 {% endif %}
 
     environment:
-{% if certdumper_extract_domains %}
-      - DOMAIN={{certdumper_extract_domains | join(',')}}
+{% if app.certdumper_extract_domains %}
+      - DOMAIN={{app.certdumper_extract_domains | join(',')}}
 {% endif %}
 
     volumes:
