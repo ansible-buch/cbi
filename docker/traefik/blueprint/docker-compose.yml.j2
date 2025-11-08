@@ -39,6 +39,15 @@ services:
   certdumper:
     image: ghcr.io/kereis/traefik-certs-dumper:latest
     container_name: traefik-certdumper
+{% if certdumper_restart_containers %}
+    command: --restart-containers {{certdumper_restart_containers | join(',')}}
+{% endif %}
+
+    environment:
+{% if certdumper_extract_domains %}
+      - DOMAIN={{certdumper_extract_domains | join(',')}}
+{% endif %}
+
     volumes:
     - acme:/traefik:ro
     - certdumper_files:/output:rw

@@ -1,6 +1,14 @@
 # Start additional certdumper container:
 use_certdumper: False
 
+# When certdumper is in use, dump only certs for specific domains
+# (if empty list, all certs are dumped):
+certdumper_extract_domains: []
+
+# When certdumper is in use, restart certain containers, if domain certs
+# are renewed:
+certdumper_restart_containers: []
+
 # Can contain maps with 'router' and 'domain' entries, e.g.:
 #   - router: maildummy
 #     domain: mail.cbi.tdbuilder.de
