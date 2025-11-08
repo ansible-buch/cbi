@@ -45,15 +45,16 @@ services:
 
     environment:
 {% if app.certdumper_extract_domains %}
+{% set extract_domains = app.certdumper_extract_domains %}
 {#
 Unfortunately, certdumper doesn't create a directory when only one cert is
 dumped. Two or more certs, and the directory is created. But we need a
 stable mount path for the certs, regardless of their number.
 #}
-{% if app.certdumper_extract_domains | length == 1 %}
-{% set app.certdumper_extract_domains = app.certdumper_extract_domains + ['dummy.' ~ global.domain ] %}
+{% if extract_domains | length == 1 %}
+{% set extract_domains = extract_domains + ['dummy.' ~ global.domain ] %}
 {% endif %}
-      - DOMAIN={{app.certdumper_extract_domains | join(',')}}
+      - DOMAIN={{extract_domains | join(',')}}
 {% endif %}
 
     volumes:
