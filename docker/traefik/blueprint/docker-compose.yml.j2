@@ -52,6 +52,9 @@ services:
     - acme:/traefik:ro
     - certdumper_files:/output:rw
     - ./mnt/var_lib_docker:/var/lib/docker
+{% if app.certdumper_restart_containers %}
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+{% endif %}
     # Otherwise we get anonymous volume :-(
 
     restart: unless-stopped
