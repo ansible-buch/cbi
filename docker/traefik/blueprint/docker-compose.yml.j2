@@ -57,6 +57,9 @@ stable mount path for the certs, regardless of their number.
       - DOMAIN={{extract_domains | join(',')}}
 {% endif %}
 
+    networks:
+      - {{docker.infra.proxy_network}}
+
     volumes:
     - acme:/traefik:ro
     - certdumper_files:/output:rw
