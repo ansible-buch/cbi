@@ -5,3 +5,4 @@
   command: "docker network create {{docker.infra.proxy_network}}"
   register: docker_cmd
   failed_when: docker_cmd.rc != 0 and not 'already exists' in docker_cmd.stderr
+  when: "'infra' in docker" # should almost always be the case.
