@@ -38,7 +38,7 @@
   register: deb822_task
 
 
-- name: Pin version
+- name: Pin version of docker-ce packages
   copy:
     dest: /etc/apt/preferences.d/docker.pref
     content: |
