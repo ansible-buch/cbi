@@ -9,7 +9,7 @@
     name: python3-dnf-plugin-versionlock
 
 - name: Pin version of docker-ce packages
-  command: dnf versionlock add docker-ce-{{app.version}}.*
+  command: dnf versionlock add {{item}}
   with_items:
     - docker-ce-{{app.version}}.*
     - docker-ce-cli-{{app.version}}.*
