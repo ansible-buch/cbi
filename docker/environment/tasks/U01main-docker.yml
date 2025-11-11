@@ -7,7 +7,7 @@
     name: docker
     state: started
     enabled: yes
-    
+
 - name: Upload daemon.json
   copy:
     dest: /etc/docker/daemon.json

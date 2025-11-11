@@ -36,7 +36,17 @@
       Components: stable
       Signed-By: /etc/apt/keyrings/docker-archive-keyring.asc
   register: deb822_task
-      
+
+
+- name: Pin version
+  copy:
+    dest: /etc/apt/preferences.d/docker.pref
+    content: |
+      Package: docker-ce*
+      Pin: version 5:{{app.version}}.*
+      Pin-Priority: 1000
+  when: "'version' in app"
+
 - name: apt update
   apt:
     update_cache: yes

@@ -1,2 +1,6 @@
+# Currently we pin to version 28.x due to API compatibility problems
+# in higher versions.
+version: 28
+
 # true or false needs to be specfied as string!
 live_restore: "false"
