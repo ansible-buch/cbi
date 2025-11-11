@@ -45,7 +45,7 @@
       Package: docker-ce*
       Pin: version 5:{{app.version}}.*
       Pin-Priority: 1000
-  when: "'version' in app"
+  when: "'version' in app and app.version != None"
 
 - name: apt update
   apt:

@@ -4,6 +4,14 @@
     url: https://download.docker.com/linux/centos/docker-ce.repo
     dest: /etc/yum.repos.d/docker-ce.repo
 
+- name: Install versionlock-plugin
+  dnf:
+    name: python3-dnf-plugin-versionlock
+
+- name: Pin version
+  command: dnf versionlock add docker-ce-{{app.version}}.*
+  when: "'version' in app and app.version != None"
+
 - name: Install Docker Engine and Compose+Buildx plugin
   dnf:
     name:

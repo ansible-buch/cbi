@@ -28,6 +28,12 @@ The Docker environment has been tested on:
 - Firewall/package filters disabled
 - `ansible` (community package) and `git` installed on this server
 
+### Special additional requirements on Rocky Linux:
+
+```
+dnf install python3-jinja2
+```
+
 ### Special additional requirements on openSUSE:
 
 ```
