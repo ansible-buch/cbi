@@ -1,5 +1,5 @@
 ---
-- name: Create proxy network '{{docker.infra.proxy_network}}'
+- name: Create proxy network
   # We don't use the docker_network module, because on some systems
   # we don't have the community.docker collection installed :-(
   command: "docker network create {{docker.infra.proxy_network}}"
