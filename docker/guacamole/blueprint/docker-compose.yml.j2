@@ -1,31 +1,29 @@
 ---
-name: guacamole
+{% import 'utils.j2' as utils %}
+name: {{app.name}}
 
 services:
   app:
     image: guacamole/guacamole
-    container_name: ${COMPOSE_PROJECT_NAME}-app
+
+    container_name: {{app.cbiname}}-app
     environment:
       - GUACAMOLE_HOME=/guacamole_home # Default /etc/guacamole does not work!
       - GUACD_HOSTNAME=daemon
       - WEBAPP_CONTEXT=ROOT   # no need for the /guacamole sub-URL
     networks:
-      - {{docker_internal_network}}
+      - {{docker.infra.proxy_network}}
       - backend
     volumes:
       - ./mnt/config:/guacamole_home
     restart: unless-stopped
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`connect.{{domain}}`)
-      - traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=8080
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver={{cert_resolver_type}}
+{{ utils.traefik_labels(docker, app.name, [app.fqdn], 8080) }}
 
 
   daemon:
     image: guacamole/guacd
-    container_name: ${COMPOSE_PROJECT_NAME}-daemon
+    container_name: {{app.cbiname}}-daemon
     networks:
       - backend
     restart: unless-stopped
@@ -33,9 +31,9 @@ services:
 
 networks:
   backend:
-  {{docker_internal_network}}:
+  {{docker.infra.proxy_network}}:
     external: true
 
-    
+
 volumes:
   data:
