@@ -1,0 +1,5 @@
+---
+version:
+  server: release
+  ml: release
+  postgres: 17-vectorchord0.5.3-pgvector0.8.1

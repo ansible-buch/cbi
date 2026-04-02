@@ -141,6 +141,7 @@ re-login now, so that the new group membership comes into effect.
 |BookStack |`docker/bookstack` |No |`admin@admin.com` (`password`)|
 |Redmine |`docker/redmine` |No |`admin` (`admin`)|
 |Adminer |`docker/adminer` |No |`admin`|
+|Immich  |`docker/immich` |No |-|
 
 - Roundcube
 

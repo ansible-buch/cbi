@@ -1,0 +1,78 @@
+---
+{% import 'utils.j2' as utils %}
+name: {{app.name}}
+
+services:
+  app:
+    image: ghcr.io/immich-app/immich-server:{{app.version.server}}
+    container_name: {{app.cbiname}}-app
+    environment:
+      DB_HOSTNAME: db
+      DB_USERNAME: immich
+      DB_PASSWORD: immich
+      DB_DATABASE_NAME: immich
+
+      REDIS_HOSTNAME: memcache
+
+    networks:
+      - {{docker.infra.proxy_network}}
+      - backend
+    volumes:
+      - upload:/data
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    labels:
+{{ utils.traefik_labels(docker, app.name, [app.fqdn], 2283) }}
+
+    depends_on:
+      - db
+      - ml
+      - memcache
+
+
+  ml:
+    container_name: {{app.cbiname}}-ml
+    image: ghcr.io/immich-app/immich-machine-learning:{{app.version.ml}}
+    networks:
+      - backend
+    volumes:
+      - ml-cache:/cache
+    restart: unless-stopped
+    healthcheck:
+      disable: false
+
+      
+  db:
+    image: ghcr.io/immich-app/postgres:{{app.version.postgres}}
+    container_name: {{app.cbiname}}-db
+    environment:
+      POSTGRES_PASSWORD: immich
+      POSTGRES_USER: immich
+      POSTGRES_db: immich
+      POSTGRES_INITDB_ARGS: '--data-checksums'
+
+    networks:
+      - backend
+    volumes:
+      - data_17:/var/lib/postgresql/data
+    restart: unless-stopped
+
+
+  memcache:
+    image: redis:latest
+    container_name: {{app.cbiname}}-memcache
+    networks:
+      - backend
+    restart: unless-stopped
+
+
+networks:
+  backend:
+  {{docker.infra.proxy_network}}:
+    external: true
+
+volumes:
+  upload:
+  data_17:
+  empty:
+  ml-cache:
