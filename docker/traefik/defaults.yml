@@ -16,3 +16,6 @@ extra_acme_domains: []
 
 # Log level: TRACE, DEBUG, INFO, WARN
 log_level: INFO
+
+# Read timeout: make large uploads work
+read_timeout: "10m"

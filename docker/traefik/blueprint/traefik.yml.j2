@@ -14,20 +14,23 @@ entryPoints:
         entrypoint:
           to: websecure
           scheme: https
-              
+
   websecure:
     address: ":443"
+    transport:
+      respondingTimeouts:
+        readTimeout: "{{app.read_timeout}}"
 
 
 api:
   dashboard: true
 
-  
+
 providers:
   docker:
     exposedByDefault: false
     network: {{docker.infra.proxy_network}}
-    
+
   file:
     directory: /etc/traefik/dynamic
     watch: true
