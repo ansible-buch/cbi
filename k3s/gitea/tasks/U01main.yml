@@ -3,6 +3,7 @@
   kubernetes.core.helm:
     release_name: gitea
     chart_ref: gitea-charts/gitea
+    chart_version: "{{app.chart_version}}"
     release_namespace: gitea
     create_namespace: true
     wait: true
