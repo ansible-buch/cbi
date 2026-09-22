@@ -48,7 +48,7 @@ services:
       - SSL_KEY_PATH=/certdumper/mail.{{global.domain}}/key.pem
 
       - ENABLE_QUOTAS=0
-      - POSTFIX_MESSAGE_SIZE_LIMIT=51200000
+      - POSTFIX_MESSAGE_SIZE_LIMIT=104857600
       - ENABLE_MANAGESIEVE=1
       - POSTMASTER_ADDRESS=postmaster@{{global.domain}}
       - POSTFIX_INET_PROTOCOLS=ipv4
