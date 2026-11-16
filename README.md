@@ -46,7 +46,7 @@ pip3.11 install kubernetes
 ## Clone this repo on your server and ch'dir into directory.
 
 ```
-git clone https://github.com/ansible-buch/cbi.git
+git clone https://github.com/ansible-buch/cbi.git -b devel
 cd cbi
 ```
 
