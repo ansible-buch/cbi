@@ -19,7 +19,7 @@ services:
         aliases:
           - traefik.{{global.domain}}
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./mnt/traefik.yml:/etc/traefik/traefik.yml
       - ./mnt/dynamic:/etc/traefik/dynamic
       - acme:/etc/traefik/acme
