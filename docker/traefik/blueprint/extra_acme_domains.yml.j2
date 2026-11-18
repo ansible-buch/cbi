@@ -6,7 +6,9 @@ http:
       rule: Host(`{{d.domain}}`)
       entryPoints: [websecure]
       tls:
+{% if docker.infra.cert_resolver %}
         certResolver: {{docker.infra.cert_resolver}}
+{% endif %}
       service: noop
 {% endfor %}
   services:
