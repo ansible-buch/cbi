@@ -73,7 +73,7 @@ stable mount path for the certs, regardless of their number.
 {% endif %}
 
 networks:
-  traefik:
+  {{docker.infra.proxy_network}}:
     external: true
 
 volumes:
