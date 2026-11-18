@@ -3,13 +3,15 @@
     admin_dn: cn=Directory Manager
     settings:
       Debian:
-        sssd_package_name: sssd
+        sssd_packages:
+          - sssd
+          - sssd-tools
         sssd_service_name: sssd
         pam_session_file:  /etc/pam.d/common-session
 
 - name: Install sssd
   package:
-    name: "{{settings[ansible_os_family].sssd_package_name}}"
+    name: "{{settings[ansible_os_family].sssd_packages}}"
 
 
 - name: Copy sssd.conf
@@ -41,23 +43,23 @@
       auth_provider = ldap
       chpass_provider = ldap
 
-      cache_credentials = false
+      cache_credentials = true
       enumerate = true
 
   register: sssd_config
 
 
-- name: Enable autostart and start service
+- name: Restart SSSD if configuration changed
   service:
-    name: "{{settings[ansible_os_family].sssd_service_name}}"
-    enabled: yes
-    state: started
-
-- name: Restart sssh service on demand
-  service:
-    name: "{{settings[ansible_os_family].sssd_service_name}}"
+    name: "{{ settings[ansible_os_family].sssd_service_name }}"
     state: restarted
   when: sssd_config.changed
+
+- name: Enable autostart and start service
+  service:
+    name: "{{ settings[ansible_os_family].sssd_service_name }}"
+    enabled: true
+    state: started
 
 
 - name: Activate PAM module pam_mkhomedir
