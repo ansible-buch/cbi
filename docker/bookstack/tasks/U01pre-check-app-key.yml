@@ -1,0 +1,15 @@
+---
+- name: Check BookStack application key
+  assert:
+    that:
+      - app.app_key is defined
+      - app.app_key is string
+      - app.app_key.startswith('base64:')
+      - app.app_key | length > 7
+    fail_msg: >-
+      BookStack requires an APP_KEY.
+      Generate one with:
+      docker run -it --rm --entrypoint /bin/bash
+      lscr.io/linuxserver/bookstack:latest appkey
+      Then configure app_key in env.yml.
+    quiet: true
