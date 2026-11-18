@@ -2,16 +2,20 @@
 - set_fact:
     group_dn: ou=groups,{{docker.infra.ldap.base_dn}}
   when: "'ldap' in docker.infra"
-    
+
 - debug:
     msg: |
       Use LDAP? ==> Site Administration -> Identity & Access -> Auth. Sources
 
       Add Source.
 
+      Authentication Type: LDAP (via BindDN)
       Authentication Name: ldap
+      Security Protocol: LDAPS
+
       Host: {{docker.infra.ldap.host_fqdn}}
-      Port: 389
+      Port: 636
+      Skip TLS Verify: YES
 
       User Search Base: ou=users,{{docker.infra.ldap.base_dn}}
 
