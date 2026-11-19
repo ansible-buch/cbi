@@ -28,9 +28,6 @@ services:
       - OVERWRITEHOST={{app.fqdn}}
       - OVERWRITEPROTOCOL=https
       - OVERWRITECLIURL=https://{{app.fqdn}}
-
-      - LDAPTLS_REQCERT=never
-
     networks:
       - {{docker.infra.proxy_network}}
       - backend

@@ -14,9 +14,22 @@
       Host: ldaps://{{docker.infra.ldap.host_fqdn}}
       Port: 636
 
+      Base DN: {{docker.infra.ldap.base_dn}}
 
-      **User**:
-      Only Objectclass: inetOrgPerson
+
+      **Users**:
+
+      Only these object classes: inetOrgPerson
+
+
+      **Advanced:**
+
+      Turn off SSL certificate validation: YES
+
+
+      ** Do not forget:***
+
+      If Test succeeds: Server -> Configuration active
 
 
   when: "'ldap' in docker.infra"
