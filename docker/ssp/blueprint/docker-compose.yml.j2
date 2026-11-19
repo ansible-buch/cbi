@@ -14,6 +14,9 @@ services:
       - ./mnt/conf:/var/www/conf
       - ./mnt/templates_c:/var/www/templates_c
       - ./mnt/cache:/var/www/cache
+    environment:
+      LDAPTLS_REQCERT: never
+
     restart: unless-stopped
     labels:
 {{ utils.traefik_labels(docker, app.name, [app.fqdn], 80) }}

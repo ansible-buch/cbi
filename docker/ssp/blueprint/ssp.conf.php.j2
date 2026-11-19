@@ -2,7 +2,9 @@
 $keyphrase = "{{global.salt}}";
 $debug = true;
 
-$ldap_url = "ldap://{{docker.infra.ldap.host_fqdn}}";
+$ldap_url = "ldaps://{{docker.infra.ldap.host_fqdn}}";
+# In docker-compose.yml we have LDAPTLS_REQCERT: never
+
 $ldap_base = "{{docker.infra.ldap.base_dn}}";
 
 $ldap_binddn = "";
