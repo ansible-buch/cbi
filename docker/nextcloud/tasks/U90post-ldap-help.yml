@@ -24,7 +24,13 @@
 
       **Advanced:**
 
-      Turn off SSL certificate validation: YES
+      - Connection Settings:
+
+        Turn off SSL certificate validation: YES
+
+      - Directory Settings:
+
+        User Display Name Field: cn
 
 
       ** Do not forget:***
