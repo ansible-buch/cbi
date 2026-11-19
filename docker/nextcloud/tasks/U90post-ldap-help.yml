@@ -1,0 +1,35 @@
+---
+# - set_fact:
+#     group_dn: ou=groups,{{docker.infra.ldap.base_dn}}
+#   when: "'ldap' in docker.infra"
+
+- debug:
+    msg: |
+      Use LDAP? ==> First active app "LDAP user and group Backend"!
+
+      Then: Administration -> LDAP/AD Integration
+
+      Host: ldaps://{{docker.infra.ldap.host_fqdn}}
+      Port: 636
+
+
+      
+      Add Source.
+
+      Authentication Type: LDAP (via BindDN)
+      Authentication Name: ldap
+      Security Protocol: LDAPS
+
+      
+      Skip TLS Verify: YES
+
+      User Search Base: ou=users,{{docker.infra.ldap.base_dn}}
+
+      User Filter: (&(uid=%[1]s)(|(memberOf=cn=gitea-users,{{group_dn}})(memberOf=cn=gitea-admins,{{group_dn}})))
+
+      Admin Filter: (memberOf=cn=gitea-admins,{{group_dn}})
+
+      First Name Attribute: givenName
+      Surname Attribute:    sn
+      Email Attribute:      mail
+  when: "'ldap' in docker.infra"
