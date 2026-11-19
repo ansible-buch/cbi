@@ -14,5 +14,5 @@
     cron_file: docker_nextcloud
     user: root
     name: Run cron.php in nextcloud-app container
-    special_time: hourly
+    minute: "*/5"
     job: docker exec --user www-data  nextcloud-app php cron.php
