@@ -15,20 +15,8 @@
       Port: 636
 
 
-      
-      Add Source.
-
-      Authentication Type: LDAP (via BindDN)
-      Authentication Name: ldap
-      Security Protocol: LDAPS
-
-      
-      Skip TLS Verify: YES
-
-      User Search Base: ou=users,{{docker.infra.ldap.base_dn}}
+      **User**:
+      Only Objectclass: inetOrgPerson
 
 
-      First Name Attribute: givenName
-      Surname Attribute:    sn
-      Email Attribute:      mail
   when: "'ldap' in docker.infra"
