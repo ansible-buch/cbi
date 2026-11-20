@@ -4,7 +4,7 @@ name: {{app.name}}
 
 services:
   app:
-    image: redmine:6
+    image: redmine:{{app.version}}
 
     container_name: {{app.cbiname}}-app
     environment:
