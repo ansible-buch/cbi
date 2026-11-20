@@ -65,11 +65,14 @@ services:
       - LDAP_BIND_DN=cn=Directory Manager
       - LDAP_BIND_PW={{global.password | b64decode}}
 
-
-      - LDAP_QUERY_FILTER_USER=(&(mail=%s)(mailAccountActive=yes))
-      - LDAP_QUERY_FILTER_GROUP=(&(objectclass=organizationalPerson)(mail=%s))
-      - LDAP_QUERY_FILTER_ALIAS=(&(mailAlias=%s)(mailAccountActive=yes))
-      - LDAP_QUERY_FILTER_DOMAIN=(&(|(mail=*@%s)(mailAlias=*@%s))(mailAccountActive=yes))
+      - POSTFIX_USERS_QUERY_FILTER=(&(mail=%s)(mailAccountActive=yes))
+      - POSTFIX_ALIASES_QUERY_FILTER=(&(mailAlias=%s)(mailAccountActive=yes))
+      - POSTFIX_GROUPS_QUERY_FILTER=(&(objectclass=organizationalPerson)(mail=%s))
+      - POSTFIX_DOMAINS_QUERY_FILTER=(&(|(mail=*@%s)(mailAlias=*@%s))(mailAccountActive=yes))
+      # - LDAP_QUERY_FILTER_USER=(&(mail=%s)(mailAccountActive=yes))
+      # - LDAP_QUERY_FILTER_GROUP=(&(objectclass=organizationalPerson)(mail=%s))
+      # - LDAP_QUERY_FILTER_ALIAS=(&(mailAlias=%s)(mailAccountActive=yes))
+      # - LDAP_QUERY_FILTER_DOMAIN=(&(|(mail=*@%s)(mailAlias=*@%s))(mailAccountActive=yes))
 
       # %u - username
       # %n - user part in user@domain, same as %u if there's no domain
