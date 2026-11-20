@@ -62,7 +62,6 @@ services:
       - ACCOUNT_PROVISIONER=LDAP
       
       - LDAP_SERVER_HOST=ldaps://{{docker.infra.ldap.host_fqdn}}:636
-      - LDAP_TLS_CHECK_PEER=no
       - LDAP_SEARCH_BASE={{docker.infra.ldap.base_dn}}
       - LDAP_BIND_DN=cn=Directory Manager
       - LDAP_BIND_PW={{global.password | b64decode}}
@@ -72,6 +71,9 @@ services:
       #- POSTFIX_GROUPS_QUERY_FILTER=(&(objectclass=organizationalPerson)(mail=%s))
       - POSTFIX_DOMAINS_QUERY_FILTER=(&(|(mail=*@%s)(mailAlias=*@%s))(mailAccountActive=yes))
 
+      # Dovecot does not like self-singned certs without additional conf :-(
+      - DOVECOT_URIS=ldap://{{ docker.infra.ldap.host_fqdn }}:389
+      
       - DOVECOT_USER_FILTER=(&(mail=%{user})(mailAccountActive=yes))
       - DOVECOT_USER_ATTRS=mail=user,=home=/var/mail/%{user | domain}/%{user | username},=mail=maildir:~/Maildir,=uid=5000,=gid=5000
 
