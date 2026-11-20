@@ -3,7 +3,7 @@ name: {{app.name}}
 
 services:
   mailserver:
-    image: mailserver/docker-mailserver
+    image: mailserver/docker-mailserver:{{app.version}}
     hostname: mail
     domainname: {{global.domain}}
     container_name: {{app.cbiname}}
