@@ -4,9 +4,11 @@ http:
 {% for d in app.extra_acme_domains %}
     {{ d.router }}:
       rule: Host(`{{d.domain}}`)
-      entryPoints: [web]
+      entryPoints: [websecure]
       tls:
+{% if docker.infra.cert_resolver %}
         certResolver: {{docker.infra.cert_resolver}}
+{% endif %}
       service: noop
 {% endfor %}
   services:

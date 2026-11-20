@@ -1,0 +1,41 @@
+---
+# - set_fact:
+#     group_dn: ou=groups,{{docker.infra.ldap.base_dn}}
+#   when: "'ldap' in docker.infra"
+
+- debug:
+    msg: |
+      Use LDAP? ==> First active app "LDAP user and group Backend"!
+
+      Then: Administration -> LDAP/AD Integration
+
+      **Server**:
+
+      Host: ldaps://{{docker.infra.ldap.host_fqdn}}
+      Port: 636
+
+      Base DN: {{docker.infra.ldap.base_dn}}
+
+
+      **Users**:
+
+      Only these object classes: inetOrgPerson
+
+
+      **Advanced:**
+
+      - Connection Settings:
+
+        Turn off SSL certificate validation: YES
+
+      - Directory Settings:
+
+        User Display Name Field: cn
+
+
+      ** Do not forget:***
+
+      If Test succeeds: Server -> Configuration active
+
+
+  when: "'ldap' in docker.infra"

@@ -19,7 +19,7 @@ services:
         aliases:
           - traefik.{{global.domain}}
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./mnt/traefik.yml:/etc/traefik/traefik.yml
       - ./mnt/dynamic:/etc/traefik/dynamic
       - acme:/etc/traefik/acme
@@ -32,7 +32,9 @@ services:
       - traefik.http.routers.{{app.name}}.rule=Host(`{{app.fqdn}}`)
       - traefik.http.routers.{{app.name}}.service=api@internal
       - traefik.http.routers.{{app.name}}.tls=true
+{% if docker.infra.cert_resolver %}
       - traefik.http.routers.{{app.name}}.tls.certresolver={{docker.infra.cert_resolver}}
+{% endif %}
       - traefik.http.routers.{{app.name}}.middlewares=auth@file
 
 {% if app.use_certdumper %}

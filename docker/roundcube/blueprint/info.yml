@@ -7,3 +7,5 @@ generate:
     - src:  docker-compose.yml.j2
     - src:  managesieve.inc.php.j2
       dest: mnt/config/managesieve.inc.php
+    - src: tls-options.inc.php.j2
+      dest: mnt/config/tls-options.inc.php

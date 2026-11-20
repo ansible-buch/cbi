@@ -11,7 +11,10 @@
       # Configuration change:
       # Maximum cert validity: 2 years
       # Default validity: 90 days like Lets Encrypt
-      jq '.authority += {"claims": { "maxTLSCertDuration": "17568h", "defaultTLSCertDuration": "2160h" }}' ca.json >tmp.json
+      jq '.authority.claims += {
+        "maxTLSCertDuration": "17568h",
+        "defaultTLSCertDuration": "2160h"
+      }' ca.json >tmp.json
       mv tmp.json ca.json
 
       # Copy back into container:

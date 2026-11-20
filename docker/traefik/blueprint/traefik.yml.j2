@@ -2,6 +2,7 @@
 global:
   checkNewVersion: false
   sendAnonymousUsage: false
+  aliasHeadersStrategy: delete
 
 log:
   level: {{app.log_level}}
@@ -36,6 +37,7 @@ providers:
     watch: true
 
 
+{% if docker.infra.cert_resolver %}
 certificatesResolvers:
 {% if docker.infra.cert_resolver == 'letsencrypt' %}
   letsencrypt:
@@ -49,4 +51,5 @@ certificatesResolvers:
       tlschallenge: true
       storage: /etc/traefik/acme/acme.json
       caServer: https://ca.{{global.domain}}:9000/acme/acme/directory
+{% endif %}
 {% endif %}
