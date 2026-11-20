@@ -60,30 +60,18 @@ services:
       - MOVE_SPAM_TO_JUNK=1
 
       - ACCOUNT_PROVISIONER=LDAP
-      - LDAP_SERVER_HOST=ldap://{{docker.infra.ldap.host_fqdn}}
+      
+      - LDAP_SERVER_HOST=ldaps://{{docker.infra.ldap.host_fqdn}}:636
+      - LDAP_TLS_CHECK_PEER=no
       - LDAP_SEARCH_BASE={{docker.infra.ldap.base_dn}}
       - LDAP_BIND_DN=cn=Directory Manager
       - LDAP_BIND_PW={{global.password | b64decode}}
 
       - POSTFIX_USERS_QUERY_FILTER=(&(mail=%s)(mailAccountActive=yes))
       - POSTFIX_ALIASES_QUERY_FILTER=(&(mailAlias=%s)(mailAccountActive=yes))
-      - POSTFIX_GROUPS_QUERY_FILTER=(&(objectclass=organizationalPerson)(mail=%s))
+      #- POSTFIX_GROUPS_QUERY_FILTER=(&(objectclass=organizationalPerson)(mail=%s))
       - POSTFIX_DOMAINS_QUERY_FILTER=(&(|(mail=*@%s)(mailAlias=*@%s))(mailAccountActive=yes))
-      # - LDAP_QUERY_FILTER_USER=(&(mail=%s)(mailAccountActive=yes))
-      # - LDAP_QUERY_FILTER_GROUP=(&(objectclass=organizationalPerson)(mail=%s))
-      # - LDAP_QUERY_FILTER_ALIAS=(&(mailAlias=%s)(mailAccountActive=yes))
-      # - LDAP_QUERY_FILTER_DOMAIN=(&(|(mail=*@%s)(mailAlias=*@%s))(mailAccountActive=yes))
 
-      # %u - username
-      # %n - user part in user@domain, same as %u if there's no domain
-      # %d - domain part in user@domain, empty if there's no domain
-      
-      # - DOVECOT_USER_FILTER=(&(mail=%u)(mailAccountActive=yes))
-      # - DOVECOT_USER_ATTRS=mail=user,=home=/var/mail/%d/%n,=mail=maildir:/var/mail/%d/%n/Maildir,=uid=5000,=gid=5000
-
-      # - DOVECOT_AUTH_BIND=yes
-      # - DOVECOT_PASS_FILTER=(&(mail=%u)(mailAccountActive=yes))
-      # - DOVECOT_PASS_ATTRS=mail=user,userPassword=password
       - DOVECOT_USER_FILTER=(&(mail=%{user})(mailAccountActive=yes))
       - DOVECOT_USER_ATTRS=mail=user,=home=/var/mail/%{user | domain}/%{user | username},=mail=maildir:~/Maildir,=uid=5000,=gid=5000
 
