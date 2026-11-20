@@ -48,7 +48,7 @@ services:
     environment:
       POSTGRES_PASSWORD: immich
       POSTGRES_USER: immich
-      POSTGRES_db: immich
+      POSTGRES_DB: immich
       POSTGRES_INITDB_ARGS: '--data-checksums'
 
     networks:
@@ -74,5 +74,4 @@ networks:
 volumes:
   upload:
   data_17:
-  empty:
   ml-cache:
