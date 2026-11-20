@@ -71,7 +71,8 @@ services:
       #- POSTFIX_GROUPS_QUERY_FILTER=(&(objectclass=organizationalPerson)(mail=%s))
       - POSTFIX_DOMAINS_QUERY_FILTER=(&(|(mail=*@%s)(mailAlias=*@%s))(mailAccountActive=yes))
 
-      # Dovecot does not like self-singned certs without additional conf :-(
+      # Dovecot does not accept self-signed LDAP certificates
+      # without additional configuration:
       - DOVECOT_URIS=ldap://{{ docker.infra.ldap.host_fqdn }}:389
       
       - DOVECOT_USER_FILTER=(&(mail=%{user})(mailAccountActive=yes))
